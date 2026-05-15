@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Budget Dashboard - REWARD</title>
+    <title>Water Budget Dashboard - REWARD Project</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +16,7 @@
         :root { --primary: #0077b6; --bg: #f1f5f9; --card: #ffffff; --border: #cbd5e1; --text: #0f172a; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg); color: var(--text); padding: 10px; }
-        h1 { text-align: center; font-size: 1.6rem; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; border-bottom: 3px solid var(--primary); width: 100%; padding-bottom: 5px; }
+        h1 { text-align: center; font-size: 1.5rem; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; border-bottom: 3px solid var(--primary); width: 100%; padding-bottom: 5px; }
         
         .main-grid { display: grid; grid-template-columns: 360px 1fr; gap: 15px; }
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -43,12 +43,48 @@
 
         .input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 0.75rem; }
         .input-row input { width: 65px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; }
-        .chart-container { height: 100px; margin-top: 5px; }
+        .chart-container { height: 110px; margin-top: 5px; }
+
+        #monthly-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 10px; }
+        #monthly-table th, #monthly-table td { border: 1px solid #eee; padding: 3px; text-align: right; }
+        #monthly-table th { background: #f8fafc; text-align: left; }
+
+        .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Keeps logo left and title centered or right */
+    background-color: #ffffff;
+    padding: 15px 30px;
+    margin-bottom: 20px;
+    border-bottom: 4px solid var(--primary);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logo-box img {
+    height: 80px; 
+    width: 80px;
+}
+
+h1 {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin: 0;
+    text-transform: uppercase;
+    border-bottom: none; /* Removed from H1 since it's on the container now */
+}
     </style>
 </head>
 <body>
 
+    <header class="header-container">
+    <div class="logo-box">
+        <img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"> </div>
     <h1>REWARD Water Budget Dashboard</h1>
+    <div class="logo-box">
+        <img src="top_logo.jpg.png" alt="REWARD Logo"> </div>
+</header>
 
     <div class="main-grid">
         <div class="left-col">
@@ -60,7 +96,7 @@
             </div>
 
             <div class="card budget-overview" style="margin-top:15px;">
-                <h4 style="margin-top:0;">Budget Breakup (m³)</h4>
+                <h4 style="margin-top:0;">Annual Summary (m³)</h4>
                 <ul>
                     <li>Human Consumption <span id="txt-human">0</span></li>
                     <li>Livestock Demand <span id="txt-livestock">0</span></li>
@@ -72,13 +108,27 @@
                     <li class="net-status-row">Net Budget Status <span id="txt-net">0</span></li>
                 </ul>
             </div>
+            
+            <div class="card" style="margin-top:15px; max-height: 250px; overflow-y: auto;">
+                <h4 style="margin-top:0;">Monthly Breakdown</h4>
+                <table id="monthly-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Crop (m³)</th>
+                            <th>Total (m³)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monthly-body"></tbody>
+                </table>
+            </div>
         </div>
 
         <div class="right-col">
             <div class="kpi-row">
-                <div class="kpi-box supply-bg"><h3>Total Supply (m³)</h3><h2 id="kpi-supply">0</h2></div>
-                <div class="kpi-box demand-bg"><h3>Total Demand (m³)</h3><h2 id="kpi-demand">0</h2></div>
-                <div class="kpi-box status-bg" id="kpi-status-box"><h3>Net Status (m³)</h3><h2 id="kpi-status">0</h2></div>
+                <div class="kpi-box supply-bg"><h3>Total Supply</h3><h2 id="kpi-supply">0</h2></div>
+                <div class="kpi-box demand-bg"><h3>Total Demand</h3><h2 id="kpi-demand">0</h2></div>
+                <div class="kpi-box status-bg" id="kpi-status-box"><h3>Net Status</h3><h2 id="kpi-status">0</h2></div>
             </div>
             <div class="card">
                 <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-weight:600;">
@@ -86,9 +136,13 @@
                 </div>
                 <div id="map"></div>
             </div>
+            <div class="card" style="margin-top:15px; height: 180px;">
+                <h4 style="margin-top:0; font-size:0.8rem;">12-Month Total Demand Trend</h4>
+                <canvas id="c-monthly-trend"></canvas>
+            </div>
         </div>
 
-        <div class="section-header">Demand Overview (m³)</div>
+        <div class="section-header">Demand Inputs (m³)</div>
         <div class="bottom-grid-demand" style="grid-column: span 2;">
             <div class="card">
                 <h5>Human Population</h5>
@@ -107,11 +161,11 @@
                 <div class="chart-container"><canvas id="c-livestock"></canvas></div>
             </div>
             <div class="card">
-                <h5>Irrigation</h5>
-                <div class="input-row"><label>Kharif (m³)</label><input type="number" id="i-c1" class="calc-input" value="0"></div>
-                <div class="input-row"><label>Rabi (m³)</label><input type="number" id="i-c2" class="calc-input" value="0"></div>
-                <div class="input-row"><label>Zaid (m³)</label><input type="number" id="i-c3" class="calc-input" value="0"></div>
-                <div class="chart-container"><canvas id="c-irrigation"></canvas></div>
+                <h5>Crop Area (Ha)</h5>
+                <div class="input-row"><label>Paddy</label><input type="number" id="a-paddy" class="calc-input" value="0"></div>
+                <div class="input-row"><label>Pulses</label><input type="number" id="a-pulses" class="calc-input" value="0"></div>
+                <div class="input-row"><label>Oilseeds</label><input type="number" id="a-oil" class="calc-input" value="0"></div>
+                <div class="input-row"><label>Vegetables</label><input type="number" id="a-veg" class="calc-input" value="0"></div>
             </div>
             <div class="card">
                 <h5>Industry</h5>
@@ -121,7 +175,7 @@
             </div>
         </div>
 
-        <div class="section-header">Supply Overview (m³)</div>
+        <div class="section-header">Supply Inputs (m³)</div>
         <div class="bottom-grid-supply" style="grid-column: span 2;">
             <div class="card">
                 <h5>Surface Water</h5>
@@ -144,190 +198,224 @@
     </div>
 
     <script>
-proj4.defs("EPSG:32645", "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs");
+        proj4.defs("EPSG:32645", "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs");
+        
+        // Month-wise Crop Irrigation Requirements (mm) from your spreadsheet
+        const monthlyIrrigationReq = {
+            "Jan": { p: 0,    pu: 31,    o: 68.4,  v: 0 },
+            "Feb": { p: 0,    pu: 114.6, o: 167,   v: 50 },
+            "Mar": { p: 0,    pu: 145.8, o: 72.6,  v: 107 },
+            "Apr": { p: 0,    pu: 15.3,  o: 0,     v: 208 },
+            "May": { p: 0,    pu: 0,     o: 0,     v: 81 },
+            "Jun": { p: 258.6, pu: 0,    o: 0,     v: 0 },
+            "Jul": { p: 19.6,  pu: 0,    o: 0,     v: 0 },
+            "Aug": { p: 24.6,  pu: 0,    o: 0,     v: 0 },
+            "Sep": { p: 5.5,   pu: 0,    o: 0,     v: 0 },
+            "Oct": { p: 86.9,  pu: 0,    o: 0,     v: 0 },
+            "Nov": { p: 0,     pu: 0,    o: 0,     v: 0 },
+            "Dec": { p: 0,     pu: 14.1, o: 25,    v: 0 }
+        };
 
-const geoData = {
-    "Nayagarh": {
-        coords: [20.1226, 85.1051],
-        districtBoundaryFile: "Nayagarh_bnd.json", 
-        files: ["Odogaon_bnd.json", "Daspalla.json"],
-        clusters: {
-            "Odagaon": {
-                file: "Odogaon_bnd.json",
-                msws: {
-                    "Rabara": { pop: 2508, ls: { c: 239, s: 160+267, p: 378, pig: 0 } },
-                    "Odagaon": { pop: 8514, ls: { c: 112, s: 44, p: 160, pig: 0 } },
-                    "Jaringi": { pop: 6172, ls: { c: 172, s: 100+115, p: 180, pig: 0 } },
-                    "Kumbhiapallii": { pop: 4766, ls: { c: 388+10, s: 153+300, p: 405, pig: 0 } },
-                    "Kalyanpur": { pop: 4479, ls: { c: 182+22, s: 25+84, p: 270, pig: 0 } },
-                    "Bhandar": { pop: 8151, ls: { c: 108+14, s: 32+105, p: 136, pig: 0 } },
-                    "Sikharpur": { pop: 9745, ls: { c: 360+42, s: 57+187, p: 6235, pig: 0 } },
-                    "Nandighora": { pop: 5652, ls: { c: 1740+72, s: 830+950, p: 1150, pig: 0 } },
-                    "Badaput": { pop: 1833, ls: { c: 270+10, s: 110+230, p: 100, pig: 0 } },
-                    "Saradapur": { pop: 6143, ls: { c: 165+10, s: 45+86, p: 137, pig: 24 } },
-                    "Dhusuma": { pop: 1474, ls: { c: 300+6, s: 7+12, p: 150, pig: 0 } },
-                    "Badagarada": { pop: 9852, ls: { c: 860+35, s: 357+260, p: 780, pig: 0 } }
-                }
-            },
-            "Daspalla": {
-                file: "Daspalla.json",
-                msws: {
-                    "Baijhari": { code: "0407010304140202", pop: 492, ls: { c: 62+23, s: 72, p: 150, pig: 0 } },
-                    "Duda": { code: "0407010304130202", pop: 264, ls: { c: 200+50, s: 300, p: 500, pig: 0 } },
-                    "Kurudangi": { code: "0407010304130201", pop: 242, ls: { c: 150+60, s: 250, p: 400, pig: 0 } },
-                    "Kumbhikela": { code: "0407010304140104", pop: 385, ls: { c: 180+66, s: 268, p: 335, pig: 0 } },
-                    "Kuradhinisa": { code: "0407010304140201", pop: 183, ls: { c: 70+26, s: 232, p: 240, pig: 0 } },
-                    "Sirisira": { code: "0407010304150201", pop: 494, ls: { c: 260+52, s: 210, p: 280, pig: 0 } },
-                    "Kujamendhi": { code: "0407010304160201", pop: 1090, ls: { c: 172+192, s: 275, p: 620, pig: 0 } },
-                    "Gunduribadi": { code: "0407010304140102", pop: 502, ls: { c: 423+198, s: 503, p: 611, pig: 0 } },
-                    "Hanumanta": { code: "0407010304140103", pop: 2185, ls: { c: 77+72, s: 150, p: 200, pig: 0 } },
-                    "Chadheyapalli": { code: "0407010304160102", pop: 2760, ls: { c: 42+91, s: 120, p: 250, pig: 0 } },
-                    "Bani": { code: "0407010304070203", pop: 454, ls: { c: 302+152, s: 353, p: 468, pig: 0 } },
-                    "Padhanpada": { code: "0407010304080204", pop: 244, ls: { c: 25+38, s: 75, p: 150, pig: 0 } },
-                    "Sundarkumpa": { code: "0407010304150202", pop: 792, ls: { c: 110+150, s: 250, p: 435, pig: 0 } },
-                    "Pemperada": { code: "0407010304160202", pop: 241, ls: { c: 230+78, s: 335, p: 432, pig: 0 } },
-                    "Durgaprasad": { code: "0407010304140101", pop: 885, ls: { c: 278+154, s: 247, p: 341, pig: 0 } }
+        const geoData = {
+            "Nayagarh": {
+                coords: [20.1226, 85.1051],
+                districtBoundaryFile: "Nayagarh_bnd.json",
+                clusters: {
+                    "Odagaon": {
+                        file: "Odogaon_bnd.json",
+                        msws: {
+                            "Rabara": { pop: 2508, ls: { c: 239, s: 427, p: 378, pig: 0 }, crops: { p: 140, pu: 60, o: 0, v: 5 } },
+                            "Odagaon": { pop: 8514, ls: { c: 112, s: 44, p: 160, pig: 0 }, crops: { p: 100, pu: 20, o: 0, v: 10 } },
+                            "Jaringi": { pop: 6172, ls: { c: 172, s: 215, p: 180, pig: 0 }, crops: { p: 130, pu: 40, o: 0, v: 5 } },
+                            "Kumbhiapallii": { pop: 4766, ls: { c: 398, s: 453, p: 405, pig: 0 }, crops: { p: 200, pu: 80, o: 10, v: 15 } },
+                            "Kalyanpur": { pop: 4479, ls: { c: 204, s: 109, p: 270, pig: 0 }, crops: { p: 110, pu: 30, o: 5, v: 8 } },
+                            "Bhandar": { pop: 8151, ls: { c: 122, s: 137, p: 136, pig: 0 }, crops: { p: 150, pu: 50, o: 0, v: 5 } },
+                            "Sikharpur": { pop: 9745, ls: { c: 402, s: 244, p: 6235, pig: 0 }, crops: { p: 180, pu: 70, o: 10, v: 20 } },
+                            "Nandighora": { pop: 5652, ls: { c: 1812, s: 1780, p: 1150, pig: 0 }, crops: { p: 300, pu: 150, o: 20, v: 40 } },
+                            "Badaput": { pop: 1833, ls: { c: 280, s: 340, p: 100, pig: 0 }, crops: { p: 80, pu: 20, o: 5, v: 10 } },
+                            "Saradapur": { pop: 6143, ls: { c: 175, s: 131, p: 137, pig: 24 }, crops: { p: 140, pu: 50, o: 5, v: 15 } },
+                            "Dhusuma": { pop: 1474, ls: { c: 306, s: 19, p: 150, pig: 0 }, crops: { p: 90, pu: 30, o: 0, v: 5 } },
+                            "Badagarada": { pop: 9852, ls: { c: 895, s: 617, p: 780, pig: 0 }, crops: { p: 250, pu: 100, o: 15, v: 25 } }
+                        }
+                    },
+                    "Daspalla": {
+                        file: "Daspalla.json",
+                        msws: {
+                            "Baijhari": { code: "0407010304140202", pop: 492, ls: { c: 85, s: 72, p: 150, pig: 0 }, crops: { p: 62, pu: 6, o: 3, v: 3 } },
+                            "Duda": { code: "0407010304130202", pop: 264, ls: { c: 250, s: 300, p: 500, pig: 0 }, crops: { p: 105.8, pu: 10, o: 5, v: 5 } },
+                            "Kurudangi": { code: "0407010304130201", pop: 242, ls: { c: 210, s: 250, p: 400, pig: 0 }, crops: { p: 120.9, pu: 15, o: 0, v: 8 } },
+                            "Kumbhikela": { code: "0407010304140104", pop: 385, ls: { c: 246, s: 268, p: 335, pig: 0 }, crops: { p: 231.8, pu: 50, o: 0, v: 0 } },
+                            "Kuradhinisa": { code: "0407010304140201", pop: 183, ls: { c: 96, s: 232, p: 240, pig: 0 }, crops: { p: 40, pu: 5, o: 0, v: 0 } },
+                            "Sirisira": { code: "0407010304150201", pop: 494, ls: { c: 312, s: 210, p: 280, pig: 0 }, crops: { p: 125.5, pu: 15, o: 0, v: 0 } },
+                            "Kujamendhi": { code: "0407010304160201", pop: 1090, ls: { c: 364, s: 275, p: 620, pig: 0 }, crops: { p: 119, pu: 30, o: 20, v: 5 } },
+                            "Gunduribadi": { code: "0407010304140102", pop: 502, ls: { c: 621, s: 503, p: 611, pig: 0 }, crops: { p: 145.9, pu: 70, o: 0, v: 0 } },
+                            "Hanumanta": { code: "0407010304140103", pop: 2185, ls: { c: 149, s: 150, p: 200, pig: 0 }, crops: { p: 180, pu: 40, o: 10, v: 15 } },
+                            "Chadheyapalli": { code: "0407010304160102", pop: 2760, ls: { c: 133, s: 120, p: 250, pig: 0 }, crops: { p: 185, pu: 40, o: 17, v: 9 } },
+                            "Bani": { code: "0407010304070203", pop: 454, ls: { c: 454, s: 353, p: 468, pig: 0 }, crops: { p: 122.5, pu: 25, o: 0, v: 0 } },
+                            "Padhanpada": { code: "0407010304080204", pop: 244, ls: { c: 63, s: 75, p: 150, pig: 0 }, crops: { p: 75, pu: 10, o: 5, v: 3 } },
+                            "Sundarkumpa": { code: "0407010304150202", pop: 792, ls: { c: 260, s: 250, p: 435, pig: 0 }, crops: { p: 229, pu: 25, o: 10, v: 10 } },
+                            "Pemperada": { code: "0407010304160202", pop: 241, ls: { c: 308, s: 335, p: 432, pig: 0 }, crops: { p: 115, pu: 12, o: 2, v: 8 } },
+                            "Durgaprasad": { code: "0407010304170202", pop: 885, ls: { c: 432, s: 247, p: 341, pig: 0 }, crops: { p: 145.8, pu: 35, o: 0, v: 45 } }
+                        }
+                    }
                 }
             }
+        };
+
+        const map = L.map('map').setView([20.1226, 85.1051], 9);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        let geoLayer = null, districtLayer = null;
+        const dS = document.getElementById('district-select'), cS = document.getElementById('cluster-select'), mS = document.getElementById('msw-select');
+
+        for (let d in geoData) dS.add(new Option(d, d));
+
+        dS.onchange = function() {
+            cS.innerHTML = '<option value="">Select Cluster</option>'; mS.innerHTML = '';
+            cS.disabled = !this.value; mS.disabled = true;
+            if (districtLayer) map.removeLayer(districtLayer);
+            if (geoLayer) map.removeLayer(geoLayer);
+            if (!this.value) return;
+            let distInfo = geoData[this.value];
+            for (let c in distInfo.clusters) cS.add(new Option(c, c));
+            fetch(distInfo.districtBoundaryFile).then(r => r.json()).then(data => {
+                data.features.forEach(f => processCoords(f));
+                districtLayer = L.geoJSON(data, { style: { color: '#334155', weight: 3, fillOpacity: 0, dashArray: '5, 10' } }).addTo(map);
+                map.flyToBounds(districtLayer.getBounds(), { duration: 1.5 });
+            });
+        };
+
+        cS.onchange = function() {
+            mS.innerHTML = '<option value="">Select MSW</option>'; mS.disabled = !this.value;
+            if (!this.value) return;
+            let cluster = geoData[dS.value].clusters[this.value];
+            for (let m in cluster.msws) mS.add(new Option(m, m));
+            fetch(cluster.file).then(r => r.json()).then(data => {
+                data.features.forEach(f => processCoords(f));
+                plotMap(data);
+                if (geoLayer) map.flyToBounds(geoLayer.getBounds(), { duration: 1.2 });
+            });
+        };
+
+        mS.onchange = function() {
+            if (!this.value) return;
+            let selectedName = this.value;
+            let mswData = geoData[dS.value].clusters[cS.value].msws[selectedName];
+            document.getElementById('map-name').innerText = "MSW: " + selectedName;
+            geoLayer.eachLayer(l => {
+                let p = l.feature.properties;
+                let jsonName = (p.MWS_Name || p.MICRO_WS || p.Name || "").toString().toLowerCase().trim();
+                let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || "").toString().trim();
+                let match = (jsonName === selectedName.toLowerCase()) || (mswData.code && jsonCode === mswData.code.toString());
+                if (match) { 
+                    l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); 
+                    map.flyToBounds(l.getBounds(), { duration: 1, padding: [50, 50] }); 
+                }
+                else l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
+            });
+            document.getElementById('pop-rural').value = mswData.pop;
+            document.getElementById('l-cattle').value = mswData.ls.c;
+            document.getElementById('l-sheep').value = mswData.ls.s;
+            document.getElementById('l-poultry').value = mswData.ls.p;
+            document.getElementById('l-pigs').value = mswData.ls.pig || 0;
+            document.getElementById('a-paddy').value = mswData.crops.p;
+            document.getElementById('a-pulses').value = mswData.crops.pu;
+            document.getElementById('a-oil').value = mswData.crops.o;
+            document.getElementById('a-veg').value = mswData.crops.v;
+            calculate();
+        };
+
+        function processCoords(f) {
+            let c = f.geometry.coordinates;
+            if (f.geometry.type === "Polygon") c.forEach(r => r.forEach(pt => convert(pt)));
+            else c.forEach(p => p.forEach(r => r.forEach(pt => convert(pt))));
         }
-    }
-};
+        function convert(pt) { if (pt[0] > 180) { let out = proj4("EPSG:32645", "EPSG:4326", [pt[0], pt[1]]); pt[0] = out[0]; pt[1] = out[1]; } }
+        
+        function plotMap(data) {
+            if (geoLayer) map.removeLayer(geoLayer);
+            geoLayer = L.geoJSON(data, { 
+                style: { color: '#0077b6', weight: 1.5, fillOpacity: 0.1 },
+                onEachFeature: function(feature, layer) {
+                    layer.bindTooltip(feature.properties.MWS_Name || feature.properties.MICRO_WS || "MSW");
+                }
+            }).addTo(map);
+        }
 
-const map = L.map('map').setView([20.1226, 85.1051], 9);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        function calculate() {
+            let rFull = (+document.getElementById('pop-rural').value) + (+document.getElementById('pop-add-a').value) + (+document.getElementById('pop-add-b').value);
+            let hDemAnnual = ((+document.getElementById('pop-urban').value * 145) + (rFull * 55)) * 365 / 1000;
+            let c = +document.getElementById('l-cattle').value, s = +document.getElementById('l-sheep').value, p = +document.getElementById('l-poultry').value, pig = +document.getElementById('l-pigs').value;
+            let lDemAnnual = ((c * 67) + (s * 7) + (p * 0.3) + (pig * 22)) * 365 / 1000;
+            
+            let aP = +document.getElementById('a-paddy').value, aPu = +document.getElementById('a-pulses').value, aO = +document.getElementById('a-oil').value, aV = +document.getElementById('a-veg').value;
+            
+            let totalIrrigationAnnual = 0, monthlyDemandArr = [], tableHtml = "";
+            
+            Object.keys(monthlyIrrigationReq).forEach(m => {
+                let req = monthlyIrrigationReq[m];
+                
+                // Formula Updated: (Requirement * Area) / Efficiency(0.4) * 10
+                let irrWaterMonth = ((req.p * aP) + (req.pu * aPu) + (req.o * aO) + (req.v * aV)) / 0.4 * 10;
+                let domesticWaterMonth = (hDemAnnual + lDemAnnual) / 12;
+                let monthTotal = Math.round(irrWaterMonth + domesticWaterMonth);
+                
+                totalIrrigationAnnual += irrWaterMonth;
+                monthlyDemandArr.push(monthTotal);
+                
+                tableHtml += `<tr>
+                    <th>${m}</th>
+                    <td>${Math.round(irrWaterMonth).toLocaleString()}</td>
+                    <td>${monthTotal.toLocaleString()}</td>
+                </tr>`;
+            });
 
-let geoLayer = null;      
-let districtLayer = null; 
+            document.getElementById('monthly-body').innerHTML = tableHtml;
+            let indDem = (+document.getElementById('ind-1').value + +document.getElementById('ind-2').value);
+            let surf = (+document.getElementById('s-pond').value + +document.getElementById('s-res').value + +document.getElementById('s-riv').value);
+            let ground = (+document.getElementById('g-dug').value + +document.getElementById('g-tube').value + +document.getElementById('g-oth').value);
+            let trans = (+document.getElementById('t-s1').value + +document.getElementById('t-s2').value);
+            
+            let totalD = hDemAnnual + lDemAnnual + totalIrrigationAnnual + indDem, totalS = surf + ground + trans, net = totalS - totalD;
+            
+            document.getElementById('txt-human').innerText = Math.round(hDemAnnual).toLocaleString();
+            document.getElementById('txt-livestock').innerText = Math.round(lDemAnnual).toLocaleString();
+            document.getElementById('txt-irrigation').innerText = Math.round(totalIrrigationAnnual).toLocaleString();
+            document.getElementById('txt-industry').innerText = Math.round(indDem).toLocaleString();
+            document.getElementById('txt-surface').innerText = Math.round(surf).toLocaleString();
+            document.getElementById('txt-ground').innerText = Math.round(ground).toLocaleString();
+            document.getElementById('txt-transfer').innerText = Math.round(trans).toLocaleString();
+            document.getElementById('txt-net').innerText = Math.round(net).toLocaleString();
+            document.getElementById('kpi-supply').innerText = Math.round(totalS).toLocaleString();
+            document.getElementById('kpi-demand').innerText = Math.round(totalD).toLocaleString();
+            document.getElementById('kpi-status').innerText = Math.round(net).toLocaleString();
+            document.getElementById('kpi-status-box').style.background = net >= 0 ? '#10b981' : '#ef4444';
+            updateCharts(monthlyDemandArr);
+        }
 
-const dS = document.getElementById('district-select'), cS = document.getElementById('cluster-select'), mS = document.getElementById('msw-select');
-
-for (let d in geoData) dS.add(new Option(d, d));
-
-dS.onchange = function() {
-    cS.innerHTML = '<option value="">Select Cluster</option>'; mS.innerHTML = '';
-    cS.disabled = !this.value; mS.disabled = true;
-    if (districtLayer) map.removeLayer(districtLayer);
-    if (geoLayer) map.removeLayer(geoLayer);
-    if (!this.value) return;
-
-    let distInfo = geoData[this.value];
-    for (let c in distInfo.clusters) cS.add(new Option(c, c));
-
-    fetch(distInfo.districtBoundaryFile).then(r => r.json()).then(data => {
-        data.features.forEach(f => processCoords(f));
-        districtLayer = L.geoJSON(data, { style: { color: '#334155', weight: 3, fillOpacity: 0, dashArray: '5, 10' } }).addTo(map);
-        map.fitBounds(districtLayer.getBounds());
-    });
-
-    let promises = distInfo.files.map(f => fetch(f).then(r => r.json()));
-    Promise.all(promises).then(res => {
-        let combined = { type: "FeatureCollection", features: [] };
-        res.forEach(d => d.features.forEach(f => { processCoords(f); combined.features.push(f); }));
-        plotMap(combined);
-    });
-};
-
-cS.onchange = function() {
-    mS.innerHTML = '<option value="">Select MSW</option>'; mS.disabled = !this.value;
-    if (!this.value) return;
-    let cluster = geoData[dS.value].clusters[this.value];
-    for (let m in cluster.msws) mS.add(new Option(m, m));
-    fetch(cluster.file).then(r => r.json()).then(data => {
-        data.features.forEach(f => processCoords(f));
-        plotMap(data);
-    });
-};
-
-mS.onchange = function() {
-    if (!this.value) return;
-    let selectedName = this.value;
-    let mswData = geoData[dS.value].clusters[cS.value].msws[selectedName];
-    document.getElementById('map-name').innerText = "MSW: " + selectedName;
-
-    geoLayer.eachLayer(l => {
-        let p = l.feature.properties;
-        let jsonName = (p.MWS_Name || p.MICRO_WS || "").toString().toLowerCase().trim();
-        let match = [p.MWS_Name, p.NEW_WS_COD, p.WS_LCODE_1, p.MICRO_WS].includes(mswData.code || selectedName) || 
-                    (selectedName === "Saradapur" && jsonName === "saradapur") ||
-                    (selectedName === "Saradapur" && jsonName === "saradhapur");
-
-        if (match) { l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); map.fitBounds(l.getBounds()); }
-        else l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
-    });
-    
-    document.getElementById('pop-rural').value = mswData.pop;
-    document.getElementById('pop-urban').value = 0;
-    document.getElementById('pop-add-a').value = 0;
-    document.getElementById('pop-add-b').value = 0;
-    document.getElementById('l-cattle').value = mswData.ls.c;
-    document.getElementById('l-sheep').value = mswData.ls.s;
-    document.getElementById('l-poultry').value = mswData.ls.p;
-    document.getElementById('l-pigs').value = mswData.ls.pig || 0;
-    calculate();
-};
-
-function processCoords(f) {
-    let c = f.geometry.coordinates;
-    if (f.geometry.type === "Polygon") c.forEach(r => r.forEach(pt => convert(pt)));
-    else c.forEach(p => p.forEach(r => r.forEach(pt => convert(pt))));
-}
-function convert(pt) { if (pt[0] > 180) { let out = proj4("EPSG:32645", "EPSG:4326", [pt[0], pt[1]]); pt[0] = out[0]; pt[1] = out[1]; } }
-function plotMap(data) {
-    if (geoLayer) map.removeLayer(geoLayer);
-    geoLayer = L.geoJSON(data, { style: { color: '#0077b6', weight: 1.5, fillOpacity: 0.1 } }).addTo(map);
-    if (geoLayer.getBounds().isValid()) map.fitBounds(geoLayer.getBounds(), { padding: [20, 20] });
-}
-
-function calculate() {
-    let rFull = (+document.getElementById('pop-rural').value) + (+document.getElementById('pop-add-a').value) + (+document.getElementById('pop-add-b').value);
-    let hDem = ((+document.getElementById('pop-urban').value * 145) + (rFull * 55)) * 365 / 1000;
-    
-    let c = +document.getElementById('l-cattle').value, s = +document.getElementById('l-sheep').value, p = +document.getElementById('l-poultry').value, pig = +document.getElementById('l-pigs').value;
-    let lDem = ((c * 67) + (s * 7) + (p * 0.3) + (pig * 22)) * 365 / 1000;
-
-    let iDem = (+document.getElementById('i-c1').value + +document.getElementById('i-c2').value + +document.getElementById('i-c3').value);
-    let indDem = (+document.getElementById('ind-1').value + +document.getElementById('ind-2').value);
-    let surf = (+document.getElementById('s-pond').value + +document.getElementById('s-res').value + +document.getElementById('s-riv').value);
-    let ground = (+document.getElementById('g-dug').value + +document.getElementById('g-tube').value + +document.getElementById('g-oth').value);
-    let trans = (+document.getElementById('t-s1').value + +document.getElementById('t-s2').value);
-
-    let totalD = hDem + lDem + iDem + indDem, totalS = surf + ground + trans, net = totalS - totalD;
-
-    document.getElementById('txt-human').innerText = Math.round(hDem).toLocaleString();
-    document.getElementById('txt-livestock').innerText = Math.round(lDem).toLocaleString();
-    document.getElementById('txt-irrigation').innerText = Math.round(iDem).toLocaleString();
-    document.getElementById('txt-industry').innerText = Math.round(indDem).toLocaleString();
-    document.getElementById('txt-surface').innerText = Math.round(surf).toLocaleString();
-    document.getElementById('txt-ground').innerText = Math.round(ground).toLocaleString();
-    document.getElementById('txt-transfer').innerText = Math.round(trans).toLocaleString();
-    document.getElementById('txt-net').innerText = Math.round(net).toLocaleString();
-
-    document.getElementById('kpi-supply').innerText = Math.round(totalS).toLocaleString();
-    document.getElementById('kpi-demand').innerText = Math.round(totalD).toLocaleString();
-    document.getElementById('kpi-status').innerText = Math.round(net).toLocaleString();
-    document.getElementById('kpi-status-box').style.background = net >= 0 ? '#10b981' : '#ef4444';
-    updateCharts();
-}
-
-let charts = {};
-function initCharts() {
-    const config = (id, type, labels) => new Chart(document.getElementById(id), {
-        type: type, data: { labels: labels, datasets:[{data:[1,1,1,1], backgroundColor:['#0077b6','#f59e0b','#10b981','#6366f1']}] },
-        options: { maintainAspectRatio:false, plugins:{legend:{display:false}} }
-    });
-    charts.h = config('c-human', 'pie', ['U','R','A','B']); 
-    charts.l = config('c-livestock', 'pie', ['C','S','P','PG']);
-    charts.i = config('c-irrigation', 'bar', ['K','R','S']); 
-    charts.ind = config('c-industry', 'doughnut', ['H','L']);
-}
-function updateCharts() {
-    charts.h.data.datasets[0].data = [+document.getElementById('pop-urban').value, +document.getElementById('pop-rural').value, +document.getElementById('pop-add-a').value, +document.getElementById('pop-add-b').value];
-    charts.l.data.datasets[0].data = [+document.getElementById('l-cattle').value, +document.getElementById('l-sheep').value, +document.getElementById('l-poultry').value, +document.getElementById('l-pigs').value];
-    Object.values(charts).forEach(c => c.update());
-}
-
-document.querySelectorAll('.calc-input').forEach(i => i.oninput = calculate);
-initCharts();
+        let charts = {};
+        function initCharts() {
+            const config = (id, type, labels) => new Chart(document.getElementById(id), {
+                type: type, data: { labels: labels, datasets:[{data:[1,1,1,1], backgroundColor:['#0077b6','#f59e0b','#10b981','#6366f1']}] },
+                options: { maintainAspectRatio:false, plugins:{legend:{display:false}} }
+            });
+            charts.h = config('c-human', 'pie', ['U','R','A','B']); 
+            charts.l = config('c-livestock', 'pie', ['C','S','P','PG']);
+            charts.ind = config('c-industry', 'doughnut', ['H','L']);
+            charts.m = new Chart(document.getElementById('c-monthly-trend'), {
+                type: 'line',
+                data: { labels: Object.keys(monthlyIrrigationReq), datasets: [{ label: 'm³', data: [], borderColor: '#0077b6', fill: true, backgroundColor: 'rgba(0,119,182,0.1)', tension: 0.4 }] },
+                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+            });
+        }
+        function updateCharts(mValues) {
+            charts.h.data.datasets[0].data = [+document.getElementById('pop-urban').value || 0, +document.getElementById('pop-rural').value || 1, +document.getElementById('pop-add-a').value, +document.getElementById('pop-add-b').value];
+            charts.l.data.datasets[0].data = [+document.getElementById('l-cattle').value, +document.getElementById('l-sheep').value, +document.getElementById('l-poultry').value, +document.getElementById('l-pigs').value];
+            charts.m.data.datasets[0].data = mValues;
+            Object.values(charts).forEach(c => c.update());
+        }
+        document.querySelectorAll('.calc-input').forEach(i => i.oninput = calculate);
+        initCharts();
     </script>
 </body>
 </html>
