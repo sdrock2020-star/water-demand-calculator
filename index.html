@@ -16,7 +16,6 @@
         :root { --primary: #0077b6; --bg: #f1f5f9; --card: #ffffff; --border: #cbd5e1; --text: #0f172a; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg); color: var(--text); padding: 10px; }
-        h1 { text-align: center; font-size: 1.5rem; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; border-bottom: 3px solid var(--primary); width: 100%; padding-bottom: 5px; }
         
         .main-grid { display: grid; grid-template-columns: 360px 1fr; gap: 15px; }
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -49,42 +48,30 @@
         #monthly-table th, #monthly-table td { border: 1px solid #eee; padding: 3px; text-align: right; }
         #monthly-table th { background: #f8fafc; text-align: left; }
 
-        .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Keeps logo left and title centered or right */
-    background-color: #ffffff;
-    padding: 15px 30px;
-    margin-bottom: 20px;
-    border-bottom: 4px solid var(--primary);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+        .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .logo-box img { height: 80px; width: 80px; }
+        h1 { flex-grow: 1; text-align: center; font-size: 1.8rem; color: var(--primary); margin: 0; text-transform: uppercase; border-bottom: none; }
 
-.logo-box img {
-    height: 80px; 
-    width: 80px;
-}
-
-h1 {
-    flex-grow: 1;
-    text-align: center;
-    font-size: 1.8rem;
-    color: var(--primary);
-    margin: 0;
-    text-transform: uppercase;
-    border-bottom: none; /* Removed from H1 since it's on the container now */
-}
+        /* Dynamic Tabs Implementation */
+        .tab-section-container { grid-column: span 2; margin-top: 25px; background: #170107; color: #181819; border: none; }
+        .tab-navigation { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 15px; }
+        .tab-btn { background: transparent; border: 2px solid #475569; color: #94a3b8; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
+        .tab-btn:hover, .tab-btn.active { border-color: var(--primary); background-color: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 119, 182, 0.3); }
+        .tab-pane { display: none; text-align: center; max-width: 800px; margin: 0 auto; animation: fadeIn 0.4s ease forwards; }
+        .tab-pane.active { display: block; }
+        .tab-pane h4 { font-size: 1.2rem; color: #ffffff; margin-bottom: 12px; font-weight: 600; }
+        .tab-pane p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #94a3b8; }
+        .tab-pane strong { color: #f8fafc; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <header class="header-container">
-    <div class="logo-box">
-        <img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"> </div>
-    <h1>REWARD Water Budget Dashboard</h1>
-    <div class="logo-box">
-        <img src="top_logo.jpg.png" alt="REWARD Logo"> </div>
-</header>
+        <div class="logo-box"><img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"></div>
+        <h1>REWARD Water Budget Dashboard</h1>
+        <div class="logo-box"><img src="top_logo.jpg.png" alt="REWARD Logo"></div>
+    </header>
 
     <div class="main-grid">
         <div class="left-col">
@@ -195,12 +182,45 @@ h1 {
                 <div class="input-row"><label>Source-2</label><input type="number" id="t-s2" class="calc-input" value="0"></div>
             </div>
         </div>
+
+        <div class="card tab-section-container">
+            <div class="tab-navigation">
+                <button class="tab-btn active" onclick="switchTab(event, 'about-tab')">About Us</button>
+                <button class="tab-btn" onclick="switchTab(event, 'contact-tab')">Contact</button>
+                <button class="tab-btn" onclick="switchTab(event, 'team-tab')">Research Team</button>
+                <button class="tab-btn" onclick="switchTab(event, 'copyright-tab')">Copyright</button>
+            </div>
+            <div class="tab-wrapper">
+                <div id="about-tab" class="tab-pane active">
+                    <h4>About ICAR-IIWM</h4>
+                    <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production.</p>
+                    <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building.</p>
+                    <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions.</p>
+                </div>
+                <div id="contact-tab" class="tab-pane">
+                    <h4>Contact Information</h4>
+                    <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principle Scientist) <br>P.I REWARD</p>
+                    <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023</p>
+                </div>
+                <div id="team-tab" class="tab-pane">
+                    <h4>Research Team</h4>
+                    <p>DR. SUSANTA KUMAR JENA (P.I REWARD)</p>
+                    <p>DR. SAMEER MANDAL(RA) </p>
+                    <p>ER. SUBRAT DASH(YP-1)</p>
+
+                </div>
+                <div id="copyright-tab" class="tab-pane">
+                    <h4>Copyright & Acknowledgments</h4>
+                    <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved.</p>
+                    <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India</p>
+                    <p style="font-style: italic; margin-top: 5px; font-size: 0.8rem;">This project contributes to sustainable agricultural development and water security in India.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         proj4.defs("EPSG:32645", "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs");
-        
-        // Month-wise Crop Irrigation Requirements (mm) from your spreadsheet
         const monthlyIrrigationReq = {
             "Jan": { p: 0,    pu: 31,    o: 68.4,  v: 0 },
             "Feb": { p: 0,    pu: 114.6, o: 167,   v: 50 },
@@ -215,7 +235,6 @@ h1 {
             "Nov": { p: 0,     pu: 0,    o: 0,     v: 0 },
             "Dec": { p: 0,     pu: 14.1, o: 25,    v: 0 }
         };
-
         const geoData = {
             "Nayagarh": {
                 coords: [20.1226, 85.1051],
@@ -269,9 +288,9 @@ h1 {
         const dS = document.getElementById('district-select'), cS = document.getElementById('cluster-select'), mS = document.getElementById('msw-select');
 
         for (let d in geoData) dS.add(new Option(d, d));
-
         dS.onchange = function() {
-            cS.innerHTML = '<option value="">Select Cluster</option>'; mS.innerHTML = '';
+            cS.innerHTML = '<option value="">Select Cluster</option>';
+            mS.innerHTML = '';
             cS.disabled = !this.value; mS.disabled = true;
             if (districtLayer) map.removeLayer(districtLayer);
             if (geoLayer) map.removeLayer(geoLayer);
@@ -286,7 +305,8 @@ h1 {
         };
 
         cS.onchange = function() {
-            mS.innerHTML = '<option value="">Select MSW</option>'; mS.disabled = !this.value;
+            mS.innerHTML = '<option value="">Select MSW</option>';
+            mS.disabled = !this.value;
             if (!this.value) return;
             let cluster = geoData[dS.value].clusters[this.value];
             for (let m in cluster.msws) mS.add(new Option(m, m));
@@ -307,6 +327,7 @@ h1 {
                 let jsonName = (p.MWS_Name || p.MICRO_WS || p.Name || "").toString().toLowerCase().trim();
                 let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || "").toString().trim();
                 let match = (jsonName === selectedName.toLowerCase()) || (mswData.code && jsonCode === mswData.code.toString());
+  
                 if (match) { 
                     l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); 
                     map.flyToBounds(l.getBounds(), { duration: 1, padding: [50, 50] }); 
@@ -347,22 +368,17 @@ h1 {
             let hDemAnnual = ((+document.getElementById('pop-urban').value * 145) + (rFull * 55)) * 365 / 1000;
             let c = +document.getElementById('l-cattle').value, s = +document.getElementById('l-sheep').value, p = +document.getElementById('l-poultry').value, pig = +document.getElementById('l-pigs').value;
             let lDemAnnual = ((c * 67) + (s * 7) + (p * 0.3) + (pig * 22)) * 365 / 1000;
-            
             let aP = +document.getElementById('a-paddy').value, aPu = +document.getElementById('a-pulses').value, aO = +document.getElementById('a-oil').value, aV = +document.getElementById('a-veg').value;
-            
             let totalIrrigationAnnual = 0, monthlyDemandArr = [], tableHtml = "";
-            
             Object.keys(monthlyIrrigationReq).forEach(m => {
                 let req = monthlyIrrigationReq[m];
-                
-                // Formula Updated: (Requirement * Area) / Efficiency(0.4) * 10
                 let irrWaterMonth = ((req.p * aP) + (req.pu * aPu) + (req.o * aO) + (req.v * aV)) / 0.4 * 10;
                 let domesticWaterMonth = (hDemAnnual + lDemAnnual) / 12;
                 let monthTotal = Math.round(irrWaterMonth + domesticWaterMonth);
                 
                 totalIrrigationAnnual += irrWaterMonth;
                 monthlyDemandArr.push(monthTotal);
-                
+       
                 tableHtml += `<tr>
                     <th>${m}</th>
                     <td>${Math.round(irrWaterMonth).toLocaleString()}</td>
@@ -375,9 +391,7 @@ h1 {
             let surf = (+document.getElementById('s-pond').value + +document.getElementById('s-res').value + +document.getElementById('s-riv').value);
             let ground = (+document.getElementById('g-dug').value + +document.getElementById('g-tube').value + +document.getElementById('g-oth').value);
             let trans = (+document.getElementById('t-s1').value + +document.getElementById('t-s2').value);
-            
             let totalD = hDemAnnual + lDemAnnual + totalIrrigationAnnual + indDem, totalS = surf + ground + trans, net = totalS - totalD;
-            
             document.getElementById('txt-human').innerText = Math.round(hDemAnnual).toLocaleString();
             document.getElementById('txt-livestock').innerText = Math.round(lDemAnnual).toLocaleString();
             document.getElementById('txt-irrigation').innerText = Math.round(totalIrrigationAnnual).toLocaleString();
@@ -414,10 +428,21 @@ h1 {
             charts.m.data.datasets[0].data = mValues;
             Object.values(charts).forEach(c => c.update());
         }
+
+        // Tab Controller Switcher Function
+        function switchTab(event, tabId) {
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
         document.querySelectorAll('.calc-input').forEach(i => i.oninput = calculate);
         initCharts();
     </script>
 </body>
 </html>
-
-
