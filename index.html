@@ -370,11 +370,17 @@
             let selectedName = this.value;
             let mswData = geoData[dS.value].clusters[cS.value].msws[selectedName];
             document.getElementById('map-name').innerText = "MSW: " + selectedName;
+            
             geoLayer.eachLayer(l => {
                 let p = l.feature.properties;
-                let jsonName = (p.MWS_Name || p.MICRO_WS || p.Name || "").toString().toLowerCase().trim();
-                let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || "").toString().trim();
-                let match = (jsonName === selectedName.toLowerCase()) || (mswData.code && jsonCode === mswData.code.toString());
+                
+                // Aggressive matching strategy for dropdown syncing
+                let jsonName = (p.MWS_Name || p.MICRO_WS || p.MWS_NAME || p.mws_name || p.Name || "").toString().toLowerCase().trim();
+                let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || p.MWS_CODE || p.mws_code || "").toString().trim();
+                
+                let match = (jsonName === selectedName.toLowerCase()) || 
+                            (mswData.code && jsonCode === mswData.code.toString()) ||
+                            (l.getTooltip() && l.getTooltip().getContent().toLowerCase().trim() === selectedName.toLowerCase());
   
                 if (match) { 
                     l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); 
@@ -382,6 +388,7 @@
                 }
                 else l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
             });
+            
             document.getElementById('pop-rural').value = mswData.pop;
             document.getElementById('l-cattle').value = mswData.ls.c;
             document.getElementById('l-sheep').value = mswData.ls.s;
@@ -406,7 +413,51 @@
             geoLayer = L.geoJSON(data, { 
                 style: { color: '#0077b6', weight: 1.5, fillOpacity: 0.1 },
                 onEachFeature: function(feature, layer) {
-                    layer.bindTooltip(feature.properties.MWS_Name || feature.properties.MICRO_WS || "MSW");
+                    let props = feature.properties;
+                    
+                    // 1. Check for any standard name fields first
+                    let mwsName = props.MWS_Name || props.MICRO_WS || props.MWS_NAME || props.mws_name || props.Name || props.name;
+                    
+                    // 2. Extract a valid identifier code string if the name fields are generic or missing
+                    if (!mwsName || 
+                        mwsName.toString().toUpperCase() === "NAYAGARH" || 
+                        mwsName.toString().toUpperCase() === "MSW" || 
+                        mwsName.toString().toUpperCase() === "TO BE PROPOSED") {
+                        
+                        for (let key in props) {
+                            if (props[key] && props[key].toString().length > 3) {
+                                let valUpper = props[key].toString().toUpperCase().trim();
+                                if (valUpper !== "NAYAGARH" && valUpper !== "MSW" && valUpper !== "TO BE PROPOSED" && !valUpper.includes("DISTRICT")) {
+                                    mwsName = props[key];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 3. CODE TRANSLATOR ENGINE: If the identifier is a GIS code, translate it to the dropdown's English name
+                    if (mwsName) {
+                        let cleanCode = mwsName.toString().toUpperCase().trim();
+                        let currentDistrict = document.getElementById('district-select').value;
+                        let currentCluster = document.getElementById('cluster-select').value;
+                        
+                        // Look up inside our active cluster registry data
+                        if (currentDistrict && currentCluster && geoData[currentDistrict]?.clusters[currentCluster]) {
+                            let mswList = geoData[currentDistrict].clusters[currentCluster].msws;
+                            for (let englishName in mswList) {
+                                let registryCode = mswList[englishName].code ? mswList[englishName].code.toString().toUpperCase() : "";
+                                
+                                // Match if the GIS code is contained within or equals our mapped data code (e.g., matching "4G1C4H2D")
+                                if (registryCode && (registryCode.includes(cleanCode) || cleanCode.includes(registryCode) || registryCode.endsWith(cleanCode))) {
+                                    mwsName = englishName; // Swap out the ugly code for the clean name!
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!mwsName) mwsName = "MSW";
+                    layer.bindTooltip(mwsName.toString(), { sticky: true });
                 }
             }).addTo(map);
         }
