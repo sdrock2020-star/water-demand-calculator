@@ -52,16 +52,64 @@
         .logo-box img { height: 80px; width: 80px; }
         h1 { flex-grow: 1; text-align: center; font-size: 1.8rem; color: var(--primary); margin: 0; text-transform: uppercase; border-bottom: none; }
 
-        /* Dynamic Tabs Implementation */
-        .tab-section-container { grid-column: span 2; margin-top: 25px; background: #170107; color: #181819; border: none; }
-        .tab-navigation { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 15px; }
-        .tab-btn { background: transparent; border: 2px solid #475569; color: #94a3b8; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
-        .tab-btn:hover, .tab-btn.active { border-color: var(--primary); background-color: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 119, 182, 0.3); }
-        .tab-pane { display: none; text-align: center; max-width: 800px; margin: 0 auto; animation: fadeIn 0.4s ease forwards; }
-        .tab-pane.active { display: block; }
-        .tab-pane h4 { font-size: 1.2rem; color: #ffffff; margin-bottom: 12px; font-weight: 600; }
-        .tab-pane p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #94a3b8; }
-        .tab-pane strong { color: #f8fafc; }
+       /* Dynamic Tabs Implementation - Clean Gray Theme */
+        .tab-section-container { 
+            grid-column: span 2; 
+            margin-top: 25px; 
+            background: #f8fafc; 
+            color: #334155; 
+            border: 1px solid var(--border); 
+        }
+        .tab-navigation { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid var(--border); 
+            padding-bottom: 15px; 
+        }
+        .tab-btn { 
+            background: #ffffff; 
+            border: 2px solid var(--border); 
+            color: #64748b; 
+            padding: 8px 24px; 
+            font-size: 0.9rem; 
+            font-weight: 500; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+        }
+        .tab-btn:hover, .tab-btn.active { 
+            border-color: var(--primary); 
+            background-color: var(--primary); 
+            color: #ffffff; 
+            box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2); 
+        }
+        .tab-pane { 
+            display: none; 
+            text-align: center; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            animation: fadeIn 0.4s ease forwards; 
+        }
+        .tab-pane.active { 
+            display: block; 
+        }
+        .tab-pane h4 { 
+            font-size: 1.2rem; 
+            color: var(--primary); 
+            margin-bottom: 12px; 
+            font-weight: 600; 
+        }
+        .tab-pane p { 
+            font-size: 0.88rem; 
+            line-height: 1.6; 
+            margin-bottom: 10px; 
+            color: #475569; 
+        }
+        .tab-pane strong { 
+            color: #0f172a; 
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
