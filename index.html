@@ -70,28 +70,13 @@
         .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
         
         #monthly-table, #seasonal-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 5px; }
-        #monthly-table th, #seasonal-table th { 
-    background: #f1f5f9;
-    font-weight: 600;
-    color: #334155; 
-    text-align: left; 
-    width: 65%;      /* Increased from 60% to stop text wrapping */
-    position: sticky; 
-    top: 0; 
-    z-index: 5;
-    padding: 8px;
-}
-#monthly-table td, #seasonal-table td { 
-    border: 1px solid #e2e8f0;
-    padding: 8px; 
-    text-align: right;
-    width: 35%;      /* Decreased from 40% to balance the row width */
-}
+        #monthly-table th, #seasonal-table th { background: #f1f5f9; font-weight: 600; color: #334155; text-align: left; width: 65%; position: sticky; top: 0; z-index: 5; padding: 8px; }
+        #monthly-table td, #seasonal-table td { border: 1px solid #e2e8f0; padding: 8px; text-align: right; width: 35%; }
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box img { height: 80px; width: 80px; }
         .title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 0 20px; }
-        .title-container h2 { font-size: 1.4rem; color: #020a16; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
+        .title-container h2 { font-size: 1.4rem; color: #475569; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
         .title-container h2 .highlight-letter { color: var(--primary); font-weight: 800; }
         .title-container h1 { font-size: 2.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; }
 
@@ -427,7 +412,6 @@
             calculate();
         };
 
-        // Reset Logic Click Event Trigger
         document.getElementById('clear-all-btn').onclick = function() {
             document.getElementById('district-select').value = "";
             document.getElementById('cluster-select').innerHTML = "";
@@ -498,7 +482,8 @@
             let c = +document.getElementById('l-cattle').value, s = +document.getElementById('l-sheep').value, p = +document.getElementById('l-poultry').value, pig = +document.getElementById('l-pigs').value;
             let lDemAnnual = ((c * 67) + (s * 7) + (p * 0.3) + (pig * 22)) * 365 / 1000;
             let aP = +document.getElementById('a-paddy').value, aPu = +document.getElementById('a-pulses').value, aO = +document.getElementById('a-oil').value, aV = +document.getElementById('a-veg').value;
-            let totalIrrigationAnnual = 0, monthlyDemandArr = [], tableHtml = "";
+            
+            let totalIrrigationAnnual = 0, monthlyDemandArr = [], monthlyIrrigationArr = [], tableHtml = "";
             let seasonalDemands = { kharif: 0, rabi: 0, summer: 0 };
             
             Object.keys(monthlyIrrigationReq).forEach(m => {
@@ -509,6 +494,7 @@
                 
                 totalIrrigationAnnual += irrWaterMonth;
                 monthlyDemandArr.push(monthTotal);
+                monthlyIrrigationArr.push(Math.round(irrWaterMonth)); // Pure volumetric sum for the irrigation tab
        
                 if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
                     seasonalDemands.kharif += monthTotal;
@@ -543,65 +529,53 @@
             document.getElementById('kpi-demand').innerText = Math.round(totalD).toLocaleString();
             document.getElementById('kpi-status').innerText = Math.round(net).toLocaleString();
             document.getElementById('kpi-status-box').style.background = net >= 0 ? '#10b981' : '#ef4444';
-            updateCharts(monthlyDemandArr);
+            
+            updateCharts(monthlyDemandArr, monthlyIrrigationArr);
         }
 
         let charts = {};
         function initCharts() {
+            // Reusable configuration template for structural Pie / Doughnut objects
             const config = (id, type, labels) => new Chart(document.getElementById(id), {
                 type: type, data: { labels: labels, datasets:[{data:[1,1,1,1], backgroundColor:['#0077b6','#f59e0b','#10b981','#6366f1']}] },
                 options: { maintainAspectRatio:false, plugins:{legend:{display:false}} }
             });
+            
+            // Full-name expansion arrays so interactive mouse tooltips present pristine descriptive values
             charts.h = config('c-human', 'pie', ['Urban Pop.', 'Rural Pop.', 'Urban Demand', 'Rural Demand']); 
             charts.l = config('c-livestock', 'pie', ['Cattle/Buff', 'Sheep/Goat', 'Poultry', 'Pigs']);
+            charts.ind = config('c-industry', 'doughnut', ['Heavy (m³)', 'Light (m³)']);
             
-            // New Irrigation Breakdown Chart Configuration Instance
+            // 1. Irrigation Line Graph Configuration (Months on X-Axis, Demand m³ on Y-Axis)
             charts.irr = new Chart(document.getElementById('c-irrigation'), {
-    type: 'line',
-    data: {
-        labels: ['Paddy', 'Pulses', 'Oilseeds', 'Vegetables'],
-        datasets: [{
-            data: [0, 0, 0, 0],
-            borderColor: '#f59e0b', /* Amber color to fit the demand theme */
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            fill: true,
-            tension: 0.4
-        }]
-    },
-    options: {
-        maintainAspectRatio: false,
-        scales: {
-            y: { beginAtZero: true }
-        },
-        plugins: {
-            legend: { display: false }
-        }
-    }
-});
+                type: 'line',
+                data: {
+                    labels: Object.keys(monthlyIrrigationReq),
+                    datasets: [{ label: 'Irrigation Demand (m³)', data: [], borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: true, tension: 0.4 }]
+                },
+                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+            });
             
-            charts.ind = config('c-industry', 'doughnut', ['H','L']);
+            // 2. Global Monthly Water Demand Trend Line Graph
             charts.m = new Chart(document.getElementById('c-monthly-trend'), {
                 type: 'line',
-                data: { labels: Object.keys(monthlyIrrigationReq), datasets: [{ label: 'm³', data: [], borderColor: '#0077b6', fill: true, backgroundColor: 'rgba(0,119,182,0.1)', tension: 0.4 }] },
+                data: {
+                    labels: Object.keys(monthlyIrrigationReq),
+                    datasets: [{ label: 'Total Demand (m³)', data: [], borderColor: '#0077b6', fill: true, backgroundColor: 'rgba(0,119,182,0.1)', tension: 0.4 }]
+                },
                 options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
             });
         }
         
-        function updateCharts(mValues) {
+        function updateCharts(mValues, mIrrValues) {
             charts.h.data.datasets[0].data = [+document.getElementById('pop-urban').value || 0, +document.getElementById('pop-rural').value || 1, +document.getElementById('pop-add-a').value, +document.getElementById('pop-add-b').value];
             charts.l.data.datasets[0].data = [+document.getElementById('l-cattle').value, +document.getElementById('l-sheep').value, +document.getElementById('l-poultry').value, +document.getElementById('l-pigs').value];
-            
-            // Dynamic Data Feed for Irrigation Chart
-            let pVal = +document.getElementById('a-paddy').value || 0;
-            let puVal = +document.getElementById('a-pulses').value || 0;
-            let oVal = +document.getElementById('a-oil').value || 0;
-            let vVal = +document.getElementById('a-veg').value || 0;
-
-            charts.irr.data.datasets[0].data = [pVal, puVal, oVal, vVal];
-            charts.irr.data.datasets[0].data = [pVal || (puVal||oVal||vVal ? 0 : 1), puVal, oVal, vVal];
-
             charts.ind.data.datasets[0].data = [+document.getElementById('ind-1').value, +document.getElementById('ind-2').value];
+            
+            // Sync calculation output arrays directly down to our line series arrays
+            charts.irr.data.datasets[0].data = mIrrValues;
             charts.m.data.datasets[0].data = mValues;
+            
             Object.values(charts).forEach(c => c.update());
         }
 
