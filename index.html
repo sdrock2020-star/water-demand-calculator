@@ -24,6 +24,27 @@
         .filter-group label { font-size: 0.85rem; font-weight: 600; width: 130px; }
         .filter-group select { flex: 1; padding: 5px; border-radius: 5px; border: 1px solid var(--border); font-size: 0.85rem; }
 
+        /* Clear All Button Style Framework */
+        #clear-all-btn {
+            width: 100%;
+            background-color: #ef4444;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        #clear-all-btn:hover { background-color: #dc2626; }
+        #clear-all-btn:active { transform: scale(0.98); }
+
         .budget-overview h4 { margin: 15px 0 5px 0; font-size: 0.95rem; color: var(--primary); border-bottom: 1px solid #e2e8f0; }
         .budget-overview ul { list-style: none; font-size: 0.85rem; }
         .budget-overview li { display: flex; justify-content: space-between; padding: 3px 0; }
@@ -44,32 +65,19 @@
         .input-row input { width: 65px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; }
         .chart-container { height: 110px; margin-top: 5px; }
 
-        /* Modern Full-Width Layout Utilities */
         .full-width-row { grid-column: span 2; width: 100%; }
-        
-        /* Shared 3-Column Split Row Layout Configuration */
         .visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 20px; }
-        
-        /* Shared CSS Properties for Table Data Cards */
         .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
         
-        #monthly-table, #seasonal-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 5px; }
-        #monthly-table th, #monthly-table td, #seasonal-table th, #seasonal-table td { border: 1px solid #e2e8f0; padding: 5px 8px; text-align: right; }
-        #monthly-table th, #seasonal-table th { background: #f1f5f9; font-weight: 600; color: #334155; text-align: left; position: sticky; top: 0; z-index: 5; }
+        #monthly-table, #seasonal-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 5px; }
+        #monthly-table th, #seasonal-table th { background: #f1f5f9; font-weight: 600; color: #334155; text-align: left; width: 60%; position: sticky; top: 0; z-index: 5; padding: 8px; }
+        #monthly-table td, #seasonal-table td { border: 1px solid #e2e8f0; padding: 8px; text-align: right; width: 40%; }
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box img { height: 80px; width: 80px; }
-
-        /* Headings Container Framework */
         .title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 0 20px; }
-
-        /* Spacious formatting for long REWARD title */
-        .title-container h2 { font-size: 1.4rem; color: #475569; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
-
-        /* Acronym highlighting style rules (RE-W-A-R-D) */
+        .title-container h2 { font-size: 1.4rem; color: #020a16; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
         .title-container h2 .highlight-letter { color: var(--primary); font-weight: 800; }
-
-        /* Large formatting for main dashboard title */
         .title-container h1 { font-size: 2.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; }
 
         .tab-section-container { grid-column: span 2; margin-top: 25px; background: #f8fafc; color: #334155; border: 1px solid var(--border); }
@@ -90,10 +98,8 @@
         <div class="logo-box"><img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"></div>
         <div class="title-container">
             <h2>
-                <span class="highlight-letter">Re</span>juvenating 
-                <span class="highlight-letter">W</span>atersheds for 
-                <span class="highlight-letter">A</span>gricultural 
-                <span class="highlight-letter">R</span>esilience through 
+                <span class="highlight-letter">Re</span>juvenating <span class="highlight-letter">W</span>atersheds for 
+                <span class="highlight-letter">A</span>gricultural <span class="highlight-letter">R</span>esilience through 
                 Innovative <span class="highlight-letter">D</span>evelopment
             </h2>
             <h1>Water Budget Dashboard</h1> 
@@ -102,12 +108,16 @@
     </header>
 
     <div class="main-grid">
-        <div class="left-col">
+         <div class="left-col">
             <div class="card">
                 <div class="filter-group"><label>District</label><select id="district-select"><option value="">Select District</option></select></div>
                 <div class="filter-group"><label>Cluster</label><select id="cluster-select" disabled></select></div>
                 <div class="filter-group"><label>Micro-watershed</label><select id="msw-select" disabled></select></div>
                 <div class="filter-group"><label>Year</label><select><option>2023-2024</option></select></div>
+                
+                <button id="clear-all-btn" type="button">
+                    <i class="fa-solid fa-rotate-left"></i> Clear All
+                </button>
             </div>
 
             <div class="card budget-overview" style="margin-top:15px;">
@@ -159,11 +169,12 @@
                 <div class="chart-container"><canvas id="c-livestock"></canvas></div>
             </div>
             <div class="card">
-                <h5>Water requirement for Irrigation</h5>
+                <h5>Water Requirement for Irrigation</h5>
                 <div class="input-row"><label>Paddy</label><input type="number" id="a-paddy" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Pulses</label><input type="number" id="a-pulses" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Oilseeds</label><input type="number" id="a-oil" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Vegetables</label><input type="number" id="a-veg" class="calc-input" value="0"></div>
+                <div class="chart-container"><canvas id="c-irrigation"></canvas></div>
             </div>
             <div class="card">
                 <h5>Industrial Water Demand</h5>
@@ -174,7 +185,6 @@
         </div>
 
         <div class="full-width-row visualization-split-row">
-            
             <div class="card compact-table-card">
                 <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand</h4>
                 <div style="flex: 1; overflow-y: auto;">
@@ -201,10 +211,10 @@
                             </tr>
                         </thead>
                         <tbody id="seasonal-body">
-                        <tr><th style="font-weight:600; text-align:left;">Kharif (Jun-Oct)</th><td><span id="season-kharif">0</span></td></tr>
-                        <tr><th style="font-weight:600; text-align:left;">Rabi (Nov-Feb)</th><td><span id="season-rabi">0</span></td></tr>
-                        <tr><th style="font-weight:600; text-align:left;">Summer (Mar-May)</th><td><span id="season-summer">0</span></td></tr>
-                </tbody>
+                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Kharif (Jun-Oct)</td><td><span id="season-kharif">0</span></td></tr>
+                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Rabi (Nov-Feb)</td><td><span id="season-rabi">0</span></td></tr>
+                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Summer (Mar-May)</td><td><span id="season-summer">0</span></td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -215,7 +225,6 @@
                     <canvas id="c-monthly-trend"></canvas>
                 </div>
             </div>
-
         </div>
 
         <div class="section-header">Supply Inputs (m³)</div>
@@ -268,7 +277,6 @@
                     <h4>Copyright & Acknowledgments</h4>
                     <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved.</p>
                     <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India</p>
-                    <p style="font-style: italic; margin-top: 5px; font-size: 0.8rem;">This project contributes to sustainable agricultural development and water security in India.</p>
                 </div>
             </div>
         </div>
@@ -378,19 +386,19 @@
             document.getElementById('map-name').innerText = "MSW: " + selectedName;
             geoLayer.eachLayer(l => {
                 let p = l.feature.properties;
-                
                 let jsonName = (p.MWS_Name || p.MICRO_WS || p.MWS_NAME || p.mws_name || p.Name || "").toString().toLowerCase().trim();
                 let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || p.MWS_CODE || p.mws_code || "").toString().trim();
                 
                 let match = (jsonName === selectedName.toLowerCase()) || 
                             (mswData.code && jsonCode === mswData.code.toString()) ||
                             (l.getTooltip() && l.getTooltip().getContent().toLowerCase().trim() === selectedName.toLowerCase());
-  
+ 
                 if (match) { 
                     l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); 
                     map.flyToBounds(l.getBounds(), { duration: 1, padding: [50, 50] }); 
+                } else {
+                    l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
                 }
-                else l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
             });
             document.getElementById('pop-rural').value = mswData.pop;
             document.getElementById('l-cattle').value = mswData.ls.c;
@@ -403,6 +411,24 @@
             document.getElementById('a-veg').value = mswData.crops.v;
             calculate();
         };
+
+        // Reset Logic Click Event Trigger
+        document.getElementById('clear-all-btn').onclick = function() {
+            document.getElementById('district-select').value = "";
+            document.getElementById('cluster-select').innerHTML = "";
+            document.getElementById('cluster-select').disabled = true;
+            document.getElementById('msw-select').innerHTML = "";
+            document.getElementById('msw-select').disabled = true;
+            
+            if (geoLayer) map.removeLayer(geoLayer);
+            if (districtLayer) map.removeLayer(districtLayer);
+            map.setView([20.1226, 85.1051], 9);
+            document.getElementById('map-name').innerText = "Project Map View";
+
+            document.querySelectorAll('.calc-input').forEach(input => { input.value = 0; });
+            calculate();
+        };
+
         function processCoords(f) {
             let c = f.geometry.coordinates;
             if (f.geometry.type === "Polygon") c.forEach(r => r.forEach(pt => convert(pt)));
@@ -418,11 +444,7 @@
                     let props = feature.properties;
                     let mwsName = props.MWS_Name || props.MICRO_WS || props.MWS_NAME || props.mws_name || props.Name || props.name;
                 
-                    if (!mwsName || 
-                        mwsName.toString().toUpperCase() === "NAYAGARH" || 
-                        mwsName.toString().toUpperCase() === "MSW" || 
-                        mwsName.toString().toUpperCase() === "TO BE PROPOSED") {
-                        
+                    if (!mwsName || mwsName.toString().toUpperCase() === "NAYAGARH" || mwsName.toString().toUpperCase() === "MSW" || mwsName.toString().toUpperCase() === "TO BE PROPOSED") {
                         for (let key in props) {
                             if (props[key] && props[key].toString().length > 3) {
                                 let valUpper = props[key].toString().toUpperCase().trim();
@@ -433,7 +455,6 @@
                             }
                         }
                     }
-
                     if (mwsName) {
                         let cleanCode = mwsName.toString().toUpperCase().trim();
                         let currentDistrict = document.getElementById('district-select').value;
@@ -443,7 +464,6 @@
                             let mswList = geoData[currentDistrict].clusters[currentCluster].msws;
                             for (let englishName in mswList) {
                                 let registryCode = mswList[englishName].code ? mswList[englishName].code.toString().toUpperCase() : "";
-                                
                                 if (registryCode && (registryCode.includes(cleanCode) || cleanCode.includes(registryCode) || registryCode.endsWith(cleanCode))) {
                                     mwsName = englishName;
                                     break;
@@ -451,7 +471,6 @@
                             }
                         }
                     }
-
                     if (!mwsName) mwsName = "MSW";
                     layer.bindTooltip(mwsName.toString(), { sticky: true });
                 }
@@ -464,10 +483,9 @@
             let c = +document.getElementById('l-cattle').value, s = +document.getElementById('l-sheep').value, p = +document.getElementById('l-poultry').value, pig = +document.getElementById('l-pigs').value;
             let lDemAnnual = ((c * 67) + (s * 7) + (p * 0.3) + (pig * 22)) * 365 / 1000;
             let aP = +document.getElementById('a-paddy').value, aPu = +document.getElementById('a-pulses').value, aO = +document.getElementById('a-oil').value, aV = +document.getElementById('a-veg').value;
-            
             let totalIrrigationAnnual = 0, monthlyDemandArr = [], tableHtml = "";
             let seasonalDemands = { kharif: 0, rabi: 0, summer: 0 };
-
+            
             Object.keys(monthlyIrrigationReq).forEach(m => {
                 let req = monthlyIrrigationReq[m];
                 let irrWaterMonth = ((req.p * aP) + (req.pu * aPu) + (req.o * aO) + (req.v * aV)) / 0.4 * 10;
@@ -477,21 +495,16 @@
                 totalIrrigationAnnual += irrWaterMonth;
                 monthlyDemandArr.push(monthTotal);
        
-             /* Track Seasonal Demand Accumulations with Corrected Calendar Months */
-if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
-    seasonalDemands.kharif += monthTotal;
-} else if (["Nov", "Dec", "Jan", "Feb"].includes(m)) {
-    seasonalDemands.rabi += monthTotal;
-} else if (["Mar", "Apr", "May"].includes(m)) {
-    seasonalDemands.summer += monthTotal;
-}
-                tableHtml += `<tr>
-                    <th style="font-weight:600; text-align:left;">${m}</th>
-                    <td>${monthTotal.toLocaleString()}</td>
-                </tr>`;
+                if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
+                    seasonalDemands.kharif += monthTotal;
+                } else if (["Nov", "Dec", "Jan", "Feb"].includes(m)) {
+                    seasonalDemands.rabi += monthTotal;
+                } else if (["Mar", "Apr", "May"].includes(m)) {
+                    seasonalDemands.summer += monthTotal;
+                }
+                tableHtml += `<tr><th style="font-weight:600; text-align:left;">${m}</th><td>${monthTotal.toLocaleString()}</td></tr>`;
             });
 
-            /* Update UI Matrices */
             document.getElementById('monthly-body').innerHTML = tableHtml;
             document.getElementById('season-kharif').innerText = seasonalDemands.kharif.toLocaleString();
             document.getElementById('season-rabi').innerText = seasonalDemands.rabi.toLocaleString();
@@ -524,8 +537,12 @@ if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
                 type: type, data: { labels: labels, datasets:[{data:[1,1,1,1], backgroundColor:['#0077b6','#f59e0b','#10b981','#6366f1']}] },
                 options: { maintainAspectRatio:false, plugins:{legend:{display:false}} }
             });
-            charts.h = config('c-human', 'pie', ['U','R','A','B']); 
-            charts.l = config('c-livestock', 'pie', ['C','S','P','PG']);
+            charts.h = config('c-human', 'pie', ['Urban Pop.', 'Rural Pop.', 'Urban Demand', 'Rural Demand']); 
+            charts.l = config('c-livestock', 'pie', ['Cattle/Buff', 'Sheep/Goat', 'Poultry', 'Pigs']);
+            
+            // New Irrigation Breakdown Chart Configuration Instance
+            charts.irr = config('c-irrigation', 'doughnut', ['Paddy', 'Pulses', 'Oilseeds', 'Vegetables']);
+            
             charts.ind = config('c-industry', 'doughnut', ['H','L']);
             charts.m = new Chart(document.getElementById('c-monthly-trend'), {
                 type: 'line',
@@ -533,9 +550,19 @@ if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
                 options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
             });
         }
+        
         function updateCharts(mValues) {
             charts.h.data.datasets[0].data = [+document.getElementById('pop-urban').value || 0, +document.getElementById('pop-rural').value || 1, +document.getElementById('pop-add-a').value, +document.getElementById('pop-add-b').value];
             charts.l.data.datasets[0].data = [+document.getElementById('l-cattle').value, +document.getElementById('l-sheep').value, +document.getElementById('l-poultry').value, +document.getElementById('l-pigs').value];
+            
+            // Dynamic Data Feed for Irrigation Chart
+            let pVal = +document.getElementById('a-paddy').value || 0;
+            let puVal = +document.getElementById('a-pulses').value || 0;
+            let oVal = +document.getElementById('a-oil').value || 0;
+            let vVal = +document.getElementById('a-veg').value || 0;
+            charts.irr.data.datasets[0].data = [pVal || (puVal||oVal||vVal ? 0 : 1), puVal, oVal, vVal];
+
+            charts.ind.data.datasets[0].data = [+document.getElementById('ind-1').value, +document.getElementById('ind-2').value];
             charts.m.data.datasets[0].data = mValues;
             Object.values(charts).forEach(c => c.update());
         }
@@ -543,10 +570,8 @@ if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
         function switchTab(event, tabId) {
             const tabPanes = document.querySelectorAll('.tab-pane');
             tabPanes.forEach(pane => pane.classList.remove('active'));
-
             const tabButtons = document.querySelectorAll('.tab-btn');
             tabButtons.forEach(btn => btn.classList.remove('active'));
-
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
