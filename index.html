@@ -35,7 +35,7 @@
         .kpi-box h2 { font-size: 1.4rem; }
 
         #map { height: 380px; width: 100%; border-radius: 8px; border: 1px solid var(--border); }
-        .section-header { grid-column: span 100%; font-weight: 700; font-size: 1.1rem; margin: 20px 0 10px 0; padding: 6px; background: #e2e8f0; border-radius: 6px; text-align: center; color: #334155; }
+        .section-header { grid-column: span 2; font-weight: 700; font-size: 1.1rem; margin: 20px 0 10px 0; padding: 6px; background: #e2e8f0; border-radius: 6px; text-align: center; color: #334155; }
         
         .bottom-grid-demand { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .bottom-grid-supply { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -44,137 +44,61 @@
         .input-row input { width: 65px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; }
         .chart-container { height: 110px; margin-top: 5px; }
 
-        #monthly-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 10px; }
-        #monthly-table th, #monthly-table td { border: 1px solid #eee; padding: 3px; text-align: right; }
-        #monthly-table th { background: #f8fafc; text-align: left; }
+        /* Modern Full-Width Layout Utilities */
+        .full-width-row { grid-column: span 2; width: 100%; }
+        
+        /* Shared Side-by-Side Horizontal Row Container */
+        .visualization-split-row { display: grid; grid-template-columns: 320px 1fr; gap: 15px; margin-bottom: 20px; }
+        
+        /* Compact and customized formatting rules for side-by-side Table Matrix */
+        .compact-table-card { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
+        #monthly-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 5px; }
+        #monthly-table th, #monthly-table td { border: 1px solid #e2e8f0; padding: 4px 8px; text-align: right; }
+        #monthly-table th { background: #f1f5f9; font-weight: 600; color: #334155; text-align: left; position: sticky; top: 0; z-index: 5; }
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box img { height: 80px; width: 80px; }
-        .title-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    text-align: center;
-    padding: 0 20px;
-}
 
-/* This styles the rest of the project title */
-.title-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1; /* Allows container to occupy available space between logos */ [cite: 34]
-    text-align: center;
-    padding: 0 20px;
-}
+        /* Headings Container Framework */
+        .title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 0 20px; }
 
-/* 1. Spacing out the long REWARD Title */
-.title-container h2 {
-    font-size: 1.4rem;        
-    color: #475569;           /* Clean slate-gray color */
-    font-weight: 600;         
-    margin-bottom: 16px;      /* INCREASED: Pushes the "Water Budget Dashboard" further down */
-    text-transform: uppercase;
-    letter-spacing: 0.8px;    /* Adds subtle horizontal spacing between letters */
-    line-height: 1.5;         /* Adds breathing room if it wraps into two lines on small screens */
-}
+        /* Spacious formatting for long REWARD title */
+        .title-container h2 { font-size: 1.4rem; color: #475569; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
 
-/* 2. Coloring the REWARD Acronym Letters */
-.title-container h2 .highlight-letter {
-    color: var(--primary);    /* Highlighting RE-W-A-R-D with your theme blue (#0077b6) */ [cite: 1]
-    font-weight: 800;         /* Extra bold styling to make them pop out */
-}
+        /* Acronym highlighting style rules (RE-W-A-R-D) */
+        .title-container h2 .highlight-letter { color: var(--primary); font-weight: 800; }
 
-/* 3. Spacing out the Main Dashboard Title */
-.title-container h1 {
-    font-size: 2.6rem;        /* Prominent main dashboard text */
-    color: var(--primary);    
-    font-weight: 800;         
-    text-transform: uppercase;
-    letter-spacing: 1.5px;    /* Extra spacing for a modern, expansive feel */
-    margin-top: 0;
-    margin-bottom: 5px;       /* Adds space below the whole text block */
-}
+        /* Large formatting for main dashboard title */
+        .title-container h1 { font-size: 2.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; }
 
-        .tab-section-container { 
-            grid-column: span 2; 
-            margin-top: 25px; 
-            background: #f8fafc; 
-            color: #334155; 
-            border: 1px solid var(--border); 
-        }
-        .tab-navigation { 
-            display: flex; 
-            justify-content: center; 
-            gap: 15px; 
-            margin-bottom: 20px; 
-            border-bottom: 1px solid var(--border); 
-            padding-bottom: 15px; 
-        }
-        .tab-btn { 
-            background: #ffffff; 
-            border: 2px solid var(--border); 
-            color: #64748b; 
-            padding: 8px 24px; 
-            font-size: 0.9rem; 
-            font-weight: 500; 
-            border-radius: 30px; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-        }
-        .tab-btn:hover, .tab-btn.active { 
-            border-color: var(--primary); 
-            background-color: var(--primary); 
-            color: #ffffff; 
-            box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2); 
-        }
-        .tab-pane { 
-            display: none; 
-            text-align: center; 
-            max-width: 800px; 
-            margin: 0 auto; 
-            animation: fadeIn 0.4s ease forwards; 
-        }
-        .tab-pane.active { 
-            display: block; 
-        }
-        .tab-pane h4 { 
-            font-size: 1.2rem; 
-            color: var(--primary); 
-            margin-bottom: 12px; 
-            font-weight: 600; 
-        }
-        .tab-pane p { 
-            font-size: 0.88rem; 
-            line-height: 1.6; 
-            margin-bottom: 10px; 
-            color: #475569; 
-        }
-        .tab-pane strong { 
-            color: #0f172a; 
-        }
+        .tab-section-container { grid-column: span 2; margin-top: 25px; background: #f8fafc; color: #334155; border: 1px solid var(--border); }
+        .tab-navigation { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .tab-btn { background: #ffffff; border: 2px solid var(--border); color: #64748b; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
+        .tab-btn:hover, .tab-btn.active { border-color: var(--primary); background-color: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2); }
+        .tab-pane { display: none; text-align: center; max-width: 800px; margin: 0 auto; animation: fadeIn 0.4s ease forwards; }
+        .tab-pane.active { display: block; }
+        .tab-pane h4 { font-size: 1.2rem; color: var(--primary); margin-bottom: 12px; font-weight: 600; }
+        .tab-pane p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #475569; }
+        .tab-pane strong { color: #0f172a; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <header class="header-container">
-    <div class="logo-box"><img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"></div>
-    <div class="title-container">
-        <h2>
-            <span class="highlight-letter">Re</span>juvenating 
-            <span class="highlight-letter">W</span>atersheds for 
-            <span class="highlight-letter">A</span>gricultural 
-            <span class="highlight-letter">R</span>esilience through 
-            Innovative <span class="highlight-letter">D</span>evelopment
-        </h2>
-        <h1>Water Budget Dashboard</h1> 
-    </div>
-    <div class="logo-box"><img src="top_logo.jpg.png" alt="REWARD Logo"></div>
-</header>
+        <div class="logo-box"><img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"></div>
+        <div class="title-container">
+            <h2>
+                <span class="highlight-letter">Re</span>juvenating 
+                <span class="highlight-letter">W</span>atersheds for 
+                <span class="highlight-letter">A</span>gricultural 
+                <span class="highlight-letter">R</span>esilience through 
+                Innovative <span class="highlight-letter">D</span>evelopment
+            </h2>
+            <h1>Water Budget Dashboard</h1> 
+        </div>
+        <div class="logo-box"><img src="top_logo.jpg.png" alt="REWARD Logo"></div>
+    </header>
 
     <div class="main-grid">
         <div class="left-col">
@@ -198,20 +122,6 @@
                     <li class="net-status-row">Net Budget Status <span id="txt-net">0</span></li>
                 </ul>
             </div>
-            
-            <div class="card" style="margin-top:15px; max-height: 250px; overflow-y: auto;">
-                <h4 style="margin-top:0;">Monthly Breakdown</h4>
-                <table id="monthly-table">
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                            <th>Crop (m³)</th>
-                            <th>Total (m³)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="monthly-body"></tbody>
-                </table>
-            </div>
         </div>
 
         <div class="right-col">
@@ -220,15 +130,12 @@
                 <div class="kpi-box demand-bg"><h3>Total Demand</h3><h2 id="kpi-demand">0</h2></div>
                 <div class="kpi-box status-bg" id="kpi-status-box"><h3>Net Status</h3><h2 id="kpi-status">0</h2></div>
             </div>
+            
             <div class="card">
                 <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-weight:600;">
                     <span id="map-name">Project Map View</span>
                 </div>
                 <div id="map"></div>
-            </div>
-            <div class="card" style="margin-top:15px; height: 180px;">
-                <h4 style="margin-top:0; font-size:0.8rem;">12-Month Total Demand Trend</h4>
-                <canvas id="c-monthly-trend"></canvas>
             </div>
         </div>
 
@@ -263,6 +170,32 @@
                 <div class="input-row"><label>Light (m³)</label><input type="number" id="ind-2" class="calc-input" value="0"></div>
                 <div class="chart-container"><canvas id="c-industry"></canvas></div>
             </div>
+        </div>
+
+        <div class="full-width-row visualization-split-row">
+            
+            <div class="card compact-table-card">
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Breakdown Matrix</h4>
+                <div style="flex: 1; overflow-y: auto;">
+                    <table id="monthly-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Month</th>
+                                <th>Total (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthly-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="height: 250px; display: flex; flex-direction: column;">
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">12-Month Total Demand Trend</h4>
+                <div style="flex: 1; min-height: 0; margin-top: 5px;">
+                    <canvas id="c-monthly-trend"></canvas>
+                </div>
+            </div>
+
         </div>
 
         <div class="section-header">Supply Inputs (m³)</div>
@@ -302,15 +235,14 @@
                 </div>
                 <div id="contact-tab" class="tab-pane">
                     <h4>Contact Information</h4>
-                    <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principle Scientist) <br>P.I REWARD</p>
+                    <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD</p>
                     <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023</p>
                 </div>
                 <div id="team-tab" class="tab-pane">
                     <h4>Research Team</h4>
                     <p>DR. SUSANTA KUMAR JENA (P.I REWARD)</p>
-                    <p>DR. SAMEER MANDAL(RA) </p>
+                    <p>DR. SAMEER MANDAL(RA)</p>
                     <p>ER. SUBRAT DASH(YP-1)</p>
-
                 </div>
                 <div id="copyright-tab" class="tab-pane">
                     <h4>Copyright & Acknowledgments</h4>
@@ -383,7 +315,6 @@
                 }
             }
         };
-
         const map = L.map('map').setView([20.1226, 85.1051], 9);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
@@ -425,7 +356,6 @@
             let selectedName = this.value;
             let mswData = geoData[dS.value].clusters[cS.value].msws[selectedName];
             document.getElementById('map-name').innerText = "MSW: " + selectedName;
-            
             geoLayer.eachLayer(l => {
                 let p = l.feature.properties;
                 
@@ -442,7 +372,6 @@
                 }
                 else l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
             });
-            
             document.getElementById('pop-rural').value = mswData.pop;
             document.getElementById('l-cattle').value = mswData.ls.c;
             document.getElementById('l-sheep').value = mswData.ls.s;
@@ -454,7 +383,6 @@
             document.getElementById('a-veg').value = mswData.crops.v;
             calculate();
         };
-
         function processCoords(f) {
             let c = f.geometry.coordinates;
             if (f.geometry.type === "Polygon") c.forEach(r => r.forEach(pt => convert(pt)));
@@ -468,7 +396,6 @@
                 style: { color: '#0077b6', weight: 1.5, fillOpacity: 0.1 },
                 onEachFeature: function(feature, layer) {
                     let props = feature.properties;
-
                     let mwsName = props.MWS_Name || props.MICRO_WS || props.MWS_NAME || props.mws_name || props.Name || props.name;
                 
                     if (!mwsName || 
@@ -498,7 +425,7 @@
                                 let registryCode = mswList[englishName].code ? mswList[englishName].code.toString().toUpperCase() : "";
                                 
                                 if (registryCode && (registryCode.includes(cleanCode) || cleanCode.includes(registryCode) || registryCode.endsWith(cleanCode))) {
-                                    mwsName = englishName; // Swap out the ugly code for the clean name!
+                                    mwsName = englishName;
                                     break;
                                 }
                             }
@@ -527,13 +454,12 @@
                 totalIrrigationAnnual += irrWaterMonth;
                 monthlyDemandArr.push(monthTotal);
        
+                /* Only outputs the Month and updated Total column */
                 tableHtml += `<tr>
-                    <th>${m}</th>
+                    <th style="font-weight:600; text-align:left;">${m}</th>
                     <td>${Math.round(irrWaterMonth).toLocaleString()}</td>
-                    <td>${monthTotal.toLocaleString()}</td>
                 </tr>`;
             });
-
             document.getElementById('monthly-body').innerHTML = tableHtml;
             let indDem = (+document.getElementById('ind-1').value + +document.getElementById('ind-2').value);
             let surf = (+document.getElementById('s-pond').value + +document.getElementById('s-res').value + +document.getElementById('s-riv').value);
