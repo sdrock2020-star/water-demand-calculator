@@ -70,8 +70,23 @@
         .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
         
         #monthly-table, #seasonal-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 5px; }
-        #monthly-table th, #seasonal-table th { background: #f1f5f9; font-weight: 600; color: #334155; text-align: left; width: 60%; position: sticky; top: 0; z-index: 5; padding: 8px; }
-        #monthly-table td, #seasonal-table td { border: 1px solid #e2e8f0; padding: 8px; text-align: right; width: 40%; }
+        #monthly-table th, #seasonal-table th { 
+    background: #f1f5f9;
+    font-weight: 600;
+    color: #334155; 
+    text-align: left; 
+    width: 65%;      /* Increased from 60% to stop text wrapping */
+    position: sticky; 
+    top: 0; 
+    z-index: 5;
+    padding: 8px;
+}
+#monthly-table td, #seasonal-table td { 
+    border: 1px solid #e2e8f0;
+    padding: 8px; 
+    text-align: right;
+    width: 35%;      /* Decreased from 40% to balance the row width */
+}
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box img { height: 80px; width: 80px; }
@@ -541,7 +556,28 @@
             charts.l = config('c-livestock', 'pie', ['Cattle/Buff', 'Sheep/Goat', 'Poultry', 'Pigs']);
             
             // New Irrigation Breakdown Chart Configuration Instance
-            charts.irr = config('c-irrigation', 'doughnut', ['Paddy', 'Pulses', 'Oilseeds', 'Vegetables']);
+            charts.irr = new Chart(document.getElementById('c-irrigation'), {
+    type: 'line',
+    data: {
+        labels: ['Paddy', 'Pulses', 'Oilseeds', 'Vegetables'],
+        datasets: [{
+            data: [0, 0, 0, 0],
+            borderColor: '#f59e0b', /* Amber color to fit the demand theme */
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        maintainAspectRatio: false,
+        scales: {
+            y: { beginAtZero: true }
+        },
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
             
             charts.ind = config('c-industry', 'doughnut', ['H','L']);
             charts.m = new Chart(document.getElementById('c-monthly-trend'), {
@@ -560,6 +596,8 @@
             let puVal = +document.getElementById('a-pulses').value || 0;
             let oVal = +document.getElementById('a-oil').value || 0;
             let vVal = +document.getElementById('a-veg').value || 0;
+
+            charts.irr.data.datasets[0].data = [pVal, puVal, oVal, vVal];
             charts.irr.data.datasets[0].data = [pVal || (puVal||oVal||vVal ? 0 : 1), puVal, oVal, vVal];
 
             charts.ind.data.datasets[0].data = [+document.getElementById('ind-1').value, +document.getElementById('ind-2').value];
