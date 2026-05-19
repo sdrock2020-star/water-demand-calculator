@@ -50,7 +50,33 @@
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box img { height: 80px; width: 80px; }
-        h1 { flex-grow: 1; text-align: center; font-size: 1.8rem; color: var(--primary); margin: 0; text-transform: uppercase; border-bottom: none; }
+        .title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.title-container h2 {
+    font-size: 1.1rem;
+    color: #64748b; 
+    font-weight: 500;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+
+.title-container h1 {
+    font-size: 2.4rem;       
+    color: var(--primary);    
+    font-weight: 800;        
+    text-transform: uppercase;
+    letter-spacing: 1px;      
+    margin: 0;
+}
 
         .tab-section-container { 
             grid-column: span 2; 
@@ -115,10 +141,13 @@
 <body>
 
     <header class="header-container">
-        <div class="logo-box"><img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"></div>
-        <h1>Rejuvenating Watersheds for Agricultural Resilience through Innovative Development (Water Budget Dashboard) </h1>
-        <div class="logo-box"><img src="top_logo.jpg.png" alt="REWARD Logo"></div>
-    </header>
+    <div class="logo-box"><img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"></div>
+    <div class="title-container">
+        <h2>Rejuvenating Watersheds for Agricultural Resilience through Innovative Development</h2>
+        <h1>Water Budget Dashboard</h1> 
+    </div>
+    <div class="logo-box"><img src="top_logo.jpg.png" alt="REWARD Logo"></div>
+</header>
 
     <div class="main-grid">
         <div class="left-col">
