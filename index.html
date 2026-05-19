@@ -47,14 +47,15 @@
         /* Modern Full-Width Layout Utilities */
         .full-width-row { grid-column: span 2; width: 100%; }
         
-        /* Shared Side-by-Side Horizontal Row Container */
-        .visualization-split-row { display: grid; grid-template-columns: 320px 1fr; gap: 15px; margin-bottom: 20px; }
+        /* Shared 3-Column Split Row Layout Configuration */
+        .visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 20px; }
         
-        /* Compact and customized formatting rules for side-by-side Table Matrix */
-        .compact-table-card { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
-        #monthly-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 5px; }
-        #monthly-table th, #monthly-table td { border: 1px solid #e2e8f0; padding: 4px 8px; text-align: right; }
-        #monthly-table th { background: #f1f5f9; font-weight: 600; color: #334155; text-align: left; position: sticky; top: 0; z-index: 5; }
+        /* Shared CSS Properties for Table Data Cards */
+        .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
+        
+        #monthly-table, #seasonal-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 5px; }
+        #monthly-table th, #monthly-table td, #seasonal-table th, #seasonal-table td { border: 1px solid #e2e8f0; padding: 5px 8px; text-align: right; }
+        #monthly-table th, #seasonal-table th { background: #f1f5f9; font-weight: 600; color: #334155; text-align: left; position: sticky; top: 0; z-index: 5; }
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box img { height: 80px; width: 80px; }
@@ -175,7 +176,7 @@
         <div class="full-width-row visualization-split-row">
             
             <div class="card compact-table-card">
-                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Breakdown Matrix</h4>
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand</h4>
                 <div style="flex: 1; overflow-y: auto;">
                     <table id="monthly-table">
                         <thead>
@@ -189,8 +190,27 @@
                 </div>
             </div>
 
+            <div class="card compact-table-card">
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Seasonal Water Demand</h4>
+                <div style="flex: 1; overflow-y: auto;">
+                    <table id="seasonal-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Season</th>
+                                <th>Total (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seasonal-body">
+                        <tr><th style="font-weight:600; text-align:left;">Kharif (Jun-Oct)</th><td><span id="season-kharif">0</span></td></tr>
+                        <tr><th style="font-weight:600; text-align:left;">Rabi (Nov-Feb)</th><td><span id="season-rabi">0</span></td></tr>
+                        <tr><th style="font-weight:600; text-align:left;">Summer (Mar-May)</th><td><span id="season-summer">0</span></td></tr>
+                </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="card" style="height: 250px; display: flex; flex-direction: column;">
-                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">12-Month Total Demand Trend</h4>
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand Trend</h4>
                 <div style="flex: 1; min-height: 0; margin-top: 5px;">
                     <canvas id="c-monthly-trend"></canvas>
                 </div>
@@ -444,7 +464,10 @@
             let c = +document.getElementById('l-cattle').value, s = +document.getElementById('l-sheep').value, p = +document.getElementById('l-poultry').value, pig = +document.getElementById('l-pigs').value;
             let lDemAnnual = ((c * 67) + (s * 7) + (p * 0.3) + (pig * 22)) * 365 / 1000;
             let aP = +document.getElementById('a-paddy').value, aPu = +document.getElementById('a-pulses').value, aO = +document.getElementById('a-oil').value, aV = +document.getElementById('a-veg').value;
+            
             let totalIrrigationAnnual = 0, monthlyDemandArr = [], tableHtml = "";
+            let seasonalDemands = { kharif: 0, rabi: 0, summer: 0 };
+
             Object.keys(monthlyIrrigationReq).forEach(m => {
                 let req = monthlyIrrigationReq[m];
                 let irrWaterMonth = ((req.p * aP) + (req.pu * aPu) + (req.o * aO) + (req.v * aV)) / 0.4 * 10;
@@ -454,18 +477,32 @@
                 totalIrrigationAnnual += irrWaterMonth;
                 monthlyDemandArr.push(monthTotal);
        
-                /* Only outputs the Month and updated Total column */
+             /* Track Seasonal Demand Accumulations with Corrected Calendar Months */
+if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
+    seasonalDemands.kharif += monthTotal;
+} else if (["Nov", "Dec", "Jan", "Feb"].includes(m)) {
+    seasonalDemands.rabi += monthTotal;
+} else if (["Mar", "Apr", "May"].includes(m)) {
+    seasonalDemands.summer += monthTotal;
+}
                 tableHtml += `<tr>
                     <th style="font-weight:600; text-align:left;">${m}</th>
-                    <td>${Math.round(irrWaterMonth).toLocaleString()}</td>
+                    <td>${monthTotal.toLocaleString()}</td>
                 </tr>`;
             });
+
+            /* Update UI Matrices */
             document.getElementById('monthly-body').innerHTML = tableHtml;
+            document.getElementById('season-kharif').innerText = seasonalDemands.kharif.toLocaleString();
+            document.getElementById('season-rabi').innerText = seasonalDemands.rabi.toLocaleString();
+            document.getElementById('season-summer').innerText = seasonalDemands.summer.toLocaleString();
+
             let indDem = (+document.getElementById('ind-1').value + +document.getElementById('ind-2').value);
             let surf = (+document.getElementById('s-pond').value + +document.getElementById('s-res').value + +document.getElementById('s-riv').value);
             let ground = (+document.getElementById('g-dug').value + +document.getElementById('g-tube').value + +document.getElementById('g-oth').value);
             let trans = (+document.getElementById('t-s1').value + +document.getElementById('t-s2').value);
             let totalD = hDemAnnual + lDemAnnual + totalIrrigationAnnual + indDem, totalS = surf + ground + trans, net = totalS - totalD;
+            
             document.getElementById('txt-human').innerText = Math.round(hDemAnnual).toLocaleString();
             document.getElementById('txt-livestock').innerText = Math.round(lDemAnnual).toLocaleString();
             document.getElementById('txt-irrigation').innerText = Math.round(totalIrrigationAnnual).toLocaleString();
