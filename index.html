@@ -60,13 +60,20 @@
     padding: 0 20px;
 }
 
+/* This styles the rest of the project title */
 .title-container h2 {
-    font-size: 1.4rem;
-    color: #010915; 
-    font-weight: 600;
-    margin-bottom: 5px;
+    font-size: 1.4rem;        
+    color: #475569;           /* Slate gray for the regular letters */
+    font-weight: 600;         
+    margin-bottom: 8px;       
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.5px;    
+}
+
+/* This targets ONLY the letters Re, W, A, R, D to make them pop out */
+.title-container h2 .highlight-letter {
+    color: var(--primary);    /* Uses your bright brand blue (#0077b6) */
+    font-weight: 800;         /* Makes the acronym letters slightly thicker/bolder */
 }
 
 
@@ -144,7 +151,12 @@
     <header class="header-container">
     <div class="logo-box"><img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"></div>
     <div class="title-container">
-        <h2>Rejuvenating Watersheds for Agricultural Resilience through Innovative Development</h2>
+        <h2>
+            <span class="highlight-letter">Re</span>juvenating 
+            <span class="highlight-letter">W</span>atersheds for 
+            <span class="highlight-letter">A</span>gricultural 
+            Innovative <span class="highlight-letter">D</span>evelopment
+        </h2>
         <h1>Water Budget Dashboard</h1> 
     </div>
     <div class="logo-box"><img src="top_logo.jpg.png" alt="REWARD Logo"></div>
