@@ -61,29 +61,42 @@
 }
 
 /* This styles the rest of the project title */
+.title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1; /* Allows container to occupy available space between logos */ [cite: 34]
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* 1. Spacing out the long REWARD Title */
 .title-container h2 {
     font-size: 1.4rem;        
-    color: #475569;           /* Slate gray for the regular letters */
+    color: #475569;           /* Clean slate-gray color */
     font-weight: 600;         
-    margin-bottom: 8px;       
+    margin-bottom: 16px;      /* INCREASED: Pushes the "Water Budget Dashboard" further down */
     text-transform: uppercase;
-    letter-spacing: 0.5px;    
+    letter-spacing: 0.8px;    /* Adds subtle horizontal spacing between letters */
+    line-height: 1.5;         /* Adds breathing room if it wraps into two lines on small screens */
 }
 
-/* This targets ONLY the letters Re, W, A, R, D to make them pop out */
+/* 2. Coloring the REWARD Acronym Letters */
 .title-container h2 .highlight-letter {
-    color: var(--primary);    /* Uses your bright brand blue (#0077b6) */
-    font-weight: 800;         /* Makes the acronym letters slightly thicker/bolder */
+    color: var(--primary);    /* Highlighting RE-W-A-R-D with your theme blue (#0077b6) */ [cite: 1]
+    font-weight: 800;         /* Extra bold styling to make them pop out */
 }
 
-
+/* 3. Spacing out the Main Dashboard Title */
 .title-container h1 {
-    font-size: 2.4rem;       
+    font-size: 2.6rem;        /* Prominent main dashboard text */
     color: var(--primary);    
-    font-weight: 800;        
+    font-weight: 800;         
     text-transform: uppercase;
-    letter-spacing: 1px;      
-    margin: 0;
+    letter-spacing: 1.5px;    /* Extra spacing for a modern, expansive feel */
+    margin-top: 0;
+    margin-bottom: 5px;       /* Adds space below the whole text block */
 }
 
         .tab-section-container { 
@@ -155,6 +168,7 @@
             <span class="highlight-letter">Re</span>juvenating 
             <span class="highlight-letter">W</span>atersheds for 
             <span class="highlight-letter">A</span>gricultural 
+            <span class="highlight-letter">R</span>esilience through 
             Innovative <span class="highlight-letter">D</span>evelopment
         </h2>
         <h1>Water Budget Dashboard</h1> 
