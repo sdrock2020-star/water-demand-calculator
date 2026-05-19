@@ -52,7 +52,6 @@
         .logo-box img { height: 80px; width: 80px; }
         h1 { flex-grow: 1; text-align: center; font-size: 1.8rem; color: var(--primary); margin: 0; text-transform: uppercase; border-bottom: none; }
 
-       /* Dynamic Tabs Implementation - Clean Gray Theme */
         .tab-section-container { 
             grid-column: span 2; 
             margin-top: 25px; 
@@ -117,7 +116,7 @@
 
     <header class="header-container">
         <div class="logo-box"><img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"></div>
-        <h1>REWARD Water Budget Dashboard</h1>
+        <h1>Rejuvenating Watersheds for Agricultural Resilience through Innovative Development (Water Budget Dashboard) </h1>
         <div class="logo-box"><img src="top_logo.jpg.png" alt="REWARD Logo"></div>
     </header>
 
@@ -374,7 +373,6 @@
             geoLayer.eachLayer(l => {
                 let p = l.feature.properties;
                 
-                // Aggressive matching strategy for dropdown syncing
                 let jsonName = (p.MWS_Name || p.MICRO_WS || p.MWS_NAME || p.mws_name || p.Name || "").toString().toLowerCase().trim();
                 let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || p.MWS_CODE || p.mws_code || "").toString().trim();
                 
@@ -414,11 +412,9 @@
                 style: { color: '#0077b6', weight: 1.5, fillOpacity: 0.1 },
                 onEachFeature: function(feature, layer) {
                     let props = feature.properties;
-                    
-                    // 1. Check for any standard name fields first
+
                     let mwsName = props.MWS_Name || props.MICRO_WS || props.MWS_NAME || props.mws_name || props.Name || props.name;
-                    
-                    // 2. Extract a valid identifier code string if the name fields are generic or missing
+                
                     if (!mwsName || 
                         mwsName.toString().toUpperCase() === "NAYAGARH" || 
                         mwsName.toString().toUpperCase() === "MSW" || 
@@ -434,20 +430,17 @@
                             }
                         }
                     }
-                    
-                    // 3. CODE TRANSLATOR ENGINE: If the identifier is a GIS code, translate it to the dropdown's English name
+
                     if (mwsName) {
                         let cleanCode = mwsName.toString().toUpperCase().trim();
                         let currentDistrict = document.getElementById('district-select').value;
                         let currentCluster = document.getElementById('cluster-select').value;
                         
-                        // Look up inside our active cluster registry data
                         if (currentDistrict && currentCluster && geoData[currentDistrict]?.clusters[currentCluster]) {
                             let mswList = geoData[currentDistrict].clusters[currentCluster].msws;
                             for (let englishName in mswList) {
                                 let registryCode = mswList[englishName].code ? mswList[englishName].code.toString().toUpperCase() : "";
                                 
-                                // Match if the GIS code is contained within or equals our mapped data code (e.g., matching "4G1C4H2D")
                                 if (registryCode && (registryCode.includes(cleanCode) || cleanCode.includes(registryCode) || registryCode.endsWith(cleanCode))) {
                                     mwsName = englishName; // Swap out the ugly code for the clean name!
                                     break;
@@ -528,7 +521,6 @@
             Object.values(charts).forEach(c => c.update());
         }
 
-        // Tab Controller Switcher Function
         function switchTab(event, tabId) {
             const tabPanes = document.querySelectorAll('.tab-pane');
             tabPanes.forEach(pane => pane.classList.remove('active'));
