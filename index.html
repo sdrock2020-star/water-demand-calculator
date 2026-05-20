@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
     <style>
         :root { --primary: #0077b6; --bg: #f1f5f9; --card: #ffffff; --border: #cbd5e1; --text: #0f172a; }
@@ -60,7 +61,6 @@
         .bottom-grid-demand { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .bottom-grid-supply { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 
-        /* Input Card Table Layout Frameworks */
         .input-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 0.72rem; }
         .input-table th { background: #f8fafc; font-weight: 600; color: #475569; padding: 4px; text-align: center; border-bottom: 1px solid var(--border); }
         .input-table td { padding: 4px; border-bottom: 1px dotted #e2e8f0; vertical-align: middle; }
@@ -123,7 +123,7 @@
                 <div class="filter-group"><label>Year</label><select><option>2023-2024</option></select></div>
                 
                 <button id="clear-all-btn" type="button">
-                   <i class="fa-solid fa-rotate-left"></i> Clear All
+                    <i class="fa-solid fa-rotate-left"></i> Clear All
                 </button>
             </div>
 
@@ -306,29 +306,29 @@
             </div>
 
             <div class="card compact-table-card">
-    <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Seasonal Water Demand</h4>
-    <div style="flex: 1; overflow-y: auto;">
-        <table id="seasonal-table">
-            <thead>
-                <tr>
-                    <th style="text-align: left;">Season</th>
-                    <th>Total (m³)</th>
-                </tr>
-            </thead>
-            <tbody id="seasonal-body">
-                <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Kharif (Jun-Oct)</td><td><span id="season-kharif">0</span></td></tr>
-                <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Rabi (Nov-Feb)</td><td><span id="season-rabi">0</span></td></tr>
-                <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Summer (Mar-May)</td><td><span id="season-summer">0</span></td></tr>
-            </tbody>
-            <tfoot>
-                <tr style="border-top: 2px solid var(--border); background: #f8fafc;">
-                    <td style="font-weight:700; text-align:left; color: var(--primary);">Total Annual</td>
-                    <td style="font-weight:700; text-align:right; color: var(--primary);"><span id="season-total-combined">0</span></td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-</div>
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Seasonal Water Demand</h4>
+                <div style="flex: 1; overflow-y: auto;">
+                    <table id="seasonal-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Season</th>
+                                <th>Total (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seasonal-body">
+                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Kharif (Jun-Oct)</td><td><span id="season-kharif">0</span></td></tr>
+                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Rabi (Nov-Feb)</td><td><span id="season-rabi">0</span></td></tr>
+                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Summer (Mar-May)</td><td><span id="season-summer">0</span></td></tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="border-top: 2px solid var(--border); background: #f8fafc;">
+                                <td style="font-weight:700; text-align:left; color: var(--primary);">Total Annual</td>
+                                <td style="font-weight:700; text-align:right; color: var(--primary);"><span id="season-total-combined">0</span></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
 
             <div class="card" style="height: 250px; display: flex; flex-direction: column;">
                 <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand Trend</h4>
@@ -369,24 +369,24 @@
             <div class="tab-wrapper">
                 <div id="about-tab" class="tab-pane active">
                     <h4>About ICAR-IIWM</h4>
-                    <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production[cite: 124].</p>
-                    <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building[cite: 125].</p>
-                    <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions[cite: 125].</p>
+                    <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production.</p>
+                    <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building.</p>
+                    <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions.</p>
                 </div>
                 <div id="contact-tab" class="tab-pane">
                     <h4>Contact Information</h4>
-                    <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD [cite: 126, 127]</p>
-                    <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023 [cite: 127]</p>
+                    <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD</p>
+                    <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023</p>
                 </div>
                 <div id="team-tab" class="tab-pane">
                     <h4>Research Team</h4>
-                    <p>DR. SUSANTA KUMAR JENA (P.I REWARD) [cite: 128, 129]</p>
-                    <p>DR. SAMEER MANDAL(RA) [cite: 129, 130]</p>
-                    <p>ER. SUBRAT DASH(YP-1) [cite: 130, 131]</p>
+                    <p>DR. SUSANTA KUMAR JENA (P.I REWARD)</p>
+                    <p>DR. SAMEER MANDAL(RA)</p>
+                    <p>ER. SUBRAT DASH(YP-1)</p>
                 </div>
                 <div id="copyright-tab" class="tab-pane">
                     <h4>Copyright & Acknowledgments</h4>
-                    <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved[cite: 132].</p>
+                    <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved.</p>
                     <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India</p>
                 </div>
             </div>
@@ -400,7 +400,7 @@
             "Feb": { p: 0,    pu: 114.6, o: 167,   v: 50 },
             "Mar": { p: 0,    pu: 145.8, o: 72.6,  v: 107 },
             "Apr": { p: 0,    pu: 15.3,  o: 0,     v: 208 },
-            "May": { p: 0,     pu: 0,     o: 0,     v: 81 },
+            "May": { p: 0,    pu: 0,     o: 0,     v: 81 },
             "Jun": { p: 258.6, pu: 0,    o: 0,     v: 0 },
             "Jul": { p: 19.6,  pu: 0,    o: 0,     v: 0 },
             "Aug": { p: 24.6,  pu: 0,    o: 0,     v: 0 },
@@ -672,7 +672,6 @@
             let totalSeasonalSum = seasonalDemands.kharif + seasonalDemands.rabi + seasonalDemands.summer;
             document.getElementById('season-total-combined').innerText = totalSeasonalSum.toLocaleString();
 
-
             let indDem = (+document.getElementById('ind-1').value + +document.getElementById('ind-2').value);
             let surf = (+document.getElementById('s-pond').value + +document.getElementById('s-res').value + +document.getElementById('s-riv').value);
             let ground = (+document.getElementById('g-dug').value + +document.getElementById('g-tube').value + +document.getElementById('g-oth').value);
@@ -698,36 +697,105 @@
         let charts = {};
         function initCharts() {
             const config = (id, type, labels) => new Chart(document.getElementById(id), {
-                type: type, data: { labels: labels, datasets:[{data:[1,1,1,1], backgroundColor:['#0077b6','#f59e0b','#10b981','#6366f1']}] },
-                options: { maintainAspectRatio:false, plugins:{legend:{display:false}} }
+                type: type, 
+                plugins: [ChartDataLabels],
+                data: { 
+                    labels: labels, 
+                    datasets: [{
+                        data: [0, 0, 0, 0], 
+                        backgroundColor: ['#0077b6', '#f59e0b', '#10b981', '#6366f1']
+                    }] 
+                },
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#ffffff', 
+                            font: { weight: '600', size: 10 },
+                            formatter: (value, ctx) => {
+                                let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                if (sum === 0 || value === 0) return ""; 
+                                return ((value * 100) / sum).toFixed(1) + "%";
+                            },
+                            anchor: 'center',
+                            align: 'center'
+                        }
+                    } 
+                }
             });
             
-            charts.h = config('c-human', 'pie', ['Urban Population', 'Rural Population', 'Urban Demand', 'Rural Demand']); 
+            charts.h = config('c-human', 'pie', ['Urban Demand', 'Rural Demand']); 
             charts.l = config('c-livestock', 'pie', ['Cattle/Buffalo', 'Sheep/Goat', 'Poultry', 'Pigs']);
             charts.ind = config('c-industry', 'doughnut', ['Heavy (m³)', 'Light (m³)']);
             
+            // Integrated Y-Axis Label for Irrigation Box
             charts.irr = new Chart(document.getElementById('c-irrigation'), {
                 type: 'line',
                 data: {
                     labels: Object.keys(monthlyIrrigationReq),
                     datasets: [{ label: 'Irrigation Demand (m³)', data: [], borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: true, tension: 0.4 }]
                 },
-                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+                options: { 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Demand (m³)',
+                                font: { family: 'Poppins', size: 10, weight: '600' }
+                            }
+                        } 
+                    }, 
+                    plugins: { legend: { display: false } } 
+                }
             });
             
+            // Integrated Y-Axis Label for Monthly Trend Box
             charts.m = new Chart(document.getElementById('c-monthly-trend'), {
                 type: 'line',
                 data: {
                     labels: Object.keys(monthlyIrrigationReq),
                     datasets: [{ label: 'Total Demand (m³)', data: [], borderColor: '#0077b6', fill: true, backgroundColor: 'rgba(0,119,182,0.1)', tension: 0.4 }]
                 },
-                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+                options: { 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Demand (m³)',
+                                font: { family: 'Poppins', size: 11, weight: '600' }
+                            }
+                        } 
+                    }, 
+                    plugins: { legend: { display: false } } 
+                }
             });
         }
         
         function updateCharts(mValues, mIrrValues) {
-            charts.h.data.datasets[0].data = [+document.getElementById('pop-urban').value || 0, +document.getElementById('pop-rural').value || 1, +document.getElementById('pop-add-a').value, +document.getElementById('pop-add-b').value];
-            charts.l.data.datasets[0].data = [+document.getElementById('l-cattle').value, +document.getElementById('l-sheep').value, +document.getElementById('l-poultry').value, +document.getElementById('l-pigs').value];
+            let popUrbanVal = +document.getElementById('pop-urban').value;
+            let popRuralVal = +document.getElementById('pop-rural').value;
+            let rFull = popRuralVal + (+document.getElementById('pop-add-a').value) + (+document.getElementById('pop-add-b').value);
+            
+            let urbanDemandAnnual = (popUrbanVal * 145) * 365 / 1000;
+            let ruralDemandAnnual = (rFull * 55) * 365 / 1000;
+
+            let c = +document.getElementById('l-cattle').value;
+            let s = +document.getElementById('l-sheep').value;
+            let p = +document.getElementById('l-poultry').value;
+            let pig = +document.getElementById('l-pigs').value;
+
+            let cattleDemandAnnual = (c * 67) * 365 / 1000;
+            let sheepDemandAnnual = (s * 7) * 365 / 1000;
+            let poultryDemandAnnual = (p * 0.3) * 365 / 1000;
+            let pigDemandAnnual = (pig * 22) * 365 / 1000;
+
+            charts.h.data.datasets[0].data = [urbanDemandAnnual, ruralDemandAnnual];
+            charts.l.data.datasets[0].data = [cattleDemandAnnual, sheepDemandAnnual, poultryDemandAnnual, pigDemandAnnual];
             charts.ind.data.datasets[0].data = [+document.getElementById('ind-1').value, +document.getElementById('ind-2').value];
             
             charts.irr.data.datasets[0].data = mIrrValues;
@@ -750,3 +818,4 @@
     </script>
 </body>
 </html>
+
