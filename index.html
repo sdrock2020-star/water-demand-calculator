@@ -76,9 +76,47 @@
         .visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 5px; width: 100%; }
         .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
         
-        #monthly-table, #seasonal-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 5px; }
-        #monthly-table th, #seasonal-table th { background: #f1f5f9; font-weight: 600; color: #334155; text-align: left; width: 65%; position: sticky; top: 0; z-index: 5; padding: 8px; }
-        #monthly-table td, #seasonal-table td { border: 1px solid #e2e8f0; padding: 8px; text-align: right; width: 35%; }
+        /* Optimized Table Layout Framework */
+        #monthly-table, #seasonal-table { 
+            width: 100%;
+            border-collapse: collapse; 
+            font-size: 0.78rem; 
+            margin-top: 3px; 
+        }
+
+        /* Monthly Table Column Configurations: Month bar is smaller (35%), Total bar is wider (65%) */
+        #monthly-table th:first-child, #monthly-table td:first-child {
+            width: 35%;
+            text-align: left;
+        }
+        #monthly-table th:last-child, #monthly-table td:last-child {
+            width: 65%;
+            text-align: right;
+        }
+
+        /* Seasonal Table Column Configurations: Even distribution to support layout symmetry */
+        #seasonal-table th:first-child, #seasonal-table td:first-child {
+            width: 55%;
+            text-align: left;
+        }
+        #seasonal-table th:last-child, #seasonal-table td:last-child {
+            width: 45%;
+            text-align: right;
+        }
+
+        #monthly-table th, #seasonal-table th { 
+            background: #f1f5f9;
+            font-weight: 600; 
+            color: #334155; 
+            position: sticky; 
+            top: 0; 
+            z-index: 5; 
+            padding: 5px 8px; /* Compact layout spacing */
+        }
+        #monthly-table td, #seasonal-table td { 
+            border: 1px solid #e2e8f0; 
+            padding: 4px 8px; /* Compressed padding to fit contents perfectly without scrollbars */
+        }
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box img { height: 80px; width: 80px; }
@@ -123,7 +161,7 @@
                 <div class="filter-group"><label>Year</label><select><option>2023-2024</option></select></div>
                 
                 <button id="clear-all-btn" type="button">
-                    <i class="fa-solid fa-rotate-left"></i> Clear All
+                   <i class="fa-solid fa-rotate-left"></i> Clear All
                 </button>
             </div>
 
@@ -296,7 +334,7 @@
                     <table id="monthly-table">
                         <thead>
                             <tr>
-                                <th style="text-align: left;">Month</th>
+                                <th>Month</th>
                                 <th>Total (m³)</th>
                             </tr>
                         </thead>
@@ -311,19 +349,19 @@
                     <table id="seasonal-table">
                         <thead>
                             <tr>
-                                <th style="text-align: left;">Season</th>
+                                <th>Season</th>
                                 <th>Total (m³)</th>
                             </tr>
                         </thead>
                         <tbody id="seasonal-body">
-                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Kharif (Jun-Oct)</td><td><span id="season-kharif">0</span></td></tr>
-                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Rabi (Nov-Feb)</td><td><span id="season-rabi">0</span></td></tr>
-                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Summer (Mar-May)</td><td><span id="season-summer">0</span></td></tr>
+                            <tr><td style="font-weight:600; background:#ffffff;">Kharif (Jun-Oct)</td><td><span id="season-kharif">0</span></td></tr>
+                            <tr><td style="font-weight:600; background:#ffffff;">Rabi (Nov-Feb)</td><td><span id="season-rabi">0</span></td></tr>
+                            <tr><td style="font-weight:600; background:#ffffff;">Summer (Mar-May)</td><td><span id="season-summer">0</span></td></tr>
                         </tbody>
                         <tfoot>
                             <tr style="border-top: 2px solid var(--border); background: #f8fafc;">
-                                <td style="font-weight:700; text-align:left; color: var(--primary);">Total Annual</td>
-                                <td style="font-weight:700; text-align:right; color: var(--primary);"><span id="season-total-combined">0</span></td>
+                                <td style="font-weight:700; color: var(--primary);">Total Annual</td>
+                                <td style="font-weight:700; color: var(--primary);"><span id="season-total-combined">0</span></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -656,7 +694,7 @@
                 } else if (["Mar", "Apr", "May"].includes(m)) {
                     seasonalDemands.summer += monthTotal;
                 }
-                tableHtml += `<tr><th style="font-weight:600; text-align:left;">${m}</th><td>${monthTotal.toLocaleString()}</td></tr>`;
+                tableHtml += `<tr><th>${m}</th><td>${monthTotal.toLocaleString()}</td></tr>`;
             });
 
             document.getElementById('lbl-demand-paddy').innerText = Math.round(paddyIrrAnnual).toLocaleString();
@@ -729,7 +767,6 @@
             charts.l = config('c-livestock', 'pie', ['Cattle/Buffalo', 'Sheep/Goat', 'Poultry', 'Pigs']);
             charts.ind = config('c-industry', 'doughnut', ['Heavy (m³)', 'Light (m³)']);
             
-            // Integrated Y-Axis Label for Irrigation Box
             charts.irr = new Chart(document.getElementById('c-irrigation'), {
                 type: 'line',
                 data: {
@@ -752,7 +789,6 @@
                 }
             });
             
-            // Integrated Y-Axis Label for Monthly Trend Box
             charts.m = new Chart(document.getElementById('c-monthly-trend'), {
                 type: 'line',
                 data: {
