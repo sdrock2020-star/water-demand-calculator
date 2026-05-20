@@ -55,22 +55,25 @@
         .kpi-box h2 { font-size: 1.4rem; }
 
         #map { height: 380px; width: 100%; border-radius: 8px; border: 1px solid var(--border); }
-        .section-header { grid-column: span 2; font-weight: 700; font-size: 1.1rem; margin: 20px 0 10px 0; padding: 6px; background: #e2e8f0; border-radius: 6px; text-align: center; color: #334155; }
+        .section-header { grid-column: span 2; font-weight: 700; font-size: 1.1rem; margin: 20px 0 10px 0; padding: 6px; background: #e2e8f0; border-radius: 6px; text-align: center; color: #334155; width: 100%; }
         
         .bottom-grid-demand { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .bottom-grid-supply { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 
-        /* Blueprint Layout Table Styles */
+        /* Input Card Table Layout Frameworks */
         .input-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 0.72rem; }
         .input-table th { background: #f8fafc; font-weight: 600; color: #475569; padding: 4px; text-align: center; border-bottom: 1px solid var(--border); }
         .input-table td { padding: 4px; border-bottom: 1px dotted #e2e8f0; vertical-align: middle; }
         .input-table input { width: 55px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.72rem; }
         .input-table .val-lbl { font-weight: 600; color: #0f172a; text-align: right; display: block; }
 
+        .input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.75rem; }
+        .input-row input { width: 70px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
+
         .chart-container { height: 100px; margin-top: 5px; }
 
         .full-width-row { grid-column: span 2; width: 100%; }
-        .visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 20px; }
+        .visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 5px; width: 100%; }
         .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
         
         #monthly-table, #seasonal-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 5px; }
@@ -84,7 +87,7 @@
         .title-container h2 .highlight-letter { color: var(--primary); font-weight: 800; }
         .title-container h1 { font-size: 2.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; }
 
-        .tab-section-container { grid-column: span 2; margin-top: 25px; background: #f8fafc; color: #334155; border: 1px solid var(--border); }
+        .tab-section-container { grid-column: span 2; margin-top: 25px; background: #f8fafc; color: #334155; border: 1px solid var(--border); width: 100%; }
         .tab-navigation { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .tab-btn { background: #ffffff; border: 2px solid var(--border); color: #64748b; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
         .tab-btn:hover, .tab-btn.active { border-color: var(--primary); background-color: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2); }
@@ -120,7 +123,7 @@
                 <div class="filter-group"><label>Year</label><select><option>2023-2024</option></select></div>
                 
                 <button id="clear-all-btn" type="button">
-                    <i class="fa-solid fa-rotate-left"></i> Clear All
+                   <i class="fa-solid fa-rotate-left"></i> Clear All
                 </button>
             </div>
 
@@ -199,7 +202,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="font-weight: 500;">Cattle/Buff</td>
+                            <td style="font-weight: 500;">Cattle/Buffalo</td>
                             <td style="text-align: center;"><input type="number" id="l-cattle" class="calc-input" value="0"></td>
                             <td><span id="lbl-demand-cattle" class="val-lbl">0</span></td>
                         </tr>
@@ -260,14 +263,33 @@
             </div>
 
             <div class="card">
-                <h5>Industrial Water Demand</h5>
-                <div class="input-row"><label>Heavy (m³)</label><input type="number" id="ind-1" class="calc-input" value="0"></div>
-                <div class="input-row"><label>Light (m³)</label><input type="number" id="ind-2" class="calc-input" value="0"></div>
+                <h5 style="margin-bottom: 8px; color: var(--primary);">Industrial Water Demand</h5>
+                <table class="input-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;">Industry Type</th>
+                            <th>Input (m³)</th>
+                            <th style="text-align: right;">Demand (m³)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: 500;">Heavy</td>
+                            <td style="text-align: center;"><input type="number" id="ind-1" class="calc-input" value="0"></td>
+                            <td><span id="lbl-demand-heavy" class="val-lbl">0</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">Light</td>
+                            <td style="text-align: center;"><input type="number" id="ind-2" class="calc-input" value="0"></td>
+                            <td><span id="lbl-demand-light" class="val-lbl">0</span></td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="chart-container"><canvas id="c-industry"></canvas></div>
             </div>
         </div>
 
-        <div class="full-width-row visualization-split-row">
+        <div class="full-width-row visualization-split-row" style="margin-top: 15px;">
             <div class="card compact-table-card">
                 <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand</h4>
                 <div style="flex: 1; overflow-y: auto;">
@@ -284,23 +306,29 @@
             </div>
 
             <div class="card compact-table-card">
-                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Seasonal Water Demand</h4>
-                <div style="flex: 1; overflow-y: auto;">
-                    <table id="seasonal-table">
-                        <thead>
-                            <tr>
-                                <th style="text-align: left;">Season</th>
-                                <th>Total (m³)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="seasonal-body">
-                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Kharif (Jun-Oct)</td><td><span id="season-kharif">0</span></td></tr>
-                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Rabi (Nov-Feb)</td><td><span id="season-rabi">0</span></td></tr>
-                            <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Summer (Mar-May)</td><td><span id="season-summer">0</span></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Seasonal Water Demand</h4>
+    <div style="flex: 1; overflow-y: auto;">
+        <table id="seasonal-table">
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Season</th>
+                    <th>Total (m³)</th>
+                </tr>
+            </thead>
+            <tbody id="seasonal-body">
+                <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Kharif (Jun-Oct)</td><td><span id="season-kharif">0</span></td></tr>
+                <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Rabi (Nov-Feb)</td><td><span id="season-rabi">0</span></td></tr>
+                <tr><td style="font-weight:600; text-align:left; background:#ffffff;">Summer (Mar-May)</td><td><span id="season-summer">0</span></td></tr>
+            </tbody>
+            <tfoot>
+                <tr style="border-top: 2px solid var(--border); background: #f8fafc;">
+                    <td style="font-weight:700; text-align:left; color: var(--primary);">Total Annual</td>
+                    <td style="font-weight:700; text-align:right; color: var(--primary);"><span id="season-total-combined">0</span></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 
             <div class="card" style="height: 250px; display: flex; flex-direction: column;">
                 <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand Trend</h4>
@@ -311,21 +339,21 @@
         </div>
 
         <div class="section-header">Supply Inputs (m³)</div>
-        <div class="bottom-grid-supply" style="grid-column: span 2;">
+        <div class="bottom-grid-supply" style="grid-column: span 2; width: 100%;">
             <div class="card">
-                <h5>Surface Water</h5>
+                <h5 style="color: var(--primary); margin-bottom: 10px;">Surface Water</h5>
                 <div class="input-row"><label>Ponds</label><input type="number" id="s-pond" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Reservoir</label><input type="number" id="s-res" class="calc-input" value="0"></div>
                 <div class="input-row"><label>River</label><input type="number" id="s-riv" class="calc-input" value="0"></div>
             </div>
             <div class="card">
-                <h5>Ground Water</h5>
+                <h5 style="color: var(--primary); margin-bottom: 10px;">Ground Water</h5>
                 <div class="input-row"><label>Dug Well</label><input type="number" id="g-dug" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Tube Well</label><input type="number" id="g-tube" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Other</label><input type="number" id="g-oth" class="calc-input" value="0"></div>
             </div>
             <div class="card">
-                <h5>Water Transfer</h5>
+                <h5 style="color: var(--primary); margin-bottom: 10px;">Water Transfer</h5>
                 <div class="input-row"><label>Source-1</label><input type="number" id="t-s1" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Source-2</label><input type="number" id="t-s2" class="calc-input" value="0"></div>
             </div>
@@ -341,24 +369,24 @@
             <div class="tab-wrapper">
                 <div id="about-tab" class="tab-pane active">
                     <h4>About ICAR-IIWM</h4>
-                    <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production.</p>
-                    <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building.</p>
-                    <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions.</p>
+                    <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production[cite: 124].</p>
+                    <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building[cite: 125].</p>
+                    <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions[cite: 125].</p>
                 </div>
                 <div id="contact-tab" class="tab-pane">
                     <h4>Contact Information</h4>
-                    <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD</p>
-                    <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023</p>
+                    <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD [cite: 126, 127]</p>
+                    <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023 [cite: 127]</p>
                 </div>
                 <div id="team-tab" class="tab-pane">
                     <h4>Research Team</h4>
-                    <p>DR. SUSANTA KUMAR JENA (P.I REWARD)</p>
-                    <p>DR. SAMEER MANDAL(RA)</p>
-                    <p>ER. SUBRAT DASH(YP-1)</p>
+                    <p>DR. SUSANTA KUMAR JENA (P.I REWARD) [cite: 128, 129]</p>
+                    <p>DR. SAMEER MANDAL(RA) [cite: 129, 130]</p>
+                    <p>ER. SUBRAT DASH(YP-1) [cite: 130, 131]</p>
                 </div>
                 <div id="copyright-tab" class="tab-pane">
                     <h4>Copyright & Acknowledgments</h4>
-                    <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved.</p>
+                    <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved[cite: 132].</p>
                     <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India</p>
                 </div>
             </div>
@@ -567,7 +595,6 @@
             
             let rFull = popRuralVal + addA + addB;
             
-            // Sub-component Demands
             let urbanDemandAnnual = (popUrbanVal * 145) * 365 / 1000;
             let ruralDemandAnnual = (rFull * 55) * 365 / 1000;
             let hDemAnnual = urbanDemandAnnual + ruralDemandAnnual;
@@ -587,8 +614,13 @@
             let aPu = +document.getElementById('a-pulses').value;
             let aO = +document.getElementById('a-oil').value;
             let aV = +document.getElementById('a-veg').value;
-            
-            // Dynamic Table Labels Render Update
+
+            let ind1Val = +document.getElementById('ind-1').value || 0;
+            let ind2Val = +document.getElementById('ind-2').value || 0;
+
+            document.getElementById('lbl-demand-heavy').innerText = Math.round(ind1Val).toLocaleString();
+            document.getElementById('lbl-demand-light').innerText = Math.round(ind2Val).toLocaleString();
+
             document.getElementById('lbl-demand-urban').innerText = Math.round(urbanDemandAnnual).toLocaleString();
             document.getElementById('lbl-demand-rural').innerText = Math.round(ruralDemandAnnual).toLocaleString();
             
@@ -597,7 +629,6 @@
             document.getElementById('lbl-demand-poultry').innerText = Math.round(poultryDemandAnnual).toLocaleString();
             document.getElementById('lbl-demand-pigs').innerText = Math.round(pigDemandAnnual).toLocaleString();
             
-            // Annual Irrigation Volumetric calculation splits per crop profile
             let paddyIrrAnnual = 0, pulsesIrrAnnual = 0, oilIrrAnnual = 0, vegIrrAnnual = 0;
             let totalIrrigationAnnual = 0, monthlyDemandArr = [], monthlyIrrigationArr = [], tableHtml = "";
             let seasonalDemands = { kharif: 0, rabi: 0, summer: 0 };
@@ -617,7 +648,7 @@
                 totalIrrigationAnnual += irrWaterMonth;
                 monthlyDemandArr.push(monthTotal);
                 monthlyIrrigationArr.push(Math.round(irrWaterMonth));
-       
+    
                 if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
                     seasonalDemands.kharif += monthTotal;
                 } else if (["Nov", "Dec", "Jan", "Feb"].includes(m)) {
@@ -637,6 +668,10 @@
             document.getElementById('season-kharif').innerText = seasonalDemands.kharif.toLocaleString();
             document.getElementById('season-rabi').innerText = seasonalDemands.rabi.toLocaleString();
             document.getElementById('season-summer').innerText = seasonalDemands.summer.toLocaleString();
+
+            let totalSeasonalSum = seasonalDemands.kharif + seasonalDemands.rabi + seasonalDemands.summer;
+            document.getElementById('season-total-combined').innerText = totalSeasonalSum.toLocaleString();
+
 
             let indDem = (+document.getElementById('ind-1').value + +document.getElementById('ind-2').value);
             let surf = (+document.getElementById('s-pond').value + +document.getElementById('s-res').value + +document.getElementById('s-riv').value);
@@ -667,8 +702,8 @@
                 options: { maintainAspectRatio:false, plugins:{legend:{display:false}} }
             });
             
-            charts.h = config('c-human', 'pie', ['Urban Pop.', 'Rural Pop.', 'Urban Demand', 'Rural Demand']); 
-            charts.l = config('c-livestock', 'pie', ['Cattle/Buff', 'Sheep/Goat', 'Poultry', 'Pigs']);
+            charts.h = config('c-human', 'pie', ['Urban Population', 'Rural Population', 'Urban Demand', 'Rural Demand']); 
+            charts.l = config('c-livestock', 'pie', ['Cattle/Buffalo', 'Sheep/Goat', 'Poultry', 'Pigs']);
             charts.ind = config('c-industry', 'doughnut', ['Heavy (m³)', 'Light (m³)']);
             
             charts.irr = new Chart(document.getElementById('c-irrigation'), {
@@ -715,4 +750,3 @@
     </script>
 </body>
 </html>
-
