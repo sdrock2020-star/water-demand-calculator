@@ -1005,9 +1005,19 @@ async function sendAIMessage() {
 
         const data = await response.json();
         
-        // 5. Render Agent Response
+        // 5. Render Agent Response or Error
         document.getElementById(loadingId).remove();
-        chatHistory.innerHTML += `<div class="ai-msg">${data.reply}</div>`;
+        
+        if (data.reply) {
+            // If it works perfectly, show the reply
+            chatHistory.innerHTML += `<div class="ai-msg">${data.reply}</div>`;
+        } else {
+            // If the backend fails, show the ACTUAL error instead of "undefined"
+            chatHistory.innerHTML += `<div class="ai-msg" style="color: #ef4444; border: 1px solid #fca5a5; background: #fef2f2;">
+                <em>Error: ${data.details || data.error || "Unknown server error"}</em>
+            </div>`;
+        }
+        
         chatHistory.scrollTop = chatHistory.scrollHeight;
         
     } catch (error) {

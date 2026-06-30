@@ -23,11 +23,30 @@ export async function handler(event, context) {
     
     Answer the user's query clearly and concisely based on this data. If the net status is negative, suggest standard water conservation interventions.`;
 
+    // 1. Set up the Prompt with the live dashboard data
+    const systemPrompt = `You are the REWARD Project Water Budget Assistant. 
+    You are helping officials analyze watershed data in Odisha.
+    
+    CURRENT DASHBOARD STATE:
+    - District: ${dashboardState.district}
+    - Cluster: ${dashboardState.cluster}
+    - Micro-watershed: ${dashboardState.msw}
+    - Total Supply: ${dashboardState.totalSupply} m³
+    - Total Demand: ${dashboardState.totalDemand} m³
+    - Net Status: ${dashboardState.netStatus} m³
+    - Irrigation Requirement: ${dashboardState.irrigationReq} m³
+    - Human Demand: ${dashboardState.humanDemand} m³
+    
+    Answer the user's query clearly and concisely based on this data. If the net status is negative, suggest standard water conservation interventions.`;
+
+    // COMBINED PAYLOAD FIX
     const geminiPayload = {
-      contents: [
-        { role: "user", parts: [{ text: systemPrompt }] },
-        { role: "user", parts: [{ text: message }] }
-      ]
+      contents: [{
+        role: "user",
+        parts: [
+            { text: systemPrompt + "\n\nUser Question: " + message }
+        ]
+      }]
     };
 
     // 2. Call the Gemini API
