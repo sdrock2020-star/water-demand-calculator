@@ -111,11 +111,11 @@
             position: sticky; 
             top: 0; 
             z-index: 5; 
-            padding: 5px 8px; /* Compact layout spacing */
+            padding: 5px 8px; 
         }
         #monthly-table td, #seasonal-table td { 
             border: 1px solid #e2e8f0; 
-            padding: 7px 8px; /* Compressed padding to fit contents perfectly without scrollbars */
+            padding: 7px 8px; 
         }
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -135,6 +135,128 @@
         .tab-pane p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #475569; }
         .tab-pane strong { color: #0f172a; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    /* --- AI Floating Widget Styles --- */
+#ai-widget-btn {
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px;
+    background: var(--primary); 
+    color: white;
+    border: none; 
+    border-radius: 30px;
+    padding: 12px 20px; 
+    font-size: 0.95rem; 
+    font-weight: 600;
+    cursor: pointer; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000; 
+    transition: transform 0.2s, background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+#ai-widget-btn:hover { 
+    transform: scale(1.05); 
+    background-color: #005f92; 
+}
+
+#ai-chat-window {
+    position: fixed; 
+    bottom: 75px; 
+    right: 20px;
+    width: 360px; 
+    height: 480px;
+    background: var(--card); 
+    border: 1px solid var(--border);
+    border-radius: 12px; 
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    display: none; 
+    flex-direction: column; 
+    z-index: 1000;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+#ai-chat-header {
+    background: var(--primary); 
+    color: white;
+    padding: 12px 15px; 
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+}
+#ai-close-btn { 
+    cursor: pointer; 
+    font-size: 1.2rem; 
+    transition: opacity 0.2s;
+}
+#ai-close-btn:hover { opacity: 0.8; }
+
+#ai-chat-history {
+    flex: 1; 
+    padding: 15px; 
+    overflow-y: auto;
+    font-size: 0.85rem; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px;
+    background: #f8fafc;
+}
+.ai-msg { 
+    background: #ffffff; 
+    border: 1px solid var(--border);
+    padding: 10px 12px; 
+    border-radius: 8px 8px 8px 0; 
+    align-self: flex-start; 
+    max-width: 85%; 
+    line-height: 1.5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+.user-msg { 
+    background: var(--primary); 
+    color: white; 
+    padding: 10px 12px; 
+    border-radius: 8px 8px 0 8px; 
+    align-self: flex-end; 
+    max-width: 85%; 
+    line-height: 1.5;
+    box-shadow: 0 1px 2px rgba(0,119,182,0.2);
+}
+
+#ai-input-area {
+    display: flex; 
+    padding: 12px; 
+    background: #ffffff;
+    border-top: 1px solid var(--border);
+}
+#ai-chat-input {
+    flex: 1; 
+    padding: 10px; 
+    border: 1px solid var(--border);
+    border-radius: 6px; 
+    font-size: 0.85rem; 
+    outline: none;
+    transition: border-color 0.2s;
+}
+#ai-chat-input:focus { border-color: var(--primary); }
+#ai-send-btn {
+    background: var(--primary); 
+    color: white; 
+    border: none;
+    border-radius: 6px; 
+    padding: 0 15px; 
+    margin-left: 8px;
+    cursor: pointer; 
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+#ai-send-btn:hover { background-color: #005f92; }
+
+
+    
     </style>
 </head>
 <body>
@@ -430,6 +552,28 @@
             </div>
         </div>
     </div>
+
+<button id="ai-widget-btn" onclick="toggleAIChat()">
+    <i class="fa-solid fa-robot"></i> Ask REWARD AI 🍀
+</button>
+
+<div id="ai-chat-window">
+    <div id="ai-chat-header">
+        <span>Water Budget Assistant</span>
+        <span id="ai-close-btn" onclick="toggleAIChat()">&times;</span>
+    </div>
+    
+    <div id="ai-chat-history">
+        <div class="ai-msg">Hello! I am your AI assistant 🔍 (REWARD PROJECT). Select a district or micro-watershed, and ask me to analyze the net status or irrigation demands.</div>
+    </div>
+    
+    <div id="ai-input-area">
+        <input type="text" id="ai-chat-input" placeholder="Ask about the data..." onkeypress="handleAIKeyPress(event)" />
+        <button id="ai-send-btn" onclick="sendAIMessage()">
+            <i class="fa-solid fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
 
     <script>
         proj4.defs("EPSG:32645", "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs");
@@ -811,6 +955,70 @@
                 }
             });
         }
+
+        // --- AI Agent Logic ---
+
+function toggleAIChat() {
+    const chatWindow = document.getElementById('ai-chat-window');
+    chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function handleAIKeyPress(event) {
+    if (event.key === 'Enter') sendAIMessage();
+}
+
+async function sendAIMessage() {
+    const inputField = document.getElementById('ai-chat-input');
+    const chatHistory = document.getElementById('ai-chat-history');
+    const userText = inputField.value.trim();
+    
+    if (!userText) return;
+
+    // 1. Render User Message
+    chatHistory.innerHTML += `<div class="user-msg">${userText}</div>`;
+    inputField.value = '';
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+
+    // 2. Render Loading State
+    const loadingId = 'loading-' + Date.now();
+    chatHistory.innerHTML += `<div class="ai-msg" id="${loadingId}"><em>Analyzing dashboard state...</em></div>`;
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+
+    // 3. Read the Live DOM Data
+    const dashboardState = {
+        district: document.getElementById('district-select').value || "None Selected",
+        cluster: document.getElementById('cluster-select').value || "None Selected",
+        msw: document.getElementById('msw-select').value || "None Selected",
+        totalSupply: document.getElementById('kpi-supply').innerText,
+        totalDemand: document.getElementById('kpi-demand').innerText,
+        netStatus: document.getElementById('kpi-status').innerText,
+        irrigationReq: document.getElementById('txt-irrigation').innerText,
+        humanDemand: document.getElementById('txt-human').innerText
+    };
+
+    try {
+        // 4. Send to Netlify Backend Route
+        const response = await fetch('/.netlify/functions/agent', {
+            method: 'POST',
+            body: JSON.stringify({ message: userText, dashboardState })
+        });
+
+        const data = await response.json();
+        
+        // 5. Render Agent Response
+        document.getElementById(loadingId).remove();
+        chatHistory.innerHTML += `<div class="ai-msg">${data.reply}</div>`;
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        
+    } catch (error) {
+        console.error("AI Agent Connection Error:", error);
+        document.getElementById(loadingId).remove();
+        chatHistory.innerHTML += `<div class="ai-msg" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2;">
+            <em>Error: Could not reach the serverless backend. Ensure your Netlify function is deployed.</em>
+        </div>`;
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+}
         
         function updateCharts(mValues, mIrrValues) {
             let popUrbanVal = +document.getElementById('pop-urban').value;
