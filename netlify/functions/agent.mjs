@@ -1,5 +1,4 @@
 export async function handler(event, context) {
-  // Only allow POST requests
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
@@ -7,7 +6,6 @@ export async function handler(event, context) {
   try {
     const { message, dashboardState } = JSON.parse(event.body);
     
-    // 1. Set up the Prompt with the live dashboard data
     const systemPrompt = `You are the REWARD Project Water Budget Assistant. 
     You are helping officials analyze watershed data in Odisha.
     
@@ -23,19 +21,16 @@ export async function handler(event, context) {
     
     Answer the user's query clearly and concisely based on this data. If the net status is negative, suggest standard water conservation interventions.`;
 
-    // 2. Prepare payload
     const geminiPayload = {
       contents: [{
         role: "user",
-        parts: [
-            { text: systemPrompt + "\n\nUser Question: " + message }
-        ]
+        parts: [{ text: systemPrompt + "\n\nUser Question: " + message }]
       }]
     };
 
-    // 3. Call the Gemini API
-   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
-      console.log("Full Request URL:", url);
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(geminiPayload)
