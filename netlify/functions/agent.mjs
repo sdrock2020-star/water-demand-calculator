@@ -6,26 +6,12 @@ export async function handler(event, context) {
   try {
     const { message, dashboardState } = JSON.parse(event.body);
     
-    const systemPrompt = `You are the REWARD Project Water Budget Assistant. 
-    You are helping officials analyze watershed data in Odisha.
-    
-    CURRENT DASHBOARD STATE:
-    - District: ${dashboardState.district}
-    - Cluster: ${dashboardState.cluster}
-    - Micro-watershed: ${dashboardState.msw}
-    - Total Supply: ${dashboardState.totalSupply} m³
-    - Total Demand: ${dashboardState.totalDemand} m³
-    - Net Status: ${dashboardState.netStatus} m³
-    - Irrigation Requirement: ${dashboardState.irrigationReq} m³
-    - Human Demand: ${dashboardState.humanDemand} m³
-    
-    Answer the user's query clearly and concisely based on this data. If the net status is negative, suggest standard water conservation interventions.`;
+    const systemPrompt = `You are the REWARD Project Water Budget Assistant. Answer based on: 
+    District: ${dashboardState.district}, Micro-watershed: ${dashboardState.msw}, 
+    Net Status: ${dashboardState.netStatus} m³.`;
 
     const geminiPayload = {
-      contents: [{
-        role: "user",
-        parts: [{ text: systemPrompt + "\n\nUser Question: " + message }]
-      }]
+      contents: [{ role: "user", parts: [{ text: systemPrompt + "\n\nUser Question: " + message }] }]
     };
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
