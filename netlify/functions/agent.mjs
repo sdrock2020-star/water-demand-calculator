@@ -23,23 +23,7 @@ export async function handler(event, context) {
     
     Answer the user's query clearly and concisely based on this data. If the net status is negative, suggest standard water conservation interventions.`;
 
-    // 1. Set up the Prompt with the live dashboard data
-    const systemPrompt = `You are the REWARD Project Water Budget Assistant. 
-    You are helping officials analyze watershed data in Odisha.
-    
-    CURRENT DASHBOARD STATE:
-    - District: ${dashboardState.district}
-    - Cluster: ${dashboardState.cluster}
-    - Micro-watershed: ${dashboardState.msw}
-    - Total Supply: ${dashboardState.totalSupply} m³
-    - Total Demand: ${dashboardState.totalDemand} m³
-    - Net Status: ${dashboardState.netStatus} m³
-    - Irrigation Requirement: ${dashboardState.irrigationReq} m³
-    - Human Demand: ${dashboardState.humanDemand} m³
-    
-    Answer the user's query clearly and concisely based on this data. If the net status is negative, suggest standard water conservation interventions.`;
-
-    // COMBINED PAYLOAD FIX
+    // 2. Prepare payload
     const geminiPayload = {
       contents: [{
         role: "user",
@@ -49,8 +33,7 @@ export async function handler(event, context) {
       }]
     };
 
-    // 2. Call the Gemini API
-    // Note: You must add GEMINI_API_KEY to your Netlify Environment Variables
+    // 3. Call the Gemini API
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -64,7 +47,6 @@ export async function handler(event, context) {
     const data = await response.json();
     const reply = data.candidates[0].content.parts[0].text;
 
-    // 3. Send the AI's reply back to your HTML frontend
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
