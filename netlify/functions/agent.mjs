@@ -42,8 +42,9 @@ export async function handler(event, context) {
       ]
     };
 
-    // 3. Call the Gemini API (Using 1.5-flash on v1beta which supports web search)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+    // 3. Call the Gemini API 
+    // CORRECTED: Restored to the working 'gemini-3.5-flash' model
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
     
     const response = await fetch(url, {
       method: 'POST',
