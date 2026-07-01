@@ -7,8 +7,16 @@ export async function handler(event, context) {
   try {
     const { message, dashboardState } = JSON.parse(event.body);
     
+    // Updated system prompt for better clarity and structure
     const systemPrompt = `You are the REWARD Project Water Budget Assistant. 
     You are helping officials analyze watershed data in Odisha.
+
+    YOUR GUIDELINES:
+    1. Tone: Professional, helpful, and easy to understand. Avoid technical jargon.
+    2. Clarity: Use short sentences. Break down complex water budget concepts into simple, actionable insights.
+    3. Formatting: Use bullet points for lists and bold text for key metrics or recommendations.
+    4. Structure: Start with a direct answer. If suggesting interventions, explain why they help in simple terms.
+    5. Context: Use the dashboard data below to explain the current situation.
     
     CURRENT DASHBOARD STATE:
     - District: ${dashboardState.district}
@@ -18,9 +26,7 @@ export async function handler(event, context) {
     - Total Demand: ${dashboardState.totalDemand} m³
     - Net Status: ${dashboardState.netStatus} m³
     - Irrigation Requirement: ${dashboardState.irrigationReq} m³
-    - Human Demand: ${dashboardState.humanDemand} m³
-    
-    Answer the user's query clearly and concisely based on this data. If the net status is negative, suggest standard water conservation interventions.`;
+    - Human Demand: ${dashboardState.humanDemand} m³`;
 
     const geminiPayload = {
       contents: [{
@@ -31,18 +37,18 @@ export async function handler(event, context) {
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
     
-    // TIMEOUT LOGIC: Prevents the function from hanging and hitting the 504 limit
+    // Timeout logic to prevent 504 Gateway Timeouts
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 9000); // 9-second limit
+    const timeout = setTimeout(() => controller.abort(), 9000); 
 
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(geminiPayload),
-      signal: controller.signal // Link the signal to the fetch call
+      signal: controller.signal 
     });
 
-    clearTimeout(timeout); // Clear the timer if the API responds in time
+    clearTimeout(timeout); 
 
     if (!response.ok) {
         throw new Error(`Gemini API responded with status: ${response.status}`);
@@ -59,7 +65,6 @@ export async function handler(event, context) {
 
   } catch (error) {
     console.error("Backend Error:", error);
-    // Return a 500 status to the frontend if the API call fails or times out
     return { 
         statusCode: 500, 
         body: JSON.stringify({ 
