@@ -1,55 +1,64 @@
-const systemPrompt = `You are the REWARD Project Water Budget Assistant. 
-You are helping officials analyze watershed data in Odisha.
+export async function handler(event, context) {
+  // Only allow POST requests
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method Not Allowed" };
+  }
 
-YOUR GUIDELINES:
-1. Tone: Highly professional, objective, and authoritative.
-2. Structure: 
-   - **Executive Summary:** Start with a brief, high-level status of the watershed.
-   - **Core Data:** Present metrics using a Markdown table or bolded list.
-   - **Analysis:** Provide concise insights on the drivers of water demand.
-   - **Recommended Interventions:** Use bullet points with a "Why it helps" rationale.
-   - **Conclusion:** End with one firm, actionable final recommendation.
-3. Clarity: Avoid jargon. Keep sentences direct.
-4. Context: Use the dashboard data provided below for all analysis.
+  try {
+    const { message, dashboardState } = JSON.parse(event.body);
+    
+    // 1. Set up the Prompt with a professional persona and strict formatting rules
+    const systemPrompt = `You are a Senior Hydrology Expert and the REWARD Project Water Budget Analyst. 
+    You have two main roles:
+    1. Analyze the provided watershed dashboard data for officials in Odisha.
+    2. Answer general questions regarding hydrology, agriculture, climate, and water management.
 
-CURRENT DASHBOARD STATE:
-- District: ${dashboardState.district}
-- Cluster: ${dashboardState.cluster}
-- Micro-watershed: ${dashboardState.msw}
-- Total Supply: ${dashboardState.totalSupply} m³
-- Total Demand: ${dashboardState.totalDemand} m³
-- Net Status: ${dashboardState.netStatus} m³
-- Irrigation Requirement: ${dashboardState.irrigationReq} m³
-- Human Demand: ${dashboardState.humanDemand} m³`;
+    CURRENT DASHBOARD STATE:
+    - District: ${dashboardState.district || 'Not Selected'}
+    - Cluster: ${dashboardState.cluster || 'Not Selected'}
+    - Micro-watershed: ${dashboardState.msw || 'Not Selected'}
+    - Total Supply: ${dashboardState.totalSupply || 0} m³
+    - Total Demand: ${dashboardState.totalDemand || 0} m³
+    - Net Status: ${dashboardState.netStatus || 0} m³
+    - Irrigation Requirement: ${dashboardState.irrigationReq || 0} m³
+    - Human Demand: ${dashboardState.humanDemand || 0} m³
 
+    INSTRUCTIONS & TONE:
+    - Maintain a highly professional, academic, and advisory tone at all times.
+    - If the user asks to analyze the dashboard data, you MUST structure your response using clear, professional bullet points (e.g., Executive Summary, Key Metrics, Deficit/Surplus Analysis, and Strategic Recommendations).
+    - If the user asks a general domain question (e.g., "what is water?", "how does drip irrigation work?"), act as a knowledgeable hydrology expert and explain it clearly. Use your web search capabilities if needed to provide accurate, up-to-date information.`;
+
+    // 2. Prepare payload and ENABLE GOOGLE SEARCH
     const geminiPayload = {
       contents: [{
         role: "user",
-        parts: [{ text: systemPrompt + "\n\nUser Question: " + message }]
-      }]
+        parts: [
+            { text: systemPrompt + "\n\nUser Question: " + message }
+        ]
+      }],
+      // This tells Gemini to search the web if the user asks something outside the dashboard data
+      tools: [
+        { googleSearch: {} }
+      ]
     };
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+    // 3. Call the Gemini API (Using 1.5-flash on v1beta which supports web search)
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
     
-    // Timeout logic to prevent 504 Gateway Timeouts
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 9000); 
-
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(geminiPayload),
-      signal: controller.signal 
+      body: JSON.stringify(geminiPayload)
     });
-
-    clearTimeout(timeout); 
 
     if (!response.ok) {
         throw new Error(`Gemini API responded with status: ${response.status}`);
     }
 
     const data = await response.json();
-    const reply = data.candidates[0].content.parts[0].text;
+    
+    // Safely extract the text response
+    const reply = data.candidates[0]?.content?.parts[0]?.text || "I'm sorry, I couldn't generate a response at this time.";
 
     return {
       statusCode: 200,
@@ -61,10 +70,7 @@ CURRENT DASHBOARD STATE:
     console.error("Backend Error:", error);
     return { 
         statusCode: 500, 
-        body: JSON.stringify({ 
-            error: error.name === 'AbortError' ? 'Request timed out' : 'Failed to process request', 
-            details: error.message 
-        }) 
+        body: JSON.stringify({ error: 'Failed to process request', details: error.message }) 
     };
   }
 }
