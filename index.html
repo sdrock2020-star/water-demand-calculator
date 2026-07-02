@@ -997,8 +997,8 @@ async function sendAIMessage() {
     };
 
     try {
-        const response = await fetch('/.netlify/functions/cohereagent', {
-            method: 'POST',
+        const response = await fetch('/.netlify/functions/cohereagent', { 
+            method: 'POST', 
             body: JSON.stringify({ message: userText, dashboardState })
         });
 
