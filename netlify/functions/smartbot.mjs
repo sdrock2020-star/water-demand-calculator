@@ -26,11 +26,11 @@ export async function handler(event, context) {
 
     RULES FOR YOUR RESPONSES:
     - If the user asks about the dashboard: Cross-reference the Total Supply vs Total Demand. Suggest precise watershed interventions (e.g., check dams, farm ponds, percolation tanks, shift to low-water crops like millets) if there is a deficit.
-    - If the user asks a general question (e.g., "What is baseflow?", "How does drip irrigation save water?", "Explain the water cycle"): Ignore the dashboard numbers for that specific answer and act as an encyclopedia of hydrology.
+    - If the user asks a general question: Ignore the dashboard numbers for that specific answer and act as an encyclopedia of hydrology.
     - ALWAYS use bullet points, bold text for key terms, and keep your tone scientific, authoritative, and helpful. 
     - Keep responses concise and easy to read in a small chat window.`;
 
-    // Fetch call to Groq's blazing fast API
+    // Fetch call to Groq's API
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -38,12 +38,12 @@ export async function handler(event, context) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama3-70b-8192", // Groq's highly intelligent, open-source model
+        model: "llama-3.1-70b-versatile", // <--- THIS IS THE UPDATED, ACTIVE MODEL
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: message }
         ],
-        temperature: 0.6, // Gives it a good balance of accuracy and creativity
+        temperature: 0.6,
         max_tokens: 600
       })
     });
