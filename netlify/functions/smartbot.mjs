@@ -38,7 +38,7 @@ export async function handler(event, context) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama3-70b-8192", // Groq's highly intelligent, open-source model
+        model: "llama-3.1-70b-versatile",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: message }
