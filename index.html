@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Budget Dashboard - REWARD Project</title>
+    <title>Water Budget Dashboard - (REWARD Project)</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -564,7 +564,7 @@
     </div>
     
     <div id="ai-chat-history">
-        <div class="ai-msg">Hello! I am your AI assistant 🔍 (REWARD PROJECT). Select a district or micro-watershed, and ask me to analyze the net status or irrigation demands.</div>
+        <div class="ai-msg">Hello! I am your AI assistant.</div>
     </div>
     
     <div id="ai-input-area">
@@ -589,7 +589,7 @@
             "Sep": { p: 5.5,   pu: 0,    o: 0,     v: 0 },
             "Oct": { p: 86.9,  pu: 0,    o: 0,     v: 0 },
             "Nov": { p: 0,     pu: 0,    o: 0,     v: 0 },
-            "Dec": { p: 0,     pu: 14.1, o: 25,    v: 0 }
+            "Dec": { p: 0,     pu: 14.1, o: 25,    v: 0 } 
         };
         const geoData = {
             "Nayagarh": {
@@ -992,14 +992,13 @@ async function sendAIMessage() {
         totalSupply: document.getElementById('kpi-supply').innerText,
         totalDemand: document.getElementById('kpi-demand').innerText,
         netStatus: document.getElementById('kpi-status').innerText,
-        irrigationReq: document.getElementById('txt-irrigation').innerText,
+        irrigationReq: document.getElementById('txt-irrigation').innerText, 
         humanDemand: document.getElementById('txt-human').innerText
     };
 
     try {
-        // 4. Send to Netlify Backend Route
-        const response = await fetch('/.netlify/functions/agent', {
-            method: 'POST',
+        const response = await fetch('/.netlify/functions/cohereagent', { 
+            method: 'POST', 
             body: JSON.stringify({ message: userText, dashboardState })
         });
 
