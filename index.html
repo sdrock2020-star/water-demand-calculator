@@ -84,39 +84,15 @@
             margin-top: 3px; 
         }
 
-        /* Monthly Table Column Configurations: Month bar is smaller (35%), Total bar is wider (65%) */
-        #monthly-table th:first-child, #monthly-table td:first-child {
-            width: 35%;
-            text-align: left;
-        }
-        #monthly-table th:last-child, #monthly-table td:last-child {
-            width: 65%;
-            text-align: right;
-        }
-
-        /* Seasonal Table Column Configurations: Even distribution to support layout symmetry */
-        #seasonal-table th:first-child, #seasonal-table td:first-child {
-            width: 55%;
-            text-align: left;
-        }
-        #seasonal-table th:last-child, #seasonal-table td:last-child {
-            width: 45%;
-            text-align: right;
-        }
+        #monthly-table th:first-child, #monthly-table td:first-child { width: 35%; text-align: left; }
+        #monthly-table th:last-child, #monthly-table td:last-child { width: 65%; text-align: right; }
+        #seasonal-table th:first-child, #seasonal-table td:first-child { width: 55%; text-align: left; }
+        #seasonal-table th:last-child, #seasonal-table td:last-child { width: 45%; text-align: right; }
 
         #monthly-table th, #seasonal-table th { 
-            background: #f1f5f9;
-            font-weight: 600; 
-            color: #334155; 
-            position: sticky; 
-            top: 0; 
-            z-index: 5; 
-            padding: 5px 8px; 
+            background: #f1f5f9; font-weight: 600; color: #334155; position: sticky; top: 0; z-index: 5; padding: 5px 8px; 
         }
-        #monthly-table td, #seasonal-table td { 
-            border: 1px solid #e2e8f0; 
-            padding: 7px 8px; 
-        }
+        #monthly-table td, #seasonal-table td { border: 1px solid #e2e8f0; padding: 7px 8px; }
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box img { height: 80px; width: 80px; }
@@ -135,128 +111,42 @@
         .tab-pane p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #475569; }
         .tab-pane strong { color: #0f172a; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    /* --- AI Floating Widget Styles --- */
-#ai-widget-btn {
-    position: fixed; 
-    bottom: 20px; 
-    right: 20px;
-    background: var(--primary); 
-    color: white;
-    border: none; 
-    border-radius: 30px;
-    padding: 12px 20px; 
-    font-size: 0.95rem; 
-    font-weight: 600;
-    cursor: pointer; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 1000; 
-    transition: transform 0.2s, background-color 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-#ai-widget-btn:hover { 
-    transform: scale(1.05); 
-    background-color: #005f92; 
-}
 
-#ai-chat-window {
-    position: fixed; 
-    bottom: 75px; 
-    right: 20px;
-    width: 360px; 
-    height: 480px;
-    background: var(--card); 
-    border: 1px solid var(--border);
-    border-radius: 12px; 
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    display: none; 
-    flex-direction: column; 
-    z-index: 1000;
-    overflow: hidden;
-    animation: slideUp 0.3s ease;
-}
-@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- AI Floating Widget Styles (Updated with safe mode disabled styling) --- */
+        #ai-widget-btn {
+            position: fixed; bottom: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 30px; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; transition: transform 0.2s, background-color 0.2s; display: flex; align-items: center; gap: 8px;
+        }
+        #ai-widget-btn:hover { transform: scale(1.05); background-color: #005f92; }
 
-#ai-chat-header {
-    background: var(--primary); 
-    color: white;
-    padding: 12px 15px; 
-    font-weight: 600;
-    font-size: 0.95rem;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-}
-#ai-close-btn { 
-    cursor: pointer; 
-    font-size: 1.2rem; 
-    transition: opacity 0.2s;
-}
-#ai-close-btn:hover { opacity: 0.8; }
+        #ai-chat-window {
+            position: fixed; bottom: 75px; right: 20px; width: 360px; height: 480px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 1000; overflow: hidden; animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-#ai-chat-history {
-    flex: 1; 
-    padding: 15px; 
-    overflow-y: auto;
-    font-size: 0.85rem; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 12px;
-    background: #f8fafc;
-}
-.ai-msg { 
-    background: #ffffff; 
-    border: 1px solid var(--border);
-    padding: 10px 12px; 
-    border-radius: 8px 8px 8px 0; 
-    align-self: flex-start; 
-    max-width: 85%; 
-    line-height: 1.5;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-}
-.user-msg { 
-    background: var(--primary); 
-    color: white; 
-    padding: 10px 12px; 
-    border-radius: 8px 8px 0 8px; 
-    align-self: flex-end; 
-    max-width: 85%; 
-    line-height: 1.5;
-    box-shadow: 0 1px 2px rgba(0,119,182,0.2);
-}
+        #ai-chat-header {
+            background: var(--primary); color: white; padding: 12px 15px; font-weight: 600; font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        #ai-close-btn { cursor: pointer; font-size: 1.2rem; transition: opacity 0.2s; }
+        #ai-close-btn:hover { opacity: 0.8; }
 
-#ai-input-area {
-    display: flex; 
-    padding: 12px; 
-    background: #ffffff;
-    border-top: 1px solid var(--border);
-}
-#ai-chat-input {
-    flex: 1; 
-    padding: 10px; 
-    border: 1px solid var(--border);
-    border-radius: 6px; 
-    font-size: 0.85rem; 
-    outline: none;
-    transition: border-color 0.2s;
-}
-#ai-chat-input:focus { border-color: var(--primary); }
-#ai-send-btn {
-    background: var(--primary); 
-    color: white; 
-    border: none;
-    border-radius: 6px; 
-    padding: 0 15px; 
-    margin-left: 8px;
-    cursor: pointer; 
-    font-weight: 600;
-    transition: background-color 0.2s;
-}
-#ai-send-btn:hover { background-color: #005f92; }
+        #ai-chat-history {
+            flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 12px; background: #f8fafc;
+        }
+        .ai-msg { background: #ffffff; border: 1px solid var(--border); padding: 10px 12px; border-radius: 8px 8px 8px 0; align-self: flex-start; max-width: 85%; line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .user-msg { background: var(--primary); color: white; padding: 10px 12px; border-radius: 8px 8px 0 8px; align-self: flex-end; max-width: 85%; line-height: 1.5; box-shadow: 0 1px 2px rgba(0,119,182,0.2); }
 
-
-    
+        #ai-input-area {
+            display: flex; padding: 12px; background: #ffffff; border-top: 1px solid var(--border);
+        }
+        #ai-chat-input {
+            flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; outline: none; transition: border-color 0.2s;
+        }
+        #ai-chat-input:focus { border-color: var(--primary); }
+        #ai-send-btn {
+            background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 15px; margin-left: 8px; cursor: pointer; font-weight: 600; transition: background-color 0.2s; min-width: 50px;
+        }
+        #ai-send-btn:hover:not(:disabled) { background-color: #005f92; }
+        #ai-send-btn:disabled { background: #94a3b8; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -554,7 +444,7 @@
     </div>
 
 <button id="ai-widget-btn" onclick="toggleAIChat()">
-    <i class="fa-solid fa-robot"></i> AI 
+    <i class="fa-solid fa-robot"></i> Ask AI 
 </button>
 
 <div id="ai-chat-window">
@@ -564,7 +454,7 @@
     </div>
     
     <div id="ai-chat-history">
-        <div class="ai-msg">Hello! I am your AI assistant.</div>
+        <div class="ai-msg">Hello! Select a district and micro-watershed, then ask me to summarize the water budget!</div>
     </div>
     
     <div id="ai-input-area">
@@ -589,7 +479,7 @@
             "Sep": { p: 5.5,   pu: 0,    o: 0,     v: 0 },
             "Oct": { p: 86.9,  pu: 0,    o: 0,     v: 0 },
             "Nov": { p: 0,     pu: 0,    o: 0,     v: 0 },
-            "Dec": { p: 0,     pu: 14.1, o: 25,    v: 0 } 
+            "Dec": { p: 0,     pu: 14.1, o: 25,    v: 0 }
         };
         const geoData = {
             "Nayagarh": {
@@ -956,79 +846,87 @@
             });
         }
 
-        // --- AI Agent Logic ---
-
-function toggleAIChat() {
-    const chatWindow = document.getElementById('ai-chat-window');
-    chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
-}
-
-function handleAIKeyPress(event) {
-    if (event.key === 'Enter') sendAIMessage();
-}
-
-async function sendAIMessage() {
-    const inputField = document.getElementById('ai-chat-input');
-    const chatHistory = document.getElementById('ai-chat-history');
-    const userText = inputField.value.trim();
-    
-    if (!userText) return;
-
-    // 1. Render User Message
-    chatHistory.innerHTML += `<div class="user-msg">${userText}</div>`;
-    inputField.value = '';
-    chatHistory.scrollTop = chatHistory.scrollHeight;
-
-    // 2. Render Loading State
-    const loadingId = 'loading-' + Date.now();
-    chatHistory.innerHTML += `<div class="ai-msg" id="${loadingId}"><em>Analyzing dashboard state...</em></div>`;
-    chatHistory.scrollTop = chatHistory.scrollHeight;
-
-    // 3. Read the Live DOM Data
-    const dashboardState = {
-        district: document.getElementById('district-select').value || "None Selected",
-        cluster: document.getElementById('cluster-select').value || "None Selected",
-        msw: document.getElementById('msw-select').value || "None Selected",
-        totalSupply: document.getElementById('kpi-supply').innerText,
-        totalDemand: document.getElementById('kpi-demand').innerText,
-        netStatus: document.getElementById('kpi-status').innerText,
-        irrigationReq: document.getElementById('txt-irrigation').innerText, 
-        humanDemand: document.getElementById('txt-human').innerText
-    };
-
-    try {
-        const response = await fetch('/.netlify/functions/cohereagent', { 
-            method: 'POST', 
-            body: JSON.stringify({ message: userText, dashboardState })
-        });
-
-        const data = await response.json();
-        
-        // 5. Render Agent Response or Error
-        document.getElementById(loadingId).remove();
-        
-        if (data.reply) {
-            // If it works perfectly, show the reply
-            chatHistory.innerHTML += `<div class="ai-msg">${data.reply}</div>`;
-        } else {
-            // If the backend fails, show the ACTUAL error instead of "undefined"
-            chatHistory.innerHTML += `<div class="ai-msg" style="color: #ef4444; border: 1px solid #fca5a5; background: #fef2f2;">
-                <em>Error: ${data.details || data.error || "Unknown server error"}</em>
-            </div>`;
+        // --- Safe AI Logic with Cooldown ---
+        function toggleAIChat() {
+            const win = document.getElementById('ai-chat-window');
+            win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
         }
-        
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-        
-    } catch (error) {
-        console.error("AI Agent Connection Error:", error);
-        document.getElementById(loadingId).remove();
-        chatHistory.innerHTML += `<div class="ai-msg" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2;">
-            <em>Error: Could not reach the serverless backend. Ensure your Netlify function is deployed.</em>
-        </div>`;
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-    }
-}
-        
+
+        function handleAIKeyPress(event) {
+            if (event.key === 'Enter') sendAIMessage();
+        }
+
+        async function sendAIMessage() {
+            const inputField = document.getElementById('ai-chat-input');
+            const chatHistory = document.getElementById('ai-chat-history');
+            const btn = document.getElementById('ai-send-btn');
+            const userText = inputField.value.trim();
+            
+            if (!userText || btn.disabled) return;
+
+            // 1. Show user message & disable button to prevent spam
+            chatHistory.innerHTML += `<div class="user-msg">${userText}</div>`;
+            inputField.value = '';
+            btn.disabled = true;
+            btn.innerText = "...";
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            const loadingId = 'load-' + Date.now();
+            chatHistory.innerHTML += `<div class="ai-msg" id="${loadingId}"><em>Analyzing dashboard state...</em></div>`;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // 2. Read Data
+            const dashboardState = {
+                district: document.getElementById('district-select').value || "None Selected",
+                cluster: document.getElementById('cluster-select').value || "None Selected",
+                msw: document.getElementById('msw-select').value || "None Selected",
+                totalSupply: document.getElementById('kpi-supply').innerText,
+                totalDemand: document.getElementById('kpi-demand').innerText,
+                netStatus: document.getElementById('kpi-status').innerText,
+                irrigationReq: document.getElementById('txt-irrigation').innerText,
+                humanDemand: document.getElementById('txt-human').innerText
+            };
+
+            try {
+                // Fetch from new Groq backend (Make sure smartbot.mjs is deployed!)
+                const res = await fetch('/.netlify/functions/smartbot', {
+                    method: 'POST',
+                    body: JSON.stringify({ message: userText, dashboardState })
+                });
+                const data = await res.json();
+                
+                document.getElementById(loadingId).remove();
+                
+                if (data.reply) {
+                    // Convert Markdown bold (**text**) to HTML bold (<b>text</b>)
+                    let formattedReply = data.reply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                    chatHistory.innerHTML += `<div class="ai-msg">${formattedReply}</div>`;
+                } else {
+                    chatHistory.innerHTML += `<div class="ai-msg" style="color: #ef4444;"><em>Error: ${data.details || data.error || "Unknown server error"}</em></div>`;
+                }
+                
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                
+            } catch (error) {
+                console.error("AI Connection Error:", error);
+                document.getElementById(loadingId).remove();
+                chatHistory.innerHTML += `<div class="ai-msg" style="color: #ef4444;"><em>Error connecting to AI. Make sure smartbot is deployed.</em></div>`;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+
+            // 3. Cooldown Timer (10 Seconds)
+            let cooldown = 10;
+            const timer = setInterval(() => {
+                btn.innerText = cooldown + "s";
+                cooldown--;
+                if (cooldown < 0) {
+                    clearInterval(timer);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
+                }
+            }, 1000);
+        }
+
         function updateCharts(mValues, mIrrValues) {
             let popUrbanVal = +document.getElementById('pop-urban').value;
             let popRuralVal = +document.getElementById('pop-rural').value;
@@ -1071,5 +969,3 @@ async function sendAIMessage() {
     </script>
 </body>
 </html>
-
-
