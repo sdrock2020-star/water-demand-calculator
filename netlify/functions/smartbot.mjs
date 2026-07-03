@@ -4,9 +4,6 @@ export async function handler(event, context) {
   try {
     const { message, dashboardState } = JSON.parse(event.body);
     
-    // ==========================================
-    // THE "HYDROLOGY EXPERT" SYSTEM PROMPT
-    // ==========================================
     const systemPrompt = `You are a Senior Hydrologist and the Lead Water Resource Management Expert for the ICAR-IIWM REWARD Project in Odisha, India. 
     You possess deep academic and practical knowledge of hydrology, watershed management, soil moisture conservation, groundwater dynamics, evapotranspiration, and climate-resilient agriculture.
 
@@ -30,7 +27,6 @@ export async function handler(event, context) {
     - ALWAYS use bullet points, bold text for key terms, and keep your tone scientific, authoritative, and helpful. 
     - Keep responses concise and easy to read in a small chat window.`;
 
-    // Fetch call to Groq's API
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -38,7 +34,7 @@ export async function handler(event, context) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3.1-70b-versatile", // <--- THIS IS THE UPDATED, ACTIVE MODEL
+        model: "llama-3.1-70b-versatile",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: message }
