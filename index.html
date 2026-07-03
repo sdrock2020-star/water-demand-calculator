@@ -842,36 +842,42 @@
             chatHistory.innerHTML += `<div class="ai-msg" id="${loadingId}"><em>Analyzing dashboard state...</em></div>`;
             chatHistory.scrollTop = chatHistory.scrollHeight;
 
-            // 2. READ EVERY DETAIL FROM THE DASHBOARD
+            // 2. READ EVERY DETAIL FROM THE DASHBOARD (Outputs + Inputs)
             const dashboardState = {
+                // Location
                 district: document.getElementById('district-select').value || "None Selected",
                 cluster: document.getElementById('cluster-select').value || "None Selected",
                 msw: document.getElementById('msw-select').value || "None Selected",
                 
-                // Totals
+                // Grand Totals
                 totalSupply: document.getElementById('kpi-supply').innerText,
                 totalDemand: document.getElementById('kpi-demand').innerText,
                 netStatus: document.getElementById('kpi-status').innerText,
                 
-                // Demand Categories
+                // --- NEW: POPULATION & AREA INPUTS ---
+                popUrban: document.getElementById('pop-urban').value,
+                popRural: document.getElementById('pop-rural').value,
+                popCattle: document.getElementById('l-cattle').value,
+                popSheep: document.getElementById('l-sheep').value,
+                popPoultry: document.getElementById('l-poultry').value,
+                areaPaddy: document.getElementById('a-paddy').value,
+                areaPulses: document.getElementById('a-pulses').value,
+                areaOil: document.getElementById('a-oil').value,
+                areaVeg: document.getElementById('a-veg').value,
+                
+                // Demand Breakdown (Outputs)
                 demandHuman: document.getElementById('txt-human').innerText,
                 demandLivestock: document.getElementById('txt-livestock').innerText,
                 demandIrrigation: document.getElementById('txt-irrigation').innerText,
                 demandIndustry: document.getElementById('txt-industry').innerText,
                 
-                // Crop Details (This fixes your Paddy issue!)
+                // Crop Specifics (Outputs)
                 cropPaddy: document.getElementById('lbl-demand-paddy').innerText,
                 cropPulses: document.getElementById('lbl-demand-pulses').innerText,
                 cropOil: document.getElementById('lbl-demand-oil').innerText,
                 cropVeg: document.getElementById('lbl-demand-veg').innerText,
                 
-                // Livestock Details
-                liveCattle: document.getElementById('lbl-demand-cattle').innerText,
-                liveSheep: document.getElementById('lbl-demand-sheep').innerText,
-                livePoultry: document.getElementById('lbl-demand-poultry').innerText,
-                livePigs: document.getElementById('lbl-demand-pigs').innerText,
-                
-                // Supply Details
+                // Supply Specifics
                 supplySurface: document.getElementById('txt-surface').innerText,
                 supplyGround: document.getElementById('txt-ground').innerText,
                 supplyTransfer: document.getElementById('txt-transfer').innerText,
