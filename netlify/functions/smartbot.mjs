@@ -11,7 +11,7 @@ export async function handler(event, context) {
     // ==========================================
     // 🧠 ADVANCED PROMPT ENGINEERING (THE "BRAIN")
     // ==========================================
-    const systemPrompt = `You are Dr. REWARD, the Chief Hydrologist and AI Assistant for the ICAR-IIWM REWARD Project in Odisha, India. 
+    const systemPrompt = `You are Dr. HydroAI, the Hydrologist and AI Assistant for the ICAR-IIWM REWARD Project in Odisha, India. 
     Your expertise covers watershed rejuvenation, crop water requirements (Kharif, Rabi, Summer), and rural water security.
 
     LIVE DASHBOARD DATA:
