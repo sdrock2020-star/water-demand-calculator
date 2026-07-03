@@ -414,7 +414,6 @@
 
 <button id="ai-widget-btn" onclick="toggleAIChat()">
     <i class="fa-solid fa-robot"></i> HydroAI 
-    <i class="fa-solid fa-robot"></i> HydroAI
 </button>
 
 <div id="ai-chat-window">
@@ -844,16 +843,46 @@
             chatHistory.scrollTop = chatHistory.scrollHeight;
 
             // 2. Read Data
-            const dashboardState = {
-                district: document.getElementById('district-select').value || "None Selected",
-                cluster: document.getElementById('cluster-select').value || "None Selected",
-                msw: document.getElementById('msw-select').value || "None Selected",
-                totalSupply: document.getElementById('kpi-supply').innerText,
-                totalDemand: document.getElementById('kpi-demand').innerText,
-                netStatus: document.getElementById('kpi-status').innerText,
-                irrigationReq: document.getElementById('txt-irrigation').innerText,
-                humanDemand: document.getElementById('txt-human').innerText
-            };
+            // Read Data (Now capturing EVERY detail on the website)
+        const dashboardState = {
+        // Location
+        district: document.getElementById('district-select').value || "None Selected",
+        cluster: document.getElementById('cluster-select').value || "None Selected",
+        msw: document.getElementById('msw-select').value || "None Selected",
+        
+        // Grand Totals
+        totalSupply: document.getElementById('kpi-supply').innerText,
+        totalDemand: document.getElementById('kpi-demand').innerText,
+        netStatus: document.getElementById('kpi-status').innerText,
+        
+        // Demand Breakdown
+        demandHuman: document.getElementById('txt-human').innerText,
+        demandLivestock: document.getElementById('txt-livestock').innerText,
+        demandIrrigation: document.getElementById('txt-irrigation').innerText,
+        demandIndustry: document.getElementById('txt-industry').innerText,
+        
+        // Crop Specifics
+        cropPaddy: document.getElementById('lbl-demand-paddy').innerText,
+        cropPulses: document.getElementById('lbl-demand-pulses').innerText,
+        cropOil: document.getElementById('lbl-demand-oil').innerText,
+        cropVeg: document.getElementById('lbl-demand-veg').innerText,
+        
+        // Livestock Specifics
+        liveCattle: document.getElementById('lbl-demand-cattle').innerText,
+        liveSheep: document.getElementById('lbl-demand-sheep').innerText,
+        livePoultry: document.getElementById('lbl-demand-poultry').innerText,
+        livePigs: document.getElementById('lbl-demand-pigs').innerText,
+        
+        // Supply Specifics
+        supplySurface: document.getElementById('txt-surface').innerText,
+        supplyGround: document.getElementById('txt-ground').innerText,
+        supplyTransfer: document.getElementById('txt-transfer').innerText,
+
+        // Seasonal Details
+        seasonKharif: document.getElementById('season-kharif').innerText,
+        seasonRabi: document.getElementById('season-rabi').innerText,
+        seasonSummer: document.getElementById('season-summer').innerText
+    };
 
             try {
                 // Fetch from the smartbot backend
