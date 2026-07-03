@@ -25,23 +25,7 @@
         .filter-group label { font-size: 0.85rem; font-weight: 600; width: 130px; }
         .filter-group select { flex: 1; padding: 5px; border-radius: 5px; border: 1px solid var(--border); font-size: 0.85rem; }
 
-        #clear-all-btn {
-            width: 100%;
-            background-color: #ef4444;
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            padding: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-        }
+        #clear-all-btn { width: 100%; background-color: #ef4444; color: #ffffff; border: none; border-radius: 6px; padding: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.2s ease, transform 0.1s ease; }
         #clear-all-btn:hover { background-color: #dc2626; }
         #clear-all-btn:active { transform: scale(0.98); }
 
@@ -71,7 +55,6 @@
         .input-row input { width: 70px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
 
         .chart-container { height: 100px; margin-top: 5px; }
-
         .full-width-row { grid-column: span 2; width: 100%; }
         .visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 5px; width: 100%; }
         .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
@@ -423,11 +406,11 @@
     </div>
     
     <div id="ai-chat-history">
-        <div class="ai-msg">Hello! Select a district and micro-watershed, then ask me anything realted to water budget</div>
+        <div class="ai-msg">Hello! Select a district and micro-watershed, then ask me anything related to the water budget!</div>
     </div>
     
     <div id="ai-input-area">
-        <input type="text" id="ai-chat-input" placeholder="Ask about the data..." onkeypress="handleAIKeyPress(event)" />
+        <input type="text" id="ai-chat-input" placeholder="Ask about the data..." onkeypress="if(event.key === 'Enter') sendAIMessage()" />
         <button id="ai-send-btn" onclick="sendAIMessage()">Send</button>
     </div>
 </div>
@@ -831,11 +814,11 @@
             
             if (!userText || btn.disabled) return;
 
-            // 1. Show user message & disable button
+            // 1. Show user message & disable button to prevent spam
             chatHistory.innerHTML += `<div class="user-msg">${userText}</div>`;
             inputField.value = '';
             btn.disabled = true;
-            btn.innerHTML = "...";
+            btn.innerText = "...";
             chatHistory.scrollTop = chatHistory.scrollHeight;
 
             const loadingId = 'load-' + Date.now();
@@ -889,7 +872,7 @@
             };
 
             try {
-                // Fetch from the backend
+                // Fetch from the smartbot backend
                 const res = await fetch('/.netlify/functions/smartbot', {
                     method: 'POST',
                     body: JSON.stringify({ message: userText, dashboardState })
@@ -899,7 +882,7 @@
                 document.getElementById(loadingId).remove();
                 
                 if (data.reply) {
-                    // Convert Markdown bold to HTML bold
+                    // Convert Markdown bold (**text**) to HTML bold (<b>text</b>)
                     let formattedReply = data.reply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
                     chatHistory.innerHTML += `<div class="ai-msg">${formattedReply}</div>`;
                 } else {
@@ -927,6 +910,7 @@
                 }
             }, 1000);
         }
+
         function updateCharts(mValues, mIrrValues) {
             let popUrbanVal = +document.getElementById('pop-urban').value;
             let popRuralVal = +document.getElementById('pop-rural').value;
