@@ -837,40 +837,40 @@
                 totalDemand: document.getElementById('kpi-demand').innerText,
                 netStatus: document.getElementById('kpi-status').innerText,
                 
-                // --- NEW: POPULATION & AREA INPUTS ---
+                // POPULATION & LIVESTOCK INPUTS
                 popUrban: document.getElementById('pop-urban').value,
                 popRural: document.getElementById('pop-rural').value,
                 popCattle: document.getElementById('l-cattle').value,
                 popSheep: document.getElementById('l-sheep').value,
                 popPoultry: document.getElementById('l-poultry').value,
+                popPigs: document.getElementById('l-pigs').value, // Added missing pig data
+                
+                // AREA & INDUSTRY INPUTS
                 areaPaddy: document.getElementById('a-paddy').value,
                 areaPulses: document.getElementById('a-pulses').value,
                 areaOil: document.getElementById('a-oil').value,
                 areaVeg: document.getElementById('a-veg').value,
+                indHeavy: document.getElementById('ind-1').value, // Added missing heavy industry
+                indLight: document.getElementById('ind-2').value, // Added missing light industry
                 
-                // Demand Breakdown (Outputs)
+                // DETAILED SUPPLY INPUTS (Previously missing)
+                supPond: document.getElementById('s-pond').value,
+                supRes: document.getElementById('s-res').value,
+                supRiv: document.getElementById('s-riv').value,
+                supDug: document.getElementById('g-dug').value,
+                supTube: document.getElementById('g-tube').value,
+                
+                // Demand Breakdown Outputs
                 demandHuman: document.getElementById('txt-human').innerText,
                 demandLivestock: document.getElementById('txt-livestock').innerText,
                 demandIrrigation: document.getElementById('txt-irrigation').innerText,
                 demandIndustry: document.getElementById('txt-industry').innerText,
                 
-                // Crop Specifics (Outputs)
-                cropPaddy: document.getElementById('lbl-demand-paddy').innerText,
-                cropPulses: document.getElementById('lbl-demand-pulses').innerText,
-                cropOil: document.getElementById('lbl-demand-oil').innerText,
-                cropVeg: document.getElementById('lbl-demand-veg').innerText,
-                
-                // Supply Specifics
-                supplySurface: document.getElementById('txt-surface').innerText,
-                supplyGround: document.getElementById('txt-ground').innerText,
-                supplyTransfer: document.getElementById('txt-transfer').innerText,
-
                 // Seasonal Details
                 seasonKharif: document.getElementById('season-kharif').innerText,
                 seasonRabi: document.getElementById('season-rabi').innerText,
                 seasonSummer: document.getElementById('season-summer').innerText
             };
-
             try {
                 // Fetch from the smartbot backend
                 const res = await fetch('/.netlify/functions/smartbot', {
