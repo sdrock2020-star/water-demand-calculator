@@ -50,6 +50,47 @@
         .input-table td { padding: 4px; border-bottom: 1px dotted #e2e8f0; vertical-align: middle; }
         .input-table input { width: 55px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.72rem; }
         .input-table .val-lbl { font-weight: 600; color: #0f172a; text-align: right; display: block; }
+        
+        .card-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .btn-add-surface { background-color: var(--primary); color: white; border: none; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: background-color 0.2s ease; }
+        .btn-add-surface:hover { background-color: #005f92; }
+
+        .input-row-dual { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 6px; 
+            font-size: 0.75rem; 
+        }
+        .dual-inputs { 
+            display: flex; 
+            gap: 6px; 
+            align-items: center; 
+        }
+        .calc-input-sm { 
+            width: 50px !important; 
+            padding: 2px 4px; 
+            text-align: right; 
+            border: 1px solid var(--border); 
+            border-radius: 4px; 
+            font-size: 0.75rem; 
+        }
+        .calc-input-md { 
+            width: 70px !important; 
+            padding: 2px 4px; 
+            text-align: right; 
+            border: 1px solid var(--border); 
+            border-radius: 4px; 
+            font-size: 0.75rem; 
+        }
+
+        .readonly-input {
+            background-color: #f1f5f9 !important;
+            color: #334155 !important;
+            cursor: not-allowed;
+            border-color: #cbd5e1 !important;
+            font-weight: 600;
+        }
 
         .input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.75rem; }
         .input-row input { width: 70px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
@@ -85,20 +126,191 @@
         .tab-pane strong { color: #0f172a; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Safe AI Widget Styles --- */
+        /* --- Full Surface Water Calculation Modal --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-container { 
+            background: #ffffff; 
+            width: 95%; 
+            max-width: 650px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            overflow: hidden; 
+            animation: fadeIn 0.3s ease; 
+        }
+        .modal-header { background: var(--primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; }
+        .modal-close-btn { background: transparent; border: none; color: white; font-size: 1.4rem; cursor: pointer; line-height: 1; }
+        .modal-body { 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            box-sizing: border-box;
+        }
+        .modal-group { display: flex; flex-direction: column; gap: 6px; }
+        .modal-group label { font-size: 0.85rem; font-weight: 600; color: #334155; }
+        .modal-group select, .modal-group input { 
+            padding: 8px 10px; 
+            border-radius: 6px; 
+            border: 1px solid var(--border); 
+            font-size: 0.85rem; 
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+        .dimension-box { border: 1px dashed var(--primary); background: #f8fafc; padding: 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 12px; }
+        .dimension-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; 
+            width: 100%;
+        }
+        .result-box { background: #e0f2fe; border: 1px solid #7dd3fc; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: #0369a1; }
+        .modal-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+        .btn-modal-cancel { background: #e2e8f0; color: #475569; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-modal-save { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+
+        /* --- AI Widget Styles --- */
         #ai-widget-btn { position: fixed; bottom: 20px; right: 20px; background: #0077b6; color: white; border: none; border-radius: 30px; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; display: flex; align-items: center; gap: 8px; transition: transform 0.2s;}
         #ai-widget-btn:hover { transform: scale(1.05); }
         #ai-chat-window { position: fixed; bottom: 75px; right: 20px; width: 340px; height: 480px; background: white; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 1000; overflow: hidden; animation: slideUp 0.3s ease;}
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         #ai-chat-header { background: #0077b6; color: white; padding: 12px 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
         #ai-close-btn { cursor: pointer; font-size: 1.2rem; }
-        #ai-chat-history { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; }
-        .ai-msg { background: white; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px 8px 8px 0; align-self: flex-start; max-width: 85%; line-height: 1.4;}
-        .user-msg { background: #0077b6; color: white; padding: 10px; border-radius: 8px 8px 0 8px; align-self: flex-end; max-width: 85%; line-height: 1.4;}
+        
+        #ai-chat-history { 
+            flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; 
+        }
+        .ai-msg { 
+            background: white; border: 1px solid #cbd5e1; padding: 12px 15px; border-radius: 12px 12px 12px 0; align-self: flex-start; max-width: 85%; line-height: 1.5; color: #334155; box-shadow: 0 1px 2px rgba(0,0,0,0.02); 
+        }
+        .ai-msg h3 { font-size: 0.95rem; color: #0077b6; margin-top: 8px; margin-bottom: 4px; font-weight: 600; }
+        .ai-msg p { margin-bottom: 6px; }
+        .ai-msg ul, .ai-msg ol { margin-left: 18px; margin-bottom: 6px; padding-left: 0; }
+        .ai-msg li { margin-bottom: 3px; }
+
+        .user-msg { 
+            background: #0077b6; color: white; padding: 10px 14px; border-radius: 12px 12px 0 12px; align-self: flex-end; max-width: 85%; line-height: 1.4; box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+        }
         #ai-input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #cbd5e1; }
         #ai-chat-input { flex: 1; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; }
         #ai-send-btn { background: #0077b6; color: white; border: none; border-radius: 6px; padding: 0 15px; margin-left: 8px; cursor: pointer; font-weight: 600; min-width: 60px; transition: background-color 0.2s;}
         #ai-send-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .leaflet-tooltip {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #0f172a;
+            text-shadow: 1px 1px 2px #ffffff, -1px -1px 2px #ffffff;
+        }
+
+        .leaflet-tooltip-top:before,
+        .leaflet-tooltip-bottom:before,
+        .leaflet-tooltip-left:before,
+        .leaflet-tooltip-right:before {
+            display: none !important;
+        }
+
+
+/* --- MOBILE & RESPONSIVE BREAKPOINTS --- */
+
+/* Tablet & Mobile Layout Adjustment */
+@media screen and (max-width: 992px) {
+    .main-grid {
+        grid-template-columns: 1fr; /* Stack left sidebar and main content */
+    }
+    
+    .bottom-grid-demand {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
+    }
+
+    .bottom-grid-supply {
+        grid-template-columns: 1fr;
+    }
+
+    .visualization-split-row {
+        grid-template-columns: 1fr; /* Stack trend tables & charts */
+    }
+
+    .header-container {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .title-container h1 {
+        font-size: 1.8rem;
+    }
+
+    .title-container h2 {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+}
+
+/* Mobile Devices (Phones) */
+@media screen and (max-width: 600px) {
+    body {
+        padding: 6px;
+    }
+
+    .kpi-row {
+        grid-template-columns: 1fr; /* Stack KPIs vertically */
+        gap: 8px;
+    }
+
+    .bottom-grid-demand {
+        grid-template-columns: 1fr; /* Stack demand cards */
+    }
+
+    #map {
+        height: 280px; /* Reduced map height for mobile viewports */
+    }
+
+    .tab-navigation {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .tab-btn {
+        padding: 6px 14px;
+        font-size: 0.8rem;
+    }
+
+    .input-table {
+        display: block;
+        overflow-x: auto; /* Enable touch scrolling for tables */
+        white-space: nowrap;
+    }
+
+    /* Modal adjustments */
+    .dimension-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-container {
+        width: 95%;
+        margin: 10px;
+    }
+
+    /* AI Assistant floating widget */
+    #ai-chat-window {
+        width: calc(100vw - 30px);
+        right: 15px;
+        left: 15px;
+        bottom: 70px;
+        height: 420px;
+    }
+
+    #ai-widget-btn {
+        bottom: 15px;
+        right: 15px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -108,8 +320,7 @@
         <div class="title-container">
             <h2>
                 <span class="highlight-letter">Re</span>juvenating <span class="highlight-letter">W</span>atersheds for 
-                <span class="highlight-letter">A</span>gricultural <span class="highlight-letter">R</span>esilience through 
-                Innovative <span class="highlight-letter">D</span>evelopment
+                <span class="highlight-letter">A</span>gricultural <span class="highlight-letter">R</span>esilience through Innovative <span class="highlight-letter">D</span>evelopment
             </h2>
             <h1>Water Budget Dashboard</h1> 
         </div>
@@ -125,7 +336,7 @@
                 <div class="filter-group"><label>Year</label><select><option>2023-2024</option></select></div>
                 
                 <button id="clear-all-btn" type="button">
-                   <i class="fa-solid fa-rotate-left"></i> Clear All
+                    <i class="fa-solid fa-rotate-left"></i> Clear All
                 </button>
             </div>
 
@@ -343,17 +554,48 @@
         <div class="section-header">Supply Inputs (m³)</div>
         <div class="bottom-grid-supply" style="grid-column: span 2; width: 100%;">
             <div class="card">
-                <h5 style="color: var(--primary); margin-bottom: 10px;">Surface Water</h5>
-                <div class="input-row"><label>Ponds</label><input type="number" id="s-pond" class="calc-input" value="0"></div>
-                <div class="input-row"><label>Reservoir</label><input type="number" id="s-res" class="calc-input" value="0"></div>
-                <div class="input-row"><label>River</label><input type="number" id="s-riv" class="calc-input" value="0"></div>
+                <div class="card-header-flex">
+                    <h5 style="color: var(--primary); margin-bottom: 0;">Surface Water</h5>
+                    <button class="btn-add-surface" onclick="openSurfaceModal()"><i class="fa-solid fa-plus"></i> Add</button>
+                </div>
+                <div class="input-row-dual">
+                    <label>Ponds / Lakes</label>
+                    <div class="dual-inputs">
+                        <input type="number" id="s-pond-nos" class="calc-input calc-input-sm" value="0" placeholder="Nos">
+                        <input type="number" id="s-pond" class="calc-input calc-input-md readonly-input" value="0" placeholder="m³" readonly>
+                    </div>
+                </div>
+                <div class="input-row-dual">
+                    <label>Reservoir / Check Dam / MCD</label>
+                    <div class="dual-inputs">
+                        <input type="number" id="s-res-nos" class="calc-input calc-input-sm" value="0" placeholder="Nos">
+                        <input type="number" id="s-res" class="calc-input calc-input-md readonly-input" value="0" placeholder="m³" readonly>
+                    </div>
+                </div>
+                <div class="input-row-dual">
+                    <label>River</label>
+                    <div class="dual-inputs">
+                        <input type="number" id="s-riv-nos" class="calc-input calc-input-sm" value="0" placeholder="Nos">
+                        <input type="number" id="s-riv" class="calc-input calc-input-md readonly-input" value="0" placeholder="m³" readonly>
+                    </div>
+                </div>
+
+                <!-- EMBEDDED DEDICATED GRAPH INSIDE SURFACE WATER CARD -->
+                <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; font-weight: 600; color: var(--primary); display: block; margin-bottom: 4px;">Monthly Surface Water Storage Trend</span>
+                    <div style="height: 120px; position: relative;">
+                        <canvas id="c-surface-trend"></canvas>
+                    </div>
+                </div>
             </div>
+
             <div class="card">
                 <h5 style="color: var(--primary); margin-bottom: 10px;">Ground Water</h5>
                 <div class="input-row"><label>Dug Well</label><input type="number" id="g-dug" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Tube Well</label><input type="number" id="g-tube" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Other</label><input type="number" id="g-oth" class="calc-input" value="0"></div>
             </div>
+
             <div class="card">
                 <h5 style="color: var(--primary); margin-bottom: 10px;">Water Transfer</h5>
                 <div class="input-row"><label>Source-1</label><input type="number" id="t-s1" class="calc-input" value="0"></div>
@@ -395,27 +637,279 @@
         </div>
     </div>
 
-<button id="ai-widget-btn" onclick="toggleAIChat()">
-    <i class="fa-solid fa-robot"></i> HydroAI 
-</button>
+    <!-- Surface Water Dimension Modal Popup -->
+    <div id="surfaceModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <span>Add Surface Water Structure</span>
+                <button class="modal-close-btn" onclick="closeSurfaceModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-group">
+                    <label>Select Structure Type</label>
+                    <select id="modal-struct-type">
+                        <option value="pond">Ponds / Lakes</option>
+                        <option value="res">Reservoir / Check Dam</option>
+                        <option value="riv">River</option>
+                    </select>
+                </div>
 
-<div id="ai-chat-window">
-    <div id="ai-chat-header">
-        <span>Water Budget Assistant</span>
-        <span id="ai-close-btn" onclick="toggleAIChat()">&times;</span>
+                <div class="dimension-box">
+                    <label style="font-weight:600; font-size:0.85rem; color:#0077b6;">Specify Dimensions</label>
+                    <div class="dimension-grid">
+                        <div class="modal-group">
+                            <label>Length (m)</label>
+                            <input type="number" id="dim-length" placeholder="0" value="0">
+                        </div>
+                        <div class="modal-group">
+                            <label>Width (m)</label>
+                            <input type="number" id="dim-width" placeholder="0" value="0">
+                        </div>
+                        <div class="modal-group">
+                            <label>Depth (m)</label>
+                            <input type="number" id="dim-depth" placeholder="0" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-box">
+                    <span>Calculated Volume:</span>
+                    <span id="dim-calc-volume">0 m³</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" onclick="closeSurfaceModal()">Cancel</button>
+                <button class="btn-modal-save" onclick="closeSurfaceModal()">Save Structure</button>
+            </div>
+        </div>
     </div>
-    
-    <div id="ai-chat-history">
-        <div class="ai-msg">Hello! Select a district and micro-watershed, then ask me anything related to the water budget!</div>
+
+    <button id="ai-widget-btn" onclick="toggleAIChat()">
+        <i class="fa-solid fa-robot"></i> HydroAI 
+    </button>
+
+    <div id="ai-chat-window">
+        <div id="ai-chat-header">
+            <span>Water Budget Assistant</span>
+            <span id="ai-close-btn" onclick="toggleAIChat()">&times;</span>
+        </div>
+        
+        <div id="ai-chat-history">
+            <div class="ai-msg">Hello! Select a district and micro-watershed, then ask me anything related to the water budget!</div>
+        </div>
+        
+        <div id="ai-input-area">
+            <input type="text" id="ai-chat-input" placeholder="Ask about the data..." onkeypress="handleAIKeyPress(event)" />
+            <button id="ai-send-btn" onclick="sendAIMessage()">Send</button>
+        </div>
     </div>
-    
-    <div id="ai-input-area">
-        <input type="text" id="ai-chat-input" placeholder="Ask about the data..." onkeypress="if(event.key === 'Enter') sendAIMessage()" />
-        <button id="ai-send-btn" onclick="sendAIMessage()">Send</button>
-    </div>
-</div>
 
     <script>
+
+const MONTHLY_LOSS = {
+    "Jan": 0.37,
+    "Feb": 0.52,
+    "Mar": 0.71,
+    "Apr": 0.94,
+    "May": 1.20,
+    "Jun": 1.35,
+    "Jul": 1.10,
+    "Aug": 0.85,
+    "Sep": 0.70,
+    "Oct": 0.55,
+    "Nov": 0.42,
+    "Dec": 0.38
+};
+
+// --- FORMULA IMPLEMENTATION: (Raw Depth - 0.25 - Month Loss) * Area ---
+function calculateMonthlyStorage(rawDepthM, areaM2) {
+    let monthlyVolumes = {};
+
+    for (let month in MONTHLY_LOSS) {
+        let loss = MONTHLY_LOSS[month];
+        let netDepth = rawDepthM - 0.25 - loss;
+
+        // Condition: If net depth is <= 0, volume is 0
+        if (netDepth <= 0) {
+            monthlyVolumes[month] = 0;
+        } else {
+            monthlyVolumes[month] = Math.round(netDepth * areaM2);
+        }
+    }
+
+    return monthlyVolumes;
+}
+
+// --- EXACT MONTHLY STORAGE PROFILE FOR ALL MWS (ODAGAON & DASPALLA CLUSTERS) ---
+const surfaceWaterBackend = {
+    // --- ODAGAON CLUSTER MWS ---
+    "Badagarada": {
+        "ponds": { count: 27, area_m2: 100563.55, max_volume_m3: 293477.64, monthly: { "Jan": 256369.69, "Feb": 239233.66, "Mar": 219322.08, "Apr": 198716.61, "May": 174641.7, "Jun": 174641.7, "Jul": 293477.64, "Aug": 293477.64, "Sep": 293477.64, "Oct": 293477.64, "Nov": 280595.45, "Dec": 269161.38 } },
+        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Badaput": {
+        "ponds": { count: 24, area_m2: 99694.83, max_volume_m3: 313363.84, monthly: { "Jan": 276576.45, "Feb": 259588.45, "Mar": 239848.87, "Apr": 219421.4, "May": 195554.46, "Jun": 195554.46, "Jul": 313363.84, "Aug": 313363.84, "Sep": 313363.84, "Oct": 313363.84, "Nov": 300592.93, "Dec": 289257.63 } },
+        "reservoir": { count: 1, area_m2: 56.45, max_volume_m3: 2.82, monthly: { "Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 2.82, "Aug": 2.82, "Sep": 2.82, "Oct": 2.82, "Nov": 0.0, "Dec": 0.0 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Bhandar": {
+        "ponds": { count: 19, area_m2: 100431.22, max_volume_m3: 253758.35, monthly: { "Jan": 216699.23, "Feb": 199585.75, "Mar": 179700.37, "Apr": 159122.01, "May": 135078.77, "Jun": 135078.77, "Jul": 253758.35, "Aug": 253758.35, "Sep": 253758.35, "Oct": 253758.35, "Nov": 240893.11, "Dec": 229474.08 } },
+        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Dhusuma": {
+        "ponds": { count: 18, area_m2: 60173.5, max_volume_m3: 199878.23, monthly: { "Jan": 177674.21, "Feb": 166782.37, "Mar": 154145.89, "Apr": 141408.08, "May": 126966.09, "Jun": 126966.09, "Jul": 199878.23, "Aug": 199878.23, "Sep": 199878.23, "Oct": 199878.23, "Nov": 192055.33, "Dec": 185328.39 } },
+        "reservoir": { count: 1, area_m2: 6612.89, max_volume_m3: 8266.11, monthly: { "Jan": 5825.96, "Feb": 5337.4, "Mar": 4750.17, "Apr": 3803.45, "May": 2256.78, "Jun": 2256.78, "Jul": 8266.11, "Aug": 8266.11, "Sep": 8266.11, "Oct": 8266.11, "Nov": 7533.68, "Dec": 6667.0 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Jaringi": {
+        "ponds": { count: 18, area_m2: 62737.35, max_volume_m3: 207105.59, monthly: { "Jan": 183955.51, "Feb": 173089.44, "Mar": 159914.95, "Apr": 146639.4, "May": 131587.84, "Jun": 131587.84, "Jul": 207105.59, "Aug": 207105.59, "Sep": 207105.59, "Oct": 207105.59, "Nov": 198949.74, "Dec": 191936.03 } },
+        "reservoir": { count: 1, area_m2: 1435.26, max_volume_m3: 1076.44, monthly: { "Jan": 546.83, "Feb": 477.89, "Mar": 946.2, "Apr": 1348.79, "May": 1381.03, "Jun": 1381.03, "Jul": 1076.44, "Aug": 1076.44, "Sep": 1076.44, "Oct": 1076.44, "Nov": 1011.78, "Dec": 729.07 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Kalyanpur": {
+        "ponds": { count: 17, area_m2: 77660.53, max_volume_m3: 236290.59, monthly: { "Jan": 207633.85, "Feb": 194400.5, "Mar": 179023.71, "Apr": 163111.07, "May": 144519.14, "Jun": 144519.14, "Jul": 236290.59, "Aug": 236290.59, "Sep": 236290.59, "Oct": 236290.59, "Nov": 226534.89, "Dec": 217512.23 } },
+        "reservoir": { count: 1, area_m2: 1580.12, max_volume_m3: 395.03, monthly: { "Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 395.03, "Aug": 395.03, "Sep": 395.03, "Oct": 395.03, "Nov": 0.0, "Dec": 13.0 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Khubhiapalli": {
+        "ponds": { count: 24, area_m2: 88490.9, max_volume_m3: 266277.62, monthly: { "Jan": 233624.48, "Feb": 218545.63, "Mar": 201024.44, "Apr": 182892.65, "May": 161707.93, "Jun": 161707.93, "Jul": 266277.62, "Aug": 266277.62, "Sep": 266277.62, "Oct": 266277.62, "Nov": 254941.94, "Dec": 244880.53 } },
+        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Nandighora": {
+        "ponds": { count: 32, area_m2: 251023.95, max_volume_m3: 869397.48, monthly: { "Jan": 776769.64, "Feb": 733995.16, "Mar": 684292.42, "Apr": 632857.61, "May": 572762.48, "Jun": 572762.48, "Jul": 869397.48, "Aug": 869397.48, "Sep": 869397.48, "Oct": 869397.48, "Nov": 837241.31, "Dec": 808699.89 } },
+        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Odagaon": {
+        "ponds": { count: 8, area_m2: 58101.86, max_volume_m3: 205389.17, monthly: { "Jan": 183949.59, "Feb": 174069.96, "Mar": 162232.06, "Apr": 150034.33, "May": 136003.87, "Jun": 136003.87, "Jul": 205389.17, "Aug": 205389.17, "Sep": 205389.17, "Oct": 205389.17, "Nov": 198177.12, "Dec": 191340.37 } },
+        "reservoir": { count: 5, area_m2: 2026.58, max_volume_m3: 1335.28, monthly: { "Jan": 691.5, "Feb": 474.21, "Mar": 579.78, "Apr": 760.82, "May": 760.82, "Jun": 760.82, "Jul": 1335.28, "Aug": 1335.28, "Sep": 1335.28, "Oct": 1335.28, "Nov": 844.88, "Dec": 845.03 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Rabara": {
+        "ponds": { count: 31, area_m2: 126365.09, max_volume_m3: 420105.54, monthly: { "Jan": 373476.82, "Feb": 351722.23, "Mar": 326443.98, "Apr": 300535.38, "May": 270283.58, "Jun": 270283.58, "Jul": 420105.54, "Aug": 420105.54, "Sep": 420105.54, "Oct": 420105.54, "Nov": 404231.99, "Dec": 389550.04 } },
+        "reservoir": { count: 2, area_m2: 1302.7, max_volume_m3: 977.02, monthly: { "Jan": 496.33, "Feb": 496.33, "Mar": 496.35, "Apr": 496.33, "May": 496.33, "Jun": 496.33, "Jul": 977.02, "Aug": 977.02, "Sep": 977.02, "Oct": 977.02, "Nov": 496.33, "Dec": 662.45 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Saradapur": {
+        "ponds": { count: 36, area_m2: 168441.99, max_volume_m3: 531222.97, monthly: { "Jan": 469067.88, "Feb": 440311.35, "Mar": 406897.08, "Apr": 372379.32, "May": 332054.31, "Jun": 332054.31, "Jul": 531222.97, "Aug": 531222.97, "Sep": 531222.97, "Oct": 531222.97, "Nov": 509721.91, "Dec": 490494.02 } },
+        "reservoir": { count: 1, area_m2: 316.96, max_volume_m3: 237.72, monthly: { "Jan": 120.76, "Feb": 120.76, "Mar": 120.76, "Apr": 120.76, "May": 120.76, "Jun": 120.76, "Jul": 237.72, "Aug": 237.72, "Sep": 237.72, "Oct": 237.72, "Nov": 120.76, "Dec": 160.76 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    },
+    "Sikharpur": {
+        "ponds": { count: 29, area_m2: 102890.27, max_volume_m3: 305085.96, monthly: { "Jan": 267119.45, "Feb": 249586.95, "Mar": 229214.68, "Apr": 208132.46, "May": 183500.53, "Jun": 183500.53, "Jul": 305085.96, "Aug": 305085.96, "Sep": 305085.96, "Oct": 305085.96, "Nov": 291905.72, "Dec": 280207.1 } },
+        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+    }
+};
+
+// --- UPDATED: Directly pulls exact Excel monthly values without dynamic reduction ---
+function getMwsSurfaceStorageData(mwsName) {
+    let mwsData = surfaceWaterBackend[mwsName];
+    if (!mwsData) return null;
+
+    let monthlyCombined = {};
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    for (let month of months) {
+        monthlyCombined[month] = Math.round(
+            (mwsData.ponds.monthly[month] || 0) + 
+            (mwsData.reservoir.monthly[month] || 0) + 
+            (mwsData.river.monthly[month] || 0)
+        );
+    }
+
+    return {
+        counts: {
+            ponds: mwsData.ponds.count,
+            reservoir: mwsData.reservoir.count,
+            river: mwsData.river.count
+        },
+        pondsMonthly: mwsData.ponds.monthly,
+        reservoirMonthly: mwsData.reservoir.monthly,
+        riverMonthly: mwsData.river.monthly,
+        monthlyCombinedTotal: monthlyCombined,
+        maxVolumes: {
+            ponds: mwsData.ponds.max_volume_m3,
+            reservoir: mwsData.reservoir.max_volume_m3,
+            river: mwsData.river.max_volume_m3
+        }
+    };
+}
+
+function getClusterSurfaceTotals(district, clusterName) {
+    let cluster = geoData[district]?.clusters[clusterName];
+    if (!cluster) return null;
+
+    let totals = {
+        pondsCount: 0,
+        resCount: 0,
+        rivCount: 0,
+        pondsVol: 0,
+        resVol: 0,
+        rivVol: 0,
+        monthlyCombinedTotal: {
+            "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0,
+            "May": 0, "Jun": 0, "Jul": 0, "Aug": 0,
+            "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0
+        }
+    };
+
+    for (let mwsName in cluster.msws) {
+        let mwsData = getMwsSurfaceStorageData(mwsName);
+        if (mwsData) {
+            totals.pondsCount += mwsData.counts.ponds;
+            totals.resCount += mwsData.counts.reservoir;
+            totals.rivCount += mwsData.counts.river;
+
+            totals.pondsVol += mwsData.maxVolumes.ponds;
+            totals.resVol += mwsData.maxVolumes.reservoir;
+            totals.rivVol += mwsData.maxVolumes.river;
+
+            for (let month in totals.monthlyCombinedTotal) {
+                totals.monthlyCombinedTotal[month] += mwsData.monthlyCombinedTotal[month];
+            }
+        }
+    }
+
+    return totals;
+}
+
+function updateSurfaceWaterUI(mwsName) {
+    let result = getMwsSurfaceStorageData(mwsName);
+
+    if (result) {
+        // Update input numbers
+        document.getElementById('s-pond-nos').value = result.counts.ponds;
+        document.getElementById('s-res-nos').value = result.counts.reservoir;
+        document.getElementById('s-riv-nos').value = result.counts.river;
+
+        document.getElementById('s-pond').value = Math.round(result.maxVolumes.ponds);
+        document.getElementById('s-res').value = Math.round(result.maxVolumes.reservoir);
+        document.getElementById('s-riv').value = Math.round(result.maxVolumes.river);
+
+        // Explicitly update the surface trend chart
+        if (charts && charts.surfTrend) {
+            let monthlyTrendValues = Object.values(result.monthlyCombinedTotal);
+            charts.surfTrend.data.datasets[0].data = monthlyTrendValues;
+            charts.surfTrend.update();
+        }
+    } else {
+        document.getElementById('s-pond-nos').value = 0;
+        document.getElementById('s-res-nos').value = 0;
+        document.getElementById('s-riv-nos').value = 0;
+        document.getElementById('s-pond').value = 0;
+        document.getElementById('s-res').value = 0;
+        document.getElementById('s-riv').value = 0;
+        
+        if (charts && charts.surfTrend) {
+            charts.surfTrend.data.datasets[0].data = Array(12).fill(0);
+            charts.surfTrend.update();
+        }
+    }
+}
+
         proj4.defs("EPSG:32645", "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs");
         const monthlyIrrigationReq = {
             "Jan": { p: 0,    pu: 31,    o: 68.4,  v: 0 },
@@ -429,8 +923,33 @@
             "Sep": { p: 5.5,   pu: 0,    o: 0,     v: 0 },
             "Oct": { p: 86.9,  pu: 0,    o: 0,     v: 0 },
             "Nov": { p: 0,     pu: 0,    o: 0,     v: 0 },
-            "Dec": { p: 0,     pu: 14.1, o: 25,    v: 0 } 
-        }; 
+            "Dec": { p: 0,     pu: 14.1, o: 25,    v: 0 }
+        };
+
+        function getClusterTotals(district, cluster) {
+            let msws = geoData[district].clusters[cluster].msws;
+            let totals = {
+                pop: 0,
+                ls: { c: 0, s: 0, p: 0, pig: 0 },
+                crops: { p: 0, pu: 0, o: 0, v: 0 }
+            };
+
+            for (let key in msws) {
+                let m = msws[key];
+                totals.pop += m.pop || 0;
+                totals.ls.c += m.ls?.c || 0;
+                totals.ls.s += m.ls?.s || 0;
+                totals.ls.p += m.ls?.p || 0;
+                totals.ls.pig += m.ls?.pig || 0;
+
+                totals.crops.p += m.crops?.p || 0;
+                totals.crops.pu += m.crops?.pu || 0;
+                totals.crops.o += m.crops?.o || 0;
+                totals.crops.v += m.crops?.v || 0;
+            }
+            return totals;
+        }
+
         const geoData = {
             "Nayagarh": {
                 coords: [20.1226, 85.1051],
@@ -442,7 +961,7 @@
                             "Rabara": { pop: 2508, ls: { c: 239, s: 427, p: 378, pig: 0 }, crops: { p: 140, pu: 60, o: 0, v: 5 } },
                             "Odagaon": { pop: 8514, ls: { c: 112, s: 44, p: 160, pig: 0 }, crops: { p: 100, pu: 20, o: 0, v: 10 } },
                             "Jaringi": { pop: 6172, ls: { c: 172, s: 215, p: 180, pig: 0 }, crops: { p: 130, pu: 40, o: 0, v: 5 } },
-                            "Kumbhiapallii": { pop: 4766, ls: { c: 398, s: 453, p: 405, pig: 0 }, crops: { p: 200, pu: 80, o: 10, v: 15 } },
+                            "Khubhiapalli": { pop: 4766, ls: { c: 398, s: 453, p: 405, pig: 0 }, crops: { p: 200, pu: 80, o: 10, v: 15 } },
                             "Kalyanpur": { pop: 4479, ls: { c: 204, s: 109, p: 270, pig: 0 }, crops: { p: 110, pu: 30, o: 5, v: 8 } },
                             "Bhandar": { pop: 8151, ls: { c: 122, s: 137, p: 136, pig: 0 }, crops: { p: 150, pu: 50, o: 0, v: 5 } },
                             "Sikharpur": { pop: 9745, ls: { c: 402, s: 244, p: 6235, pig: 0 }, crops: { p: 180, pu: 70, o: 10, v: 20 } },
@@ -456,26 +975,27 @@
                     "Daspalla": {
                         file: "Daspalla.json",
                         msws: {
-                            "Baijhari": { code: "0407010304140202", pop: 492, ls: { c: 85, s: 72, p: 150, pig: 0 }, crops: { p: 62, pu: 6, o: 3, v: 3 } },
-                            "Duda": { code: "0407010304130202", pop: 264, ls: { c: 250, s: 300, p: 500, pig: 0 }, crops: { p: 105.8, pu: 10, o: 5, v: 5 } },
-                            "Kurudangi": { code: "0407010304130201", pop: 242, ls: { c: 210, s: 250, p: 400, pig: 0 }, crops: { p: 120.9, pu: 15, o: 0, v: 8 } },
+                            "kuradhinisia": { code: "0407010304140202", pop: 492, ls: { c: 85, s: 72, p: 150, pig: 0 }, crops: { p: 62, pu: 6, o: 3, v: 3 } },
+                            "pemparada": { code: "0407010304130202", pop: 264, ls: { c: 250, s: 300, p: 500, pig: 0 }, crops: { p: 105.8, pu: 10, o: 5, v: 5 } },
+                            "durgaprasad": { code: "0407010304130201", pop: 242, ls: { c: 210, s: 250, p: 400, pig: 0 }, crops: { p: 120.9, pu: 15, o: 0, v: 8 } },
                             "Kumbhikela": { code: "0407010304140104", pop: 385, ls: { c: 246, s: 268, p: 335, pig: 0 }, crops: { p: 231.8, pu: 50, o: 0, v: 0 } },
-                            "Kuradhinisa": { code: "0407010304140201", pop: 183, ls: { c: 96, s: 232, p: 240, pig: 0 }, crops: { p: 40, pu: 5, o: 0, v: 0 } },
-                            "Sirisira": { code: "0407010304150201", pop: 494, ls: { c: 312, s: 210, p: 280, pig: 0 }, crops: { p: 125.5, pu: 15, o: 0, v: 0 } },
-                            "Kujamendhi": { code: "0407010304160201", pop: 1090, ls: { c: 364, s: 275, p: 620, pig: 0 }, crops: { p: 119, pu: 30, o: 20, v: 5 } },
-                            "Gunduribadi": { code: "0407010304140102", pop: 502, ls: { c: 621, s: 503, p: 611, pig: 0 }, crops: { p: 145.9, pu: 70, o: 0, v: 0 } },
-                            "Hanumanta": { code: "0407010304140103", pop: 2185, ls: { c: 149, s: 150, p: 200, pig: 0 }, crops: { p: 180, pu: 40, o: 10, v: 15 } },
+                            "sirisira": { code: "0407010304140201", pop: 183, ls: { c: 96, s: 232, p: 240, pig: 0 }, crops: { p: 40, pu: 5, o: 0, v: 0 } },
+                            "kurudangi": { code: "0407010304150201", pop: 494, ls: { c: 312, s: 210, p: 280, pig: 0 }, crops: { p: 125.5, pu: 15, o: 0, v: 0 } },
+                            "sundarkumpa": { code: "0407010304160201", pop: 1090, ls: { c: 364, s: 275, p: 620, pig: 0 }, crops: { p: 119, pu: 30, o: 20, v: 5 } },
+                            "padhanpada": { code: "0407010304140102", pop: 502, ls: { c: 621, s: 503, p: 611, pig: 0 }, crops: { p: 145.9, pu: 70, o: 0, v: 0 } },
+                            "Bani": { code: "0407010304140103", pop: 2185, ls: { c: 149, s: 150, p: 200, pig: 0 }, crops: { p: 180, pu: 40, o: 10, v: 15 } },
                             "Chadheyapalli": { code: "0407010304160102", pop: 2760, ls: { c: 133, s: 120, p: 250, pig: 0 }, crops: { p: 185, pu: 40, o: 17, v: 9 } },
-                            "Bani": { code: "0407010304070203", pop: 454, ls: { c: 454, s: 353, p: 468, pig: 0 }, crops: { p: 122.5, pu: 25, o: 0, v: 0 } },
-                            "Padhanpada": { code: "0407010304080204", pop: 244, ls: { c: 63, s: 75, p: 150, pig: 0 }, crops: { p: 75, pu: 10, o: 5, v: 3 } },
-                            "Sundarkumpa": { code: "0407010304150202", pop: 792, ls: { c: 260, s: 250, p: 435, pig: 0 }, crops: { p: 229, pu: 25, o: 10, v: 10 } },
-                            "Pemperada": { code: "0407010304160202", pop: 241, ls: { c: 308, s: 335, p: 432, pig: 0 }, crops: { p: 115, pu: 12, o: 2, v: 8 } },
-                            "Durgaprasad": { code: "0407010304170202", pop: 885, ls: { c: 432, s: 247, p: 341, pig: 0 }, crops: { p: 145.8, pu: 35, o: 0, v: 45 } }
+                            "gunduribadi": { code: "0407010304070203", pop: 454, ls: { c: 454, s: 353, p: 468, pig: 0 }, crops: { p: 122.5, pu: 25, o: 0, v: 0 } },
+                            "kujamendhi": { code: "0407010304080204", pop: 244, ls: { c: 63, s: 75, p: 150, pig: 0 }, crops: { p: 75, pu: 10, o: 5, v: 3 } },
+                            "duda": { code: "0407010304150202", pop: 792, ls: { c: 260, s: 250, p: 435, pig: 0 }, crops: { p: 229, pu: 25, o: 10, v: 10 } },
+                            "baijhari": { code: "0407010304160202", pop: 241, ls: { c: 308, s: 335, p: 432, pig: 0 }, crops: { p: 115, pu: 12, o: 2, v: 8 } },
+                            "hanumanta": { code: "0407010304170202", pop: 885, ls: { c: 432, s: 247, p: 341, pig: 0 }, crops: { p: 145.8, pu: 35, o: 0, v: 45 } }
                         }
                     }
                 }
             }
         };
+
         const map = L.map('map').setView([20.1226, 85.1051], 9);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
@@ -500,51 +1020,106 @@
         };
 
         cS.onchange = function() {
-            mS.innerHTML = '<option value="">Select MSW</option>';
+            mS.innerHTML = '<option value="">All Micro-watersheds</option>';
             mS.disabled = !this.value;
             if (!this.value) return;
-            let cluster = geoData[dS.value].clusters[this.value];
+
+            let clusterName = this.value;
+            let cluster = geoData[dS.value].clusters[clusterName];
+            
             for (let m in cluster.msws) mS.add(new Option(m, m));
+
             fetch(cluster.file).then(r => r.json()).then(data => {
                 data.features.forEach(f => processCoords(f));
                 plotMap(data);
                 if (geoLayer) map.flyToBounds(geoLayer.getBounds(), { duration: 1.2 });
             });
-        };
 
-        mS.onchange = function() {
-            if (!this.value) return;
-            let selectedName = this.value;
-            let mswData = geoData[dS.value].clusters[cS.value].msws[selectedName];
-            document.getElementById('map-name').innerText = "MSW: " + selectedName;
-            geoLayer.eachLayer(l => {
-                let p = l.feature.properties;
-                let jsonName = (p.MWS_Name || p.MICRO_WS || p.MWS_NAME || p.mws_name || p.Name || "").toString().toLowerCase().trim();
-                let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || p.MWS_CODE || p.mws_code || "").toString().trim();
-                
-                let match = (jsonName === selectedName.toLowerCase()) || 
-                            (mswData.code && jsonCode === mswData.code.toString()) ||
-                            (l.getTooltip() && l.getTooltip().getContent().toLowerCase().trim() === selectedName.toLowerCase());
- 
-                if (match) { 
-                    l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); 
-                    map.flyToBounds(l.getBounds(), { duration: 1, padding: [50, 50] }); 
-                } else {
-                    l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
+            let totals = getClusterTotals(dS.value, clusterName);
+            document.getElementById('map-name').innerText = "Cluster Overview: " + clusterName;
+
+            document.getElementById('pop-urban').value = 0;
+            document.getElementById('pop-rural').value = totals.pop;
+            
+            document.getElementById('l-cattle').value = totals.ls.c;
+            document.getElementById('l-sheep').value = totals.ls.s;
+            document.getElementById('l-poultry').value = totals.ls.p;
+            document.getElementById('l-pigs').value = totals.ls.pig;
+            
+            document.getElementById('a-paddy').value = totals.crops.p;
+            document.getElementById('a-pulses').value = totals.crops.pu;
+            document.getElementById('a-oil').value = totals.crops.o;
+            document.getElementById('a-veg').value = totals.crops.v;
+
+            // --- Update Cluster-level Surface Water Totals ---
+            let surfaceTotals = getClusterSurfaceTotals(dS.value, clusterName);
+            if (surfaceTotals) {
+                document.getElementById('s-pond-nos').value = surfaceTotals.pondsCount;
+                document.getElementById('s-res-nos').value = surfaceTotals.resCount;
+                document.getElementById('s-riv-nos').value = surfaceTotals.rivCount;
+
+                document.getElementById('s-pond').value = Math.round(surfaceTotals.pondsVol);
+                document.getElementById('s-res').value = Math.round(surfaceTotals.resVol);
+                document.getElementById('s-riv').value = Math.round(surfaceTotals.rivVol);
+
+                if (charts.surfTrend) {
+                    charts.surfTrend.data.datasets[0].data = Object.values(surfaceTotals.monthlyCombinedTotal);
+                    charts.surfTrend.update();
                 }
-            });
-            document.getElementById('pop-rural').value = mswData.pop;
-            document.getElementById('l-cattle').value = mswData.ls.c;
-            document.getElementById('l-sheep').value = mswData.ls.s;
-            document.getElementById('l-poultry').value = mswData.ls.p;
-            document.getElementById('l-pigs').value = mswData.ls.pig || 0;
-            document.getElementById('a-paddy').value = mswData.crops.p;
-            document.getElementById('a-pulses').value = mswData.crops.pu;
-            document.getElementById('a-oil').value = mswData.crops.o;
-            document.getElementById('a-veg').value = mswData.crops.v;
+            }
+
             calculate();
         };
 
+        mS.onchange = function() {
+    let selectedName = this.value;
+    
+    // If "All Micro-watersheds" selected, revert to cluster aggregate
+    if (!selectedName) {
+        cS.onchange(); 
+        return;
+    }
+
+    let mswData = geoData[dS.value].clusters[cS.value].msws[selectedName];
+    document.getElementById('map-name').innerText = "MSW: " + selectedName;
+    
+    // Update surface water inputs AND the graph for this specific MWS
+    updateSurfaceWaterUI(selectedName);
+
+    if (geoLayer) {
+        geoLayer.eachLayer(l => {
+            let p = l.feature.properties;
+            let jsonName = (p.MWS_Name || p.MICRO_WS || p.MWS_NAME || p.mws_name || p.Name || "").toString().toLowerCase().trim();
+            let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || p.MWS_CODE || p.mws_code || "").toString().trim();
+            
+            let match = (jsonName === selectedName.toLowerCase()) || 
+                        (mswData.code && jsonCode === mswData.code.toString()) ||
+                        (l.getTooltip() && l.getTooltip().getContent().toLowerCase().trim() === selectedName.toLowerCase());
+
+            if (match) { 
+                l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); 
+                map.flyToBounds(l.getBounds(), { duration: 1, padding: [50, 50] }); 
+            } else {
+                l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
+            }
+        });
+    }
+
+    document.getElementById('pop-urban').value = 0; 
+    document.getElementById('pop-rural').value = mswData.pop;
+    
+    document.getElementById('l-cattle').value = mswData.ls.c;
+    document.getElementById('l-sheep').value = mswData.ls.s;
+    document.getElementById('l-poultry').value = mswData.ls.p;
+    document.getElementById('l-pigs').value = mswData.ls.pig || 0;
+    
+    document.getElementById('a-paddy').value = mswData.crops.p;
+    document.getElementById('a-pulses').value = mswData.crops.pu;
+    document.getElementById('a-oil').value = mswData.crops.o;
+    document.getElementById('a-veg').value = mswData.crops.v;
+    
+    calculate();
+};
         document.getElementById('clear-all-btn').onclick = function() {
             document.getElementById('district-select').value = "";
             document.getElementById('cluster-select').innerHTML = "";
@@ -558,6 +1133,7 @@
             document.getElementById('map-name').innerText = "Project Map View";
 
             document.querySelectorAll('.calc-input').forEach(input => { input.value = 0; });
+            updateSurfaceWaterUI("");
             calculate();
         };
 
@@ -604,7 +1180,11 @@
                         }
                     }
                     if (!mwsName) mwsName = "MSW";
-                    layer.bindTooltip(mwsName.toString(), { sticky: true });
+                    layer.bindTooltip(mwsName.toString(), { 
+                        permanent: true,       
+                        direction: 'center',   
+                        className: 'custom-mws-label'
+                    });
                 }
             }).addTo(map);
         }
@@ -616,7 +1196,6 @@
             let addB = +document.getElementById('pop-add-b').value;
             
             let rFull = popRuralVal + addA + addB;
-            
             let urbanDemandAnnual = (popUrbanVal * 145) * 365 / 1000;
             let ruralDemandAnnual = (rFull * 55) * 365 / 1000;
             let hDemAnnual = urbanDemandAnnual + ruralDemandAnnual;
@@ -636,13 +1215,11 @@
             let aPu = +document.getElementById('a-pulses').value;
             let aO = +document.getElementById('a-oil').value;
             let aV = +document.getElementById('a-veg').value;
-
             let ind1Val = +document.getElementById('ind-1').value || 0;
             let ind2Val = +document.getElementById('ind-2').value || 0;
 
             document.getElementById('lbl-demand-heavy').innerText = Math.round(ind1Val).toLocaleString();
             document.getElementById('lbl-demand-light').innerText = Math.round(ind2Val).toLocaleString();
-
             document.getElementById('lbl-demand-urban').innerText = Math.round(urbanDemandAnnual).toLocaleString();
             document.getElementById('lbl-demand-rural').innerText = Math.round(ruralDemandAnnual).toLocaleString();
             
@@ -680,7 +1257,6 @@
                 }
                 tableHtml += `<tr><th>${m}</th><td>${monthTotal.toLocaleString()}</td></tr>`;
             });
-
             document.getElementById('lbl-demand-paddy').innerText = Math.round(paddyIrrAnnual).toLocaleString();
             document.getElementById('lbl-demand-pulses').innerText = Math.round(pulsesIrrAnnual).toLocaleString();
             document.getElementById('lbl-demand-oil').innerText = Math.round(oilIrrAnnual).toLocaleString();
@@ -693,7 +1269,7 @@
 
             let totalSeasonalSum = seasonalDemands.kharif + seasonalDemands.rabi + seasonalDemands.summer;
             document.getElementById('season-total-combined').innerText = totalSeasonalSum.toLocaleString();
-
+            
             let indDem = (+document.getElementById('ind-1').value + +document.getElementById('ind-2').value);
             let surf = (+document.getElementById('s-pond').value + +document.getElementById('s-res').value + +document.getElementById('s-riv').value);
             let ground = (+document.getElementById('g-dug').value + +document.getElementById('g-tube').value + +document.getElementById('g-oth').value);
@@ -743,6 +1319,46 @@
                             anchor: 'center',
                             align: 'center'
                         }
+                    } 
+                }
+            });
+
+            charts.surfTrend = new Chart(document.getElementById('c-surface-trend'), {
+                type: 'line',
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: [{ 
+                        label: 'Surface Storage (m³)', 
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                        borderColor: '#0077b6', 
+                        backgroundColor: 'rgba(0, 119, 182, 0.1)', 
+                        fill: true, 
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 2
+                    }]
+                },
+                options: { 
+                    maintainAspectRatio: false, 
+                    responsive: true,
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { 
+                                font: { size: 8 },
+                                callback: function(value) {
+                                    return value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: { font: { size: 8 } },
+                            grid: { display: false }
+                        }
+                    }, 
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: { display: false }
                     } 
                 }
             });
@@ -796,7 +1412,14 @@
             });
         }
 
-        // --- Safe AI Logic with Cooldown ---
+        function openSurfaceModal() {
+            document.getElementById('surfaceModal').style.display = 'flex';
+        }
+
+        function closeSurfaceModal() {
+            document.getElementById('surfaceModal').style.display = 'none';
+        }
+
         function toggleAIChat() {
             const win = document.getElementById('ai-chat-window');
             win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
@@ -813,8 +1436,7 @@
             const userText = inputField.value.trim();
             
             if (!userText || btn.disabled) return;
-
-            // 1. Show user message & disable button to prevent spam
+            
             chatHistory.innerHTML += `<div class="user-msg">${userText}</div>`;
             inputField.value = '';
             btn.disabled = true;
@@ -824,129 +1446,128 @@
             const loadingId = 'load-' + Date.now();
             chatHistory.innerHTML += `<div class="ai-msg" id="${loadingId}"><em>Analyzing dashboard state...</em></div>`;
             chatHistory.scrollTop = chatHistory.scrollHeight;
+            
+            try { 
+                const dashboardState = { 
+                    district: document.getElementById('district-select').value || "None Selected",
+                    cluster: document.getElementById('cluster-select').value || "None Selected",
+                    msw: document.getElementById('msw-select').value || "None Selected",
+                    
+                    totalSupply: document.getElementById('kpi-supply').innerText,
+                    totalDemand: document.getElementById('kpi-demand').innerText,
+                    netStatus: document.getElementById('kpi-status').innerText,
+                    
+                    popUrban: document.getElementById('pop-urban').value,
+                    popRural: document.getElementById('pop-rural').value,
+                    popCattle: document.getElementById('l-cattle').value,
+                    popSheep: document.getElementById('l-sheep').value,
+                    popPoultry: document.getElementById('l-poultry').value,
+                    popPigs: document.getElementById('l-pigs').value,
+                    
+                    areaPaddy: document.getElementById('a-paddy').value,
+                    areaPulses: document.getElementById('a-pulses').value,
+                    areaOil: document.getElementById('a-oil').value,
+                    areaVeg: document.getElementById('a-veg').value,
+                    indHeavy: document.getElementById('ind-1').value,
+                    indLight: document.getElementById('ind-2').value,
+                    
+                    supPond: document.getElementById('s-pond').value,
+                    supRes: document.getElementById('s-res').value,
+                    supRiv: document.getElementById('s-riv').value,
+                    supDug: document.getElementById('g-dug').value,
+                    supTube: document.getElementById('g-tube').value,
+                    
+                    demandHuman: document.getElementById('txt-human').innerText,
+                    demandLivestock: document.getElementById('txt-livestock').innerText,
+                    demandIrrigation: document.getElementById('txt-irrigation').innerText,
+                    demandIndustry: document.getElementById('txt-industry').innerText,
+                    
+                    seasonKharif: document.getElementById('season-kharif').innerText,
+                    seasonRabi: document.getElementById('season-rabi').innerText,
+                    seasonSummer: document.getElementById('season-summer').innerText
+                };
 
-            // 2. READ EVERY DETAIL FROM THE DASHBOARD (Outputs + Inputs)
-            const dashboardState = {
-                // Location
-                district: document.getElementById('district-select').value || "None Selected",
-                cluster: document.getElementById('cluster-select').value || "None Selected",
-                msw: document.getElementById('msw-select').value || "None Selected",
-                
-                // Grand Totals
-                totalSupply: document.getElementById('kpi-supply').innerText,
-                totalDemand: document.getElementById('kpi-demand').innerText,
-                netStatus: document.getElementById('kpi-status').innerText,
-                
-                // POPULATION & LIVESTOCK INPUTS
-                popUrban: document.getElementById('pop-urban').value,
-                popRural: document.getElementById('pop-rural').value,
-                popCattle: document.getElementById('l-cattle').value,
-                popSheep: document.getElementById('l-sheep').value,
-                popPoultry: document.getElementById('l-poultry').value,
-                popPigs: document.getElementById('l-pigs').value, // Added missing pig data
-                
-                // AREA & INDUSTRY INPUTS
-                areaPaddy: document.getElementById('a-paddy').value,
-                areaPulses: document.getElementById('a-pulses').value,
-                areaOil: document.getElementById('a-oil').value,
-                areaVeg: document.getElementById('a-veg').value,
-                indHeavy: document.getElementById('ind-1').value, // Added missing heavy industry
-                indLight: document.getElementById('ind-2').value, // Added missing light industry
-                
-                // DETAILED SUPPLY INPUTS (Previously missing)
-                supPond: document.getElementById('s-pond').value,
-                supRes: document.getElementById('s-res').value,
-                supRiv: document.getElementById('s-riv').value,
-                supDug: document.getElementById('g-dug').value,
-                supTube: document.getElementById('g-tube').value,
-                
-                // Demand Breakdown Outputs
-                demandHuman: document.getElementById('txt-human').innerText,
-                demandLivestock: document.getElementById('txt-livestock').innerText,
-                demandIrrigation: document.getElementById('txt-irrigation').innerText,
-                demandIndustry: document.getElementById('txt-industry').innerText,
-                
-                // Seasonal Details
-                seasonKharif: document.getElementById('season-kharif').innerText,
-                seasonRabi: document.getElementById('season-rabi').innerText,
-                seasonSummer: document.getElementById('season-summer').innerText
-            };
-            try {
-                // Fetch from the smartbot backend
-                const res = await fetch('/.netlify/functions/smartbot', {
-                    method: 'POST',
+                const res = await fetch('/.netlify/functions/smartbot', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: userText, dashboardState })
                 });
                 const data = await res.json();
                 
                 document.getElementById(loadingId).remove();
                 
-                if (data.reply) {
-                    // Convert Markdown bold (**text**) to HTML bold (<b>text</b>)
-                    let formattedReply = data.reply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                if (data.reply) { 
+                    let formattedReply = data.reply 
+                    .replace(/^####?\s*(.*?)$/gm, '<h3 style="color: #0077b6; margin-top: 12px; margin-bottom: 6px; font-size: 0.95rem;">📊 $1</h3>') 
+                    .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') 
+                    .replace(/^[\-*]\s*(.*?)$/gm, '<li>🔹 $1</li>') 
+                    .replace(/\n/g, '<br>');
+
+                    if (formattedReply.includes('<li>') && !formattedReply.includes('<ul>')) { 
+                        formattedReply = formattedReply.replace(/<li>(.*?)<\/li>/g, '<ul><li style="list-style:none; padding-left:5px;">$1</li></ul>').replace(/<\/ul><br><ul>/g, '');
+                    } 
+
                     chatHistory.innerHTML += `<div class="ai-msg">${formattedReply}</div>`;
-                } else {
-                    chatHistory.innerHTML += `<div class="ai-msg" style="color: #ef4444;"><em>Error: ${data.details || data.error || "Unknown server error"}</em></div>`;
                 }
                 
+            } catch (error) { 
+                console.error("AI Connection Error:", error);
+                if (document.getElementById(loadingId)) { 
+                    document.getElementById(loadingId).remove();
+                }
+                chatHistory.innerHTML += `<div class="ai-msg" style="color: #ef4444;"><em>Error connecting to AI: ${error.message}</em></div>`;
                 chatHistory.scrollTop = chatHistory.scrollHeight;
                 
-            } catch (error) {
-                console.error("AI Connection Error:", error);
-                document.getElementById(loadingId).remove();
-                chatHistory.innerHTML += `<div class="ai-msg" style="color: #ef4444;"><em>Error connecting to AI. Make sure smartbot is deployed.</em></div>`;
-                chatHistory.scrollTop = chatHistory.scrollHeight;
+                btn.disabled = false; 
+                btn.innerText = 'Send'; 
+                return; 
             }
 
-            // 3. Cooldown Timer (10 Seconds)
-            let cooldown = 10;
-            const timer = setInterval(() => {
+            let cooldown = 10; 
+            const timer = setInterval(() => { 
                 btn.innerText = cooldown + "s";
                 cooldown--;
-                if (cooldown < 0) {
-                    clearInterval(timer);
-                    btn.disabled = false;
-                    btn.innerText = 'Send';
+                if (cooldown < 0) { 
+                    clearInterval(timer); 
+                    btn.disabled = false; 
+                    btn.innerText = 'Send'; 
                 }
-            }, 1000);
-        }
+            }, 1000); 
+        } 
 
-        function updateCharts(mValues, mIrrValues) {
+        function updateCharts(mValues, mIrrValues) { 
             let popUrbanVal = +document.getElementById('pop-urban').value;
             let popRuralVal = +document.getElementById('pop-rural').value;
             let rFull = popRuralVal + (+document.getElementById('pop-add-a').value) + (+document.getElementById('pop-add-b').value);
-            
             let urbanDemandAnnual = (popUrbanVal * 145) * 365 / 1000;
             let ruralDemandAnnual = (rFull * 55) * 365 / 1000;
-
             let c = +document.getElementById('l-cattle').value;
             let s = +document.getElementById('l-sheep').value;
             let p = +document.getElementById('l-poultry').value;
             let pig = +document.getElementById('l-pigs').value;
-
             let cattleDemandAnnual = (c * 67) * 365 / 1000;
             let sheepDemandAnnual = (s * 7) * 365 / 1000;
             let poultryDemandAnnual = (p * 0.3) * 365 / 1000;
             let pigDemandAnnual = (pig * 22) * 365 / 1000;
-
+            
             charts.h.data.datasets[0].data = [urbanDemandAnnual, ruralDemandAnnual];
             charts.l.data.datasets[0].data = [cattleDemandAnnual, sheepDemandAnnual, poultryDemandAnnual, pigDemandAnnual];
             charts.ind.data.datasets[0].data = [+document.getElementById('ind-1').value, +document.getElementById('ind-2').value];
             
             charts.irr.data.datasets[0].data = mIrrValues;
             charts.m.data.datasets[0].data = mValues;
-            
-            Object.values(charts).forEach(c => c.update());
-        }
 
-        function switchTab(event, tabId) {
+            Object.values(charts).forEach(c => c.update());
+        } 
+
+        function switchTab(event, tabId) { 
             const tabPanes = document.querySelectorAll('.tab-pane');
             tabPanes.forEach(pane => pane.classList.remove('active'));
             const tabButtons = document.querySelectorAll('.tab-btn');
             tabButtons.forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
-        }
+        } 
 
         document.querySelectorAll('.calc-input').forEach(i => i.oninput = calculate);
         initCharts();
