@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Water Budget Dashboard - (REWARD Project)</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -40,7 +40,7 @@
         .kpi-box h2 { font-size: 1.4rem; }
 
         #map { height: 380px; width: 100%; border-radius: 8px; border: 1px solid var(--border); }
-        .section-header { grid-column: span 2; font-weight: 700; font-size: 1.1rem; margin: 20px 0 10px 0; padding: 6px; background: #e2e8f0; border-radius: 6px; text-align: center; color: #334155; width: 100%; }
+        .section-header { grid-column: 1 / -1; font-weight: 700; font-size: 1.1rem; margin: 20px 0 10px 0; padding: 6px; background: #e2e8f0; border-radius: 6px; text-align: center; color: #334155; width: 100%; }
         
         .bottom-grid-demand { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .bottom-grid-supply { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -96,7 +96,7 @@
         .input-row input { width: 70px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
 
         .chart-container { height: 100px; margin-top: 5px; }
-        .full-width-row { grid-column: span 2; width: 100%; }
+        .full-width-row { grid-column: 1 / -1; width: 100%; }
         .visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 5px; width: 100%; }
         .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
         
@@ -109,13 +109,13 @@
         #monthly-table td, #seasonal-table td { border: 1px solid #e2e8f0; padding: 7px 8px; }
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .logo-box img { height: 80px; width: 80px; }
+        .logo-box img { height: 80px; width: 80px; object-fit: contain; }
         .title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 0 20px; }
         .title-container h2 { font-size: 1.4rem; color: #475569; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
         .title-container h2 .highlight-letter { color: var(--primary); font-weight: 800; }
         .title-container h1 { font-size: 2.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; }
 
-        .tab-section-container { grid-column: span 2; margin-top: 25px; background: #f8fafc; color: #334155; border: 1px solid var(--border); width: 100%; }
+        .tab-section-container { grid-column: 1 / -1; margin-top: 25px; background: #f8fafc; color: #334155; border: 1px solid var(--border); width: 100%; }
         .tab-navigation { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .tab-btn { background: #ffffff; border: 2px solid var(--border); color: #64748b; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
         .tab-btn:hover, .tab-btn.active { border-color: var(--primary); background-color: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2); }
@@ -212,105 +212,81 @@
             display: none !important;
         }
 
+        /* --- RESPONSIVE / MOBILE CSS MEDIA QUERIES --- */
+        @media screen and (max-width: 992px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .bottom-grid-demand {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .bottom-grid-supply {
+                grid-template-columns: 1fr;
+            }
+            .visualization-split-row {
+                grid-template-columns: 1fr;
+            }
+            .header-container {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+                padding: 15px;
+            }
+            .title-container h1 {
+                font-size: 1.8rem;
+            }
+            .title-container h2 {
+                font-size: 0.95rem;
+                margin-bottom: 5px;
+            }
+        }
 
-/* --- MOBILE & RESPONSIVE BREAKPOINTS --- */
-
-/* Tablet & Mobile Layout Adjustment */
-@media screen and (max-width: 992px) {
-    .main-grid {
-        grid-template-columns: 1fr; /* Stack left sidebar and main content */
-    }
-    
-    .bottom-grid-demand {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
-    }
-
-    .bottom-grid-supply {
-        grid-template-columns: 1fr;
-    }
-
-    .visualization-split-row {
-        grid-template-columns: 1fr; /* Stack trend tables & charts */
-    }
-
-    .header-container {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-        padding: 15px;
-    }
-
-    .title-container h1 {
-        font-size: 1.8rem;
-    }
-
-    .title-container h2 {
-        font-size: 1rem;
-        margin-bottom: 5px;
-    }
-}
-
-/* Mobile Devices (Phones) */
-@media screen and (max-width: 600px) {
-    body {
-        padding: 6px;
-    }
-
-    .kpi-row {
-        grid-template-columns: 1fr; /* Stack KPIs vertically */
-        gap: 8px;
-    }
-
-    .bottom-grid-demand {
-        grid-template-columns: 1fr; /* Stack demand cards */
-    }
-
-    #map {
-        height: 280px; /* Reduced map height for mobile viewports */
-    }
-
-    .tab-navigation {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .tab-btn {
-        padding: 6px 14px;
-        font-size: 0.8rem;
-    }
-
-    .input-table {
-        display: block;
-        overflow-x: auto; /* Enable touch scrolling for tables */
-        white-space: nowrap;
-    }
-
-    /* Modal adjustments */
-    .dimension-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .modal-container {
-        width: 95%;
-        margin: 10px;
-    }
-
-    /* AI Assistant floating widget */
-    #ai-chat-window {
-        width: calc(100vw - 30px);
-        right: 15px;
-        left: 15px;
-        bottom: 70px;
-        height: 420px;
-    }
-
-    #ai-widget-btn {
-        bottom: 15px;
-        right: 15px;
-        padding: 10px 16px;
-        font-size: 0.85rem;
-    }
-}
+        @media screen and (max-width: 600px) {
+            body {
+                padding: 6px;
+            }
+            .kpi-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .bottom-grid-demand {
+                grid-template-columns: 1fr;
+            }
+            #map {
+                height: 280px;
+            }
+            .tab-navigation {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .tab-btn {
+                padding: 6px 14px;
+                font-size: 0.8rem;
+            }
+            .card {
+                padding: 10px;
+            }
+            .dimension-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-container {
+                width: 95%;
+                margin: 10px;
+            }
+            #ai-chat-window {
+                width: calc(100vw - 30px);
+                right: 15px;
+                left: 15px;
+                bottom: 70px;
+                height: 420px;
+            }
+            #ai-widget-btn {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -371,31 +347,33 @@
         </div>
 
         <div class="section-header">Demand Inputs (m³)</div>
-        <div class="bottom-grid-demand" style="grid-column: span 2;">
+        <div class="bottom-grid-demand" style="grid-column: 1 / -1;">
             
             <div class="card">
                 <h5 style="margin-bottom: 8px; color: var(--primary);">Human Water Demand</h5>
-                <table class="input-table">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;">Category</th>
-                            <th>Population</th>
-                            <th style="text-align: right;">Demand (m³)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="font-weight: 500;">Urban</td>
-                            <td style="text-align: center;"><input type="number" id="pop-urban" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-urban" class="val-lbl">0</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Rural</td>
-                            <td style="text-align: center;"><input type="number" id="pop-rural" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-rural" class="val-lbl">0</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="input-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Category</th>
+                                <th>Population</th>
+                                <th style="text-align: right;">Demand (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 500;">Urban</td>
+                                <td style="text-align: center;"><input type="number" id="pop-urban" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-urban" class="val-lbl">0</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 500;">Rural</td>
+                                <td style="text-align: center;"><input type="number" id="pop-rural" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-rural" class="val-lbl">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div style="display:none;">
                     <input type="number" id="pop-add-a" class="calc-input" value="0">
                     <input type="number" id="pop-add-b" class="calc-input" value="0">
@@ -405,99 +383,105 @@
 
             <div class="card">
                 <h5 style="margin-bottom: 8px; color: var(--primary);">Livestock Water Demand</h5>
-                <table class="input-table">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;">Livestock</th>
-                            <th>Population</th>
-                            <th style="text-align: right;">Demand (m³)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="font-weight: 500;">Cattle/Buffalo</td>
-                            <td style="text-align: center;"><input type="number" id="l-cattle" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-cattle" class="val-lbl">0</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Sheep/Goat</td>
-                            <td style="text-align: center;"><input type="number" id="l-sheep" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-sheep" class="val-lbl">0</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Poultry</td>
-                            <td style="text-align: center;"><input type="number" id="l-poultry" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-poultry" class="val-lbl">0</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Pigs</td>
-                            <td style="text-align: center;"><input type="number" id="l-pigs" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-pigs" class="val-lbl">0</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="input-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Livestock</th>
+                                <th>Population</th>
+                                <th style="text-align: right;">Demand (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 500;">Cattle/Buffalo</td>
+                                <td style="text-align: center;"><input type="number" id="l-cattle" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-cattle" class="val-lbl">0</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 500;">Sheep/Goat</td>
+                                <td style="text-align: center;"><input type="number" id="l-sheep" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-sheep" class="val-lbl">0</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 500;">Poultry</td>
+                                <td style="text-align: center;"><input type="number" id="l-poultry" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-poultry" class="val-lbl">0</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 500;">Pigs</td>
+                                <td style="text-align: center;"><input type="number" id="l-pigs" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-pigs" class="val-lbl">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="chart-container"><canvas id="c-livestock"></canvas></div>
             </div>
 
             <div class="card">
                 <h5 style="margin-bottom: 8px; color: var(--primary);">Water Requirement for Irrigation</h5>
-                <table class="input-table">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;">Crop Type</th>
-                            <th>Area (ha)</th>
-                            <th style="text-align: right;">Demand (m³)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="font-weight: 500;">Paddy</td>
-                            <td style="text-align: center;"><input type="number" id="a-paddy" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-paddy" class="val-lbl">0</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Pulses</td>
-                            <td style="text-align: center;"><input type="number" id="a-pulses" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-pulses" class="val-lbl">0</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Oilseeds</td>
-                            <td style="text-align: center;"><input type="number" id="a-oil" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-oil" class="val-lbl">0</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Vegetables</td>
-                            <td style="text-align: center;"><input type="number" id="a-veg" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-veg" class="val-lbl">0</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="input-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Crop Type</th>
+                                <th>Area (ha)</th>
+                                <th style="text-align: right;">Demand (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 500;">Paddy</td>
+                                <td style="text-align: center;"><input type="number" id="a-paddy" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-paddy" class="val-lbl">0</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 500;">Pulses</td>
+                                <td style="text-align: center;"><input type="number" id="a-pulses" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-pulses" class="val-lbl">0</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 500;">Oilseeds</td>
+                                <td style="text-align: center;"><input type="number" id="a-oil" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-oil" class="val-lbl">0</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 500;">Vegetables</td>
+                                <td style="text-align: center;"><input type="number" id="a-veg" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-veg" class="val-lbl">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="chart-container"><canvas id="c-irrigation"></canvas></div>
             </div>
 
             <div class="card">
                 <h5 style="margin-bottom: 8px; color: var(--primary);">Industrial Water Demand</h5>
-                <table class="input-table">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;">Industry Type</th>
-                            <th>Input (m³)</th>
-                            <th style="text-align: right;">Demand (m³)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="font-weight: 500;">Heavy</td>
-                            <td style="text-align: center;"><input type="number" id="ind-1" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-heavy" class="val-lbl">0</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Light</td>
-                            <td style="text-align: center;"><input type="number" id="ind-2" class="calc-input" value="0"></td>
-                            <td><span id="lbl-demand-light" class="val-lbl">0</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="input-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Industry Type</th>
+                                <th>Input (m³)</th>
+                                <th style="text-align: right;">Demand (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 500;">Heavy</td>
+                                <td style="text-align: center;"><input type="number" id="ind-1" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-heavy" class="val-lbl">0</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 500;">Light</td>
+                                <td style="text-align: center;"><input type="number" id="ind-2" class="calc-input" value="0"></td>
+                                <td><span id="lbl-demand-light" class="val-lbl">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="chart-container"><canvas id="c-industry"></canvas></div>
             </div>
         </div>
@@ -552,7 +536,7 @@
         </div>
 
         <div class="section-header">Supply Inputs (m³)</div>
-        <div class="bottom-grid-supply" style="grid-column: span 2; width: 100%;">
+        <div class="bottom-grid-supply" style="grid-column: 1 / -1; width: 100%;">
             <div class="card">
                 <div class="card-header-flex">
                     <h5 style="color: var(--primary); margin-bottom: 0;">Surface Water</h5>
@@ -580,7 +564,6 @@
                     </div>
                 </div>
 
-                <!-- EMBEDDED DEDICATED GRAPH INSIDE SURFACE WATER CARD -->
                 <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);">
                     <span style="font-size: 0.75rem; font-weight: 600; color: var(--primary); display: block; margin-bottom: 4px;">Monthly Surface Water Storage Trend</span>
                     <div style="height: 120px; position: relative;">
@@ -705,210 +688,176 @@
     </div>
 
     <script>
+        const MONTHLY_LOSS = {
+            "Jan": 0.37, "Feb": 0.52, "Mar": 0.71, "Apr": 0.94,
+            "May": 1.20, "Jun": 1.35, "Jul": 1.10, "Aug": 0.85,
+            "Sep": 0.70, "Oct": 0.55, "Nov": 0.42, "Dec": 0.38
+        };
 
-const MONTHLY_LOSS = {
-    "Jan": 0.37,
-    "Feb": 0.52,
-    "Mar": 0.71,
-    "Apr": 0.94,
-    "May": 1.20,
-    "Jun": 1.35,
-    "Jul": 1.10,
-    "Aug": 0.85,
-    "Sep": 0.70,
-    "Oct": 0.55,
-    "Nov": 0.42,
-    "Dec": 0.38
-};
-
-// --- FORMULA IMPLEMENTATION: (Raw Depth - 0.25 - Month Loss) * Area ---
-function calculateMonthlyStorage(rawDepthM, areaM2) {
-    let monthlyVolumes = {};
-
-    for (let month in MONTHLY_LOSS) {
-        let loss = MONTHLY_LOSS[month];
-        let netDepth = rawDepthM - 0.25 - loss;
-
-        // Condition: If net depth is <= 0, volume is 0
-        if (netDepth <= 0) {
-            monthlyVolumes[month] = 0;
-        } else {
-            monthlyVolumes[month] = Math.round(netDepth * areaM2);
+        function calculateMonthlyStorage(rawDepthM, areaM2) {
+            let monthlyVolumes = {};
+            for (let month in MONTHLY_LOSS) {
+                let loss = MONTHLY_LOSS[month];
+                let netDepth = rawDepthM - 0.25 - loss;
+                monthlyVolumes[month] = netDepth <= 0 ? 0 : Math.round(netDepth * areaM2);
+            }
+            return monthlyVolumes;
         }
-    }
 
-    return monthlyVolumes;
-}
+        const surfaceWaterBackend = {
+            "Badagarada": {
+                "ponds": { count: 27, area_m2: 100563.55, max_volume_m3: 293477.64, monthly: { "Jan": 256369.69, "Feb": 239233.66, "Mar": 219322.08, "Apr": 198716.61, "May": 174641.7, "Jun": 174641.7, "Jul": 293477.64, "Aug": 293477.64, "Sep": 293477.64, "Oct": 293477.64, "Nov": 280595.45, "Dec": 269161.38 } },
+                "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Badaput": {
+                "ponds": { count: 24, area_m2: 99694.83, max_volume_m3: 313363.84, monthly: { "Jan": 276576.45, "Feb": 259588.45, "Mar": 239848.87, "Apr": 219421.4, "May": 195554.46, "Jun": 195554.46, "Jul": 313363.84, "Aug": 313363.84, "Sep": 313363.84, "Oct": 313363.84, "Nov": 300592.93, "Dec": 289257.63 } },
+                "reservoir": { count: 1, area_m2: 56.45, max_volume_m3: 2.82, monthly: { "Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 2.82, "Aug": 2.82, "Sep": 2.82, "Oct": 2.82, "Nov": 0.0, "Dec": 0.0 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Bhandar": {
+                "ponds": { count: 19, area_m2: 100431.22, max_volume_m3: 253758.35, monthly: { "Jan": 216699.23, "Feb": 199585.75, "Mar": 179700.37, "Apr": 159122.01, "May": 135078.77, "Jun": 135078.77, "Jul": 253758.35, "Aug": 253758.35, "Sep": 253758.35, "Oct": 253758.35, "Nov": 240893.11, "Dec": 229474.08 } },
+                "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Dhusuma": {
+                "ponds": { count: 18, area_m2: 60173.5, max_volume_m3: 199878.23, monthly: { "Jan": 177674.21, "Feb": 166782.37, "Mar": 154145.89, "Apr": 141408.08, "May": 126966.09, "Jun": 126966.09, "Jul": 199878.23, "Aug": 199878.23, "Sep": 199878.23, "Oct": 199878.23, "Nov": 192055.33, "Dec": 185328.39 } },
+                "reservoir": { count: 1, area_m2: 6612.89, max_volume_m3: 8266.11, monthly: { "Jan": 5825.96, "Feb": 5337.4, "Mar": 4750.17, "Apr": 3803.45, "May": 2256.78, "Jun": 2256.78, "Jul": 8266.11, "Aug": 8266.11, "Sep": 8266.11, "Oct": 8266.11, "Nov": 7533.68, "Dec": 6667.0 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Jaringi": {
+                "ponds": { count: 18, area_m2: 62737.35, max_volume_m3: 207105.59, monthly: { "Jan": 183955.51, "Feb": 173089.44, "Mar": 159914.95, "Apr": 146639.4, "May": 131587.84, "Jun": 131587.84, "Jul": 207105.59, "Aug": 207105.59, "Sep": 207105.59, "Oct": 207105.59, "Nov": 198949.74, "Dec": 191936.03 } },
+                "reservoir": { count: 1, area_m2: 1435.26, max_volume_m3: 1076.44, monthly: { "Jan": 546.83, "Feb": 477.89, "Mar": 946.2, "Apr": 1348.79, "May": 1381.03, "Jun": 1381.03, "Jul": 1076.44, "Aug": 1076.44, "Sep": 1076.44, "Oct": 1076.44, "Nov": 1011.78, "Dec": 729.07 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Kalyanpur": {
+                "ponds": { count: 17, area_m2: 77660.53, max_volume_m3: 236290.59, monthly: { "Jan": 207633.85, "Feb": 194400.5, "Mar": 179023.71, "Apr": 163111.07, "May": 144519.14, "Jun": 144519.14, "Jul": 236290.59, "Aug": 236290.59, "Sep": 236290.59, "Oct": 236290.59, "Nov": 226534.89, "Dec": 217512.23 } },
+                "reservoir": { count: 1, area_m2: 1580.12, max_volume_m3: 395.03, monthly: { "Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 395.03, "Aug": 395.03, "Sep": 395.03, "Oct": 395.03, "Nov": 0.0, "Dec": 13.0 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Khubhiapalli": {
+                "ponds": { count: 24, area_m2: 88490.9, max_volume_m3: 266277.62, monthly: { "Jan": 233624.48, "Feb": 218545.63, "Mar": 201024.44, "Apr": 182892.65, "May": 161707.93, "Jun": 161707.93, "Jul": 266277.62, "Aug": 266277.62, "Sep": 266277.62, "Oct": 266277.62, "Nov": 254941.94, "Dec": 244880.53 } },
+                "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Nandighora": {
+                "ponds": { count: 32, area_m2: 251023.95, max_volume_m3: 869397.48, monthly: { "Jan": 776769.64, "Feb": 733995.16, "Mar": 684292.42, "Apr": 632857.61, "May": 572762.48, "Jun": 572762.48, "Jul": 869397.48, "Aug": 869397.48, "Sep": 869397.48, "Oct": 869397.48, "Nov": 837241.31, "Dec": 808699.89 } },
+                "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Odagaon": {
+                "ponds": { count: 8, area_m2: 58101.86, max_volume_m3: 205389.17, monthly: { "Jan": 183949.59, "Feb": 174069.96, "Mar": 162232.06, "Apr": 150034.33, "May": 136003.87, "Jun": 136003.87, "Jul": 205389.17, "Aug": 205389.17, "Sep": 205389.17, "Oct": 205389.17, "Nov": 198177.12, "Dec": 191340.37 } },
+                "reservoir": { count: 5, area_m2: 2026.58, max_volume_m3: 1335.28, monthly: { "Jan": 691.5, "Feb": 474.21, "Mar": 579.78, "Apr": 760.82, "May": 760.82, "Jun": 760.82, "Jul": 1335.28, "Aug": 1335.28, "Sep": 1335.28, "Oct": 1335.28, "Nov": 844.88, "Dec": 845.03 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Rabara": {
+                "ponds": { count: 31, area_m2: 126365.09, max_volume_m3: 420105.54, monthly: { "Jan": 373476.82, "Feb": 351722.23, "Mar": 326443.98, "Apr": 300535.38, "May": 270283.58, "Jun": 270283.58, "Jul": 420105.54, "Aug": 420105.54, "Sep": 420105.54, "Oct": 420105.54, "Nov": 404231.99, "Dec": 389550.04 } },
+                "reservoir": { count: 2, area_m2: 1302.7, max_volume_m3: 977.02, monthly: { "Jan": 496.33, "Feb": 496.33, "Mar": 496.35, "Apr": 496.33, "May": 496.33, "Jun": 496.33, "Jul": 977.02, "Aug": 977.02, "Sep": 977.02, "Oct": 977.02, "Nov": 496.33, "Dec": 662.45 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Saradapur": {
+                "ponds": { count: 36, area_m2: 168441.99, max_volume_m3: 531222.97, monthly: { "Jan": 469067.88, "Feb": 440311.35, "Mar": 406897.08, "Apr": 372379.32, "May": 332054.31, "Jun": 332054.31, "Jul": 531222.97, "Aug": 531222.97, "Sep": 531222.97, "Oct": 531222.97, "Nov": 509721.91, "Dec": 490494.02 } },
+                "reservoir": { count: 1, area_m2: 316.96, max_volume_m3: 237.72, monthly: { "Jan": 120.76, "Feb": 120.76, "Mar": 120.76, "Apr": 120.76, "May": 120.76, "Jun": 120.76, "Jul": 237.72, "Aug": 237.72, "Sep": 237.72, "Oct": 237.72, "Nov": 120.76, "Dec": 160.76 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            },
+            "Sikharpur": {
+                "ponds": { count: 29, area_m2: 102890.27, max_volume_m3: 305085.96, monthly: { "Jan": 267119.45, "Feb": 249586.95, "Mar": 229214.68, "Apr": 208132.46, "May": 183500.53, "Jun": 183500.53, "Jul": 305085.96, "Aug": 305085.96, "Sep": 305085.96, "Oct": 305085.96, "Nov": 291905.72, "Dec": 280207.1 } },
+                "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
+                "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
+            }
+        };
 
-// --- EXACT MONTHLY STORAGE PROFILE FOR ALL MWS (ODAGAON & DASPALLA CLUSTERS) ---
-const surfaceWaterBackend = {
-    // --- ODAGAON CLUSTER MWS ---
-    "Badagarada": {
-        "ponds": { count: 27, area_m2: 100563.55, max_volume_m3: 293477.64, monthly: { "Jan": 256369.69, "Feb": 239233.66, "Mar": 219322.08, "Apr": 198716.61, "May": 174641.7, "Jun": 174641.7, "Jul": 293477.64, "Aug": 293477.64, "Sep": 293477.64, "Oct": 293477.64, "Nov": 280595.45, "Dec": 269161.38 } },
-        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Badaput": {
-        "ponds": { count: 24, area_m2: 99694.83, max_volume_m3: 313363.84, monthly: { "Jan": 276576.45, "Feb": 259588.45, "Mar": 239848.87, "Apr": 219421.4, "May": 195554.46, "Jun": 195554.46, "Jul": 313363.84, "Aug": 313363.84, "Sep": 313363.84, "Oct": 313363.84, "Nov": 300592.93, "Dec": 289257.63 } },
-        "reservoir": { count: 1, area_m2: 56.45, max_volume_m3: 2.82, monthly: { "Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 2.82, "Aug": 2.82, "Sep": 2.82, "Oct": 2.82, "Nov": 0.0, "Dec": 0.0 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Bhandar": {
-        "ponds": { count: 19, area_m2: 100431.22, max_volume_m3: 253758.35, monthly: { "Jan": 216699.23, "Feb": 199585.75, "Mar": 179700.37, "Apr": 159122.01, "May": 135078.77, "Jun": 135078.77, "Jul": 253758.35, "Aug": 253758.35, "Sep": 253758.35, "Oct": 253758.35, "Nov": 240893.11, "Dec": 229474.08 } },
-        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Dhusuma": {
-        "ponds": { count: 18, area_m2: 60173.5, max_volume_m3: 199878.23, monthly: { "Jan": 177674.21, "Feb": 166782.37, "Mar": 154145.89, "Apr": 141408.08, "May": 126966.09, "Jun": 126966.09, "Jul": 199878.23, "Aug": 199878.23, "Sep": 199878.23, "Oct": 199878.23, "Nov": 192055.33, "Dec": 185328.39 } },
-        "reservoir": { count: 1, area_m2: 6612.89, max_volume_m3: 8266.11, monthly: { "Jan": 5825.96, "Feb": 5337.4, "Mar": 4750.17, "Apr": 3803.45, "May": 2256.78, "Jun": 2256.78, "Jul": 8266.11, "Aug": 8266.11, "Sep": 8266.11, "Oct": 8266.11, "Nov": 7533.68, "Dec": 6667.0 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Jaringi": {
-        "ponds": { count: 18, area_m2: 62737.35, max_volume_m3: 207105.59, monthly: { "Jan": 183955.51, "Feb": 173089.44, "Mar": 159914.95, "Apr": 146639.4, "May": 131587.84, "Jun": 131587.84, "Jul": 207105.59, "Aug": 207105.59, "Sep": 207105.59, "Oct": 207105.59, "Nov": 198949.74, "Dec": 191936.03 } },
-        "reservoir": { count: 1, area_m2: 1435.26, max_volume_m3: 1076.44, monthly: { "Jan": 546.83, "Feb": 477.89, "Mar": 946.2, "Apr": 1348.79, "May": 1381.03, "Jun": 1381.03, "Jul": 1076.44, "Aug": 1076.44, "Sep": 1076.44, "Oct": 1076.44, "Nov": 1011.78, "Dec": 729.07 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Kalyanpur": {
-        "ponds": { count: 17, area_m2: 77660.53, max_volume_m3: 236290.59, monthly: { "Jan": 207633.85, "Feb": 194400.5, "Mar": 179023.71, "Apr": 163111.07, "May": 144519.14, "Jun": 144519.14, "Jul": 236290.59, "Aug": 236290.59, "Sep": 236290.59, "Oct": 236290.59, "Nov": 226534.89, "Dec": 217512.23 } },
-        "reservoir": { count: 1, area_m2: 1580.12, max_volume_m3: 395.03, monthly: { "Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 395.03, "Aug": 395.03, "Sep": 395.03, "Oct": 395.03, "Nov": 0.0, "Dec": 13.0 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Khubhiapalli": {
-        "ponds": { count: 24, area_m2: 88490.9, max_volume_m3: 266277.62, monthly: { "Jan": 233624.48, "Feb": 218545.63, "Mar": 201024.44, "Apr": 182892.65, "May": 161707.93, "Jun": 161707.93, "Jul": 266277.62, "Aug": 266277.62, "Sep": 266277.62, "Oct": 266277.62, "Nov": 254941.94, "Dec": 244880.53 } },
-        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Nandighora": {
-        "ponds": { count: 32, area_m2: 251023.95, max_volume_m3: 869397.48, monthly: { "Jan": 776769.64, "Feb": 733995.16, "Mar": 684292.42, "Apr": 632857.61, "May": 572762.48, "Jun": 572762.48, "Jul": 869397.48, "Aug": 869397.48, "Sep": 869397.48, "Oct": 869397.48, "Nov": 837241.31, "Dec": 808699.89 } },
-        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Odagaon": {
-        "ponds": { count: 8, area_m2: 58101.86, max_volume_m3: 205389.17, monthly: { "Jan": 183949.59, "Feb": 174069.96, "Mar": 162232.06, "Apr": 150034.33, "May": 136003.87, "Jun": 136003.87, "Jul": 205389.17, "Aug": 205389.17, "Sep": 205389.17, "Oct": 205389.17, "Nov": 198177.12, "Dec": 191340.37 } },
-        "reservoir": { count: 5, area_m2: 2026.58, max_volume_m3: 1335.28, monthly: { "Jan": 691.5, "Feb": 474.21, "Mar": 579.78, "Apr": 760.82, "May": 760.82, "Jun": 760.82, "Jul": 1335.28, "Aug": 1335.28, "Sep": 1335.28, "Oct": 1335.28, "Nov": 844.88, "Dec": 845.03 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Rabara": {
-        "ponds": { count: 31, area_m2: 126365.09, max_volume_m3: 420105.54, monthly: { "Jan": 373476.82, "Feb": 351722.23, "Mar": 326443.98, "Apr": 300535.38, "May": 270283.58, "Jun": 270283.58, "Jul": 420105.54, "Aug": 420105.54, "Sep": 420105.54, "Oct": 420105.54, "Nov": 404231.99, "Dec": 389550.04 } },
-        "reservoir": { count: 2, area_m2: 1302.7, max_volume_m3: 977.02, monthly: { "Jan": 496.33, "Feb": 496.33, "Mar": 496.35, "Apr": 496.33, "May": 496.33, "Jun": 496.33, "Jul": 977.02, "Aug": 977.02, "Sep": 977.02, "Oct": 977.02, "Nov": 496.33, "Dec": 662.45 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Saradapur": {
-        "ponds": { count: 36, area_m2: 168441.99, max_volume_m3: 531222.97, monthly: { "Jan": 469067.88, "Feb": 440311.35, "Mar": 406897.08, "Apr": 372379.32, "May": 332054.31, "Jun": 332054.31, "Jul": 531222.97, "Aug": 531222.97, "Sep": 531222.97, "Oct": 531222.97, "Nov": 509721.91, "Dec": 490494.02 } },
-        "reservoir": { count: 1, area_m2: 316.96, max_volume_m3: 237.72, monthly: { "Jan": 120.76, "Feb": 120.76, "Mar": 120.76, "Apr": 120.76, "May": 120.76, "Jun": 120.76, "Jul": 237.72, "Aug": 237.72, "Sep": 237.72, "Oct": 237.72, "Nov": 120.76, "Dec": 160.76 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    },
-    "Sikharpur": {
-        "ponds": { count: 29, area_m2: 102890.27, max_volume_m3: 305085.96, monthly: { "Jan": 267119.45, "Feb": 249586.95, "Mar": 229214.68, "Apr": 208132.46, "May": 183500.53, "Jun": 183500.53, "Jul": 305085.96, "Aug": 305085.96, "Sep": 305085.96, "Oct": 305085.96, "Nov": 291905.72, "Dec": 280207.1 } },
-        "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
-        "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
-    }
-};
+        function getMwsSurfaceStorageData(mwsName) {
+            let mwsData = surfaceWaterBackend[mwsName];
+            if (!mwsData) return null;
 
-// --- UPDATED: Directly pulls exact Excel monthly values without dynamic reduction ---
-function getMwsSurfaceStorageData(mwsName) {
-    let mwsData = surfaceWaterBackend[mwsName];
-    if (!mwsData) return null;
+            let monthlyCombined = {};
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            for (let month of months) {
+                monthlyCombined[month] = Math.round(
+                    (mwsData.ponds.monthly[month] || 0) + 
+                    (mwsData.reservoir.monthly[month] || 0) + 
+                    (mwsData.river.monthly[month] || 0)
+                );
+            }
 
-    let monthlyCombined = {};
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    for (let month of months) {
-        monthlyCombined[month] = Math.round(
-            (mwsData.ponds.monthly[month] || 0) + 
-            (mwsData.reservoir.monthly[month] || 0) + 
-            (mwsData.river.monthly[month] || 0)
-        );
-    }
-
-    return {
-        counts: {
-            ponds: mwsData.ponds.count,
-            reservoir: mwsData.reservoir.count,
-            river: mwsData.river.count
-        },
-        pondsMonthly: mwsData.ponds.monthly,
-        reservoirMonthly: mwsData.reservoir.monthly,
-        riverMonthly: mwsData.river.monthly,
-        monthlyCombinedTotal: monthlyCombined,
-        maxVolumes: {
-            ponds: mwsData.ponds.max_volume_m3,
-            reservoir: mwsData.reservoir.max_volume_m3,
-            river: mwsData.river.max_volume_m3
+            return {
+                counts: {
+                    ponds: mwsData.ponds.count,
+                    reservoir: mwsData.reservoir.count,
+                    river: mwsData.river.count
+                },
+                pondsMonthly: mwsData.ponds.monthly,
+                reservoirMonthly: mwsData.reservoir.monthly,
+                riverMonthly: mwsData.river.monthly,
+                monthlyCombinedTotal: monthlyCombined,
+                maxVolumes: {
+                    ponds: mwsData.ponds.max_volume_m3,
+                    reservoir: mwsData.reservoir.max_volume_m3,
+                    river: mwsData.river.max_volume_m3
+                }
+            };
         }
-    };
-}
 
-function getClusterSurfaceTotals(district, clusterName) {
-    let cluster = geoData[district]?.clusters[clusterName];
-    if (!cluster) return null;
+        function getClusterSurfaceTotals(district, clusterName) {
+            let cluster = geoData[district]?.clusters[clusterName];
+            if (!cluster) return null;
 
-    let totals = {
-        pondsCount: 0,
-        resCount: 0,
-        rivCount: 0,
-        pondsVol: 0,
-        resVol: 0,
-        rivVol: 0,
-        monthlyCombinedTotal: {
-            "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0,
-            "May": 0, "Jun": 0, "Jul": 0, "Aug": 0,
-            "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0
+            let totals = {
+                pondsCount: 0, resCount: 0, rivCount: 0,
+                pondsVol: 0, resVol: 0, rivVol: 0,
+                monthlyCombinedTotal: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 }
+            };
+
+            for (let mwsName in cluster.msws) {
+                let mwsData = getMwsSurfaceStorageData(mwsName);
+                if (mwsData) {
+                    totals.pondsCount += mwsData.counts.ponds;
+                    totals.resCount += mwsData.counts.reservoir;
+                    totals.rivCount += mwsData.counts.river;
+
+                    totals.pondsVol += mwsData.maxVolumes.ponds;
+                    totals.resVol += mwsData.maxVolumes.reservoir;
+                    totals.rivVol += mwsData.maxVolumes.river;
+
+                    for (let month in totals.monthlyCombinedTotal) {
+                        totals.monthlyCombinedTotal[month] += mwsData.monthlyCombinedTotal[month];
+                    }
+                }
+            }
+            return totals;
         }
-    };
 
-    for (let mwsName in cluster.msws) {
-        let mwsData = getMwsSurfaceStorageData(mwsName);
-        if (mwsData) {
-            totals.pondsCount += mwsData.counts.ponds;
-            totals.resCount += mwsData.counts.reservoir;
-            totals.rivCount += mwsData.counts.river;
+        function updateSurfaceWaterUI(mwsName) {
+            let result = getMwsSurfaceStorageData(mwsName);
 
-            totals.pondsVol += mwsData.maxVolumes.ponds;
-            totals.resVol += mwsData.maxVolumes.reservoir;
-            totals.rivVol += mwsData.maxVolumes.river;
+            if (result) {
+                document.getElementById('s-pond-nos').value = result.counts.ponds;
+                document.getElementById('s-res-nos').value = result.counts.reservoir;
+                document.getElementById('s-riv-nos').value = result.counts.river;
 
-            for (let month in totals.monthlyCombinedTotal) {
-                totals.monthlyCombinedTotal[month] += mwsData.monthlyCombinedTotal[month];
+                document.getElementById('s-pond').value = Math.round(result.maxVolumes.ponds);
+                document.getElementById('s-res').value = Math.round(result.maxVolumes.reservoir);
+                document.getElementById('s-riv').value = Math.round(result.maxVolumes.river);
+
+                if (charts && charts.surfTrend) {
+                    charts.surfTrend.data.datasets[0].data = Object.values(result.monthlyCombinedTotal);
+                    charts.surfTrend.update();
+                }
+            } else {
+                document.getElementById('s-pond-nos').value = 0;
+                document.getElementById('s-res-nos').value = 0;
+                document.getElementById('s-riv-nos').value = 0;
+                document.getElementById('s-pond').value = 0;
+                document.getElementById('s-res').value = 0;
+                document.getElementById('s-riv').value = 0;
+                
+                if (charts && charts.surfTrend) {
+                    charts.surfTrend.data.datasets[0].data = Array(12).fill(0);
+                    charts.surfTrend.update();
+                }
             }
         }
-    }
-
-    return totals;
-}
-
-function updateSurfaceWaterUI(mwsName) {
-    let result = getMwsSurfaceStorageData(mwsName);
-
-    if (result) {
-        // Update input numbers
-        document.getElementById('s-pond-nos').value = result.counts.ponds;
-        document.getElementById('s-res-nos').value = result.counts.reservoir;
-        document.getElementById('s-riv-nos').value = result.counts.river;
-
-        document.getElementById('s-pond').value = Math.round(result.maxVolumes.ponds);
-        document.getElementById('s-res').value = Math.round(result.maxVolumes.reservoir);
-        document.getElementById('s-riv').value = Math.round(result.maxVolumes.river);
-
-        // Explicitly update the surface trend chart
-        if (charts && charts.surfTrend) {
-            let monthlyTrendValues = Object.values(result.monthlyCombinedTotal);
-            charts.surfTrend.data.datasets[0].data = monthlyTrendValues;
-            charts.surfTrend.update();
-        }
-    } else {
-        document.getElementById('s-pond-nos').value = 0;
-        document.getElementById('s-res-nos').value = 0;
-        document.getElementById('s-riv-nos').value = 0;
-        document.getElementById('s-pond').value = 0;
-        document.getElementById('s-res').value = 0;
-        document.getElementById('s-riv').value = 0;
-        
-        if (charts && charts.surfTrend) {
-            charts.surfTrend.data.datasets[0].data = Array(12).fill(0);
-            charts.surfTrend.update();
-        }
-    }
-}
 
         proj4.defs("EPSG:32645", "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs");
         const monthlyIrrigationReq = {
@@ -1051,7 +1000,6 @@ function updateSurfaceWaterUI(mwsName) {
             document.getElementById('a-oil').value = totals.crops.o;
             document.getElementById('a-veg').value = totals.crops.v;
 
-            // --- Update Cluster-level Surface Water Totals ---
             let surfaceTotals = getClusterSurfaceTotals(dS.value, clusterName);
             if (surfaceTotals) {
                 document.getElementById('s-pond-nos').value = surfaceTotals.pondsCount;
@@ -1072,54 +1020,52 @@ function updateSurfaceWaterUI(mwsName) {
         };
 
         mS.onchange = function() {
-    let selectedName = this.value;
-    
-    // If "All Micro-watersheds" selected, revert to cluster aggregate
-    if (!selectedName) {
-        cS.onchange(); 
-        return;
-    }
-
-    let mswData = geoData[dS.value].clusters[cS.value].msws[selectedName];
-    document.getElementById('map-name').innerText = "MSW: " + selectedName;
-    
-    // Update surface water inputs AND the graph for this specific MWS
-    updateSurfaceWaterUI(selectedName);
-
-    if (geoLayer) {
-        geoLayer.eachLayer(l => {
-            let p = l.feature.properties;
-            let jsonName = (p.MWS_Name || p.MICRO_WS || p.MWS_NAME || p.mws_name || p.Name || "").toString().toLowerCase().trim();
-            let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || p.MWS_CODE || p.mws_code || "").toString().trim();
-            
-            let match = (jsonName === selectedName.toLowerCase()) || 
-                        (mswData.code && jsonCode === mswData.code.toString()) ||
-                        (l.getTooltip() && l.getTooltip().getContent().toLowerCase().trim() === selectedName.toLowerCase());
-
-            if (match) { 
-                l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); 
-                map.flyToBounds(l.getBounds(), { duration: 1, padding: [50, 50] }); 
-            } else {
-                l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
+            let selectedName = this.value;
+            if (!selectedName) {
+                cS.onchange(); 
+                return;
             }
-        });
-    }
 
-    document.getElementById('pop-urban').value = 0; 
-    document.getElementById('pop-rural').value = mswData.pop;
-    
-    document.getElementById('l-cattle').value = mswData.ls.c;
-    document.getElementById('l-sheep').value = mswData.ls.s;
-    document.getElementById('l-poultry').value = mswData.ls.p;
-    document.getElementById('l-pigs').value = mswData.ls.pig || 0;
-    
-    document.getElementById('a-paddy').value = mswData.crops.p;
-    document.getElementById('a-pulses').value = mswData.crops.pu;
-    document.getElementById('a-oil').value = mswData.crops.o;
-    document.getElementById('a-veg').value = mswData.crops.v;
-    
-    calculate();
-};
+            let mswData = geoData[dS.value].clusters[cS.value].msws[selectedName];
+            document.getElementById('map-name').innerText = "MSW: " + selectedName;
+            
+            updateSurfaceWaterUI(selectedName);
+
+            if (geoLayer) {
+                geoLayer.eachLayer(l => {
+                    let p = l.feature.properties;
+                    let jsonName = (p.MWS_Name || p.MICRO_WS || p.MWS_NAME || p.mws_name || p.Name || "").toString().toLowerCase().trim();
+                    let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || p.MWS_CODE || p.mws_code || "").toString().trim();
+                    
+                    let match = (jsonName === selectedName.toLowerCase()) || 
+                                (mswData.code && jsonCode === mswData.code.toString()) ||
+                                (l.getTooltip() && l.getTooltip().getContent().toLowerCase().trim() === selectedName.toLowerCase());
+
+                    if (match) { 
+                        l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); 
+                        map.flyToBounds(l.getBounds(), { duration: 1, padding: [50, 50] }); 
+                    } else {
+                        l.setStyle({ color: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
+                    }
+                });
+            }
+
+            document.getElementById('pop-urban').value = 0; 
+            document.getElementById('pop-rural').value = mswData.pop;
+            
+            document.getElementById('l-cattle').value = mswData.ls.c;
+            document.getElementById('l-sheep').value = mswData.ls.s;
+            document.getElementById('l-poultry').value = mswData.ls.p;
+            document.getElementById('l-pigs').value = mswData.ls.pig || 0;
+            
+            document.getElementById('a-paddy').value = mswData.crops.p;
+            document.getElementById('a-pulses').value = mswData.crops.pu;
+            document.getElementById('a-oil').value = mswData.crops.o;
+            document.getElementById('a-veg').value = mswData.crops.v;
+            
+            calculate();
+        };
+
         document.getElementById('clear-all-btn').onclick = function() {
             document.getElementById('district-select').value = "";
             document.getElementById('cluster-select').innerHTML = "";
