@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Budget Dashboard - (REWARD Project)</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,15 @@
 
     <style>
         :root { --primary: #0077b6; --bg: #f1f5f9; --card: #ffffff; --border: #cbd5e1; --text: #0f172a; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Poppins', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
         body { background-color: var(--bg); color: var(--text); padding: 10px; }
         
         .main-grid { display: grid; grid-template-columns: 360px 1fr; gap: 15px; }
@@ -76,7 +84,7 @@
             font-size: 0.75rem; 
         }
         .calc-input-md { 
-            width: 70px !important; 
+            width: 80px !important; 
             padding: 2px 4px; 
             text-align: right; 
             border: 1px solid var(--border); 
@@ -95,18 +103,19 @@
         .input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.75rem; }
         .input-row input { width: 70px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
 
-        .chart-container { height: 100px; margin-top: 5px; }
+        .chart-container { height: 100px; margin-top: 5px; position: relative; }
         .full-width-row { grid-column: 1 / -1; width: 100%; }
         .visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 5px; width: 100%; }
         .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
         
-        #monthly-table, #seasonal-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 3px; }
-        #monthly-table th:first-child, #monthly-table td:first-child { width: 35%; text-align: left; }
-        #monthly-table th:last-child, #monthly-table td:last-child { width: 65%; text-align: right; }
-        #seasonal-table th:first-child, #seasonal-table td:first-child { width: 55%; text-align: left; }
-        #seasonal-table th:last-child, #seasonal-table td:last-child { width: 45%; text-align: right; }
-        #monthly-table th, #seasonal-table th { background: #f1f5f9; font-weight: 600; color: #334155; position: sticky; top: 0; z-index: 5; padding: 5px 8px; }
-        #monthly-table td, #seasonal-table td { border: 1px solid #e2e8f0; padding: 7px 8px; }
+        #monthly-table, #seasonal-table, #monthly-supply-table, #seasonal-supply-table, #overview-monthly-table, #overview-seasonal-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 3px; }
+        #monthly-table th:first-child, #monthly-table td:first-child, #monthly-supply-table th:first-child, #monthly-supply-table td:first-child { width: 35%; text-align: left; }
+        #monthly-table th:last-child, #monthly-table td:last-child, #monthly-supply-table th:last-child, #monthly-supply-table td:last-child { width: 65%; text-align: right; }
+        #seasonal-table th:first-child, #seasonal-table td:first-child, #seasonal-supply-table th:first-child, #seasonal-supply-table td:first-child { width: 55%; text-align: left; }
+        #seasonal-table th:last-child, #seasonal-table td:last-child, #seasonal-supply-table th:last-child, #seasonal-supply-table td:last-child { width: 45%; text-align: right; }
+        
+        #monthly-table th, #seasonal-table th, #monthly-supply-table th, #seasonal-supply-table th, #overview-monthly-table th, #overview-seasonal-table th { background: #f1f5f9; font-weight: 600; color: #334155; position: sticky; top: 0; z-index: 5; padding: 5px 8px; }
+        #monthly-table td, #seasonal-table td, #monthly-supply-table td, #seasonal-supply-table td, #overview-monthly-table td, #overview-seasonal-table td { border: 1px solid #e2e8f0; padding: 7px 8px; }
 
         .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box img { height: 80px; width: 80px; object-fit: contain; }
@@ -346,6 +355,7 @@
             </div>
         </div>
 
+        <!-- DEMAND INPUTS SECTION -->
         <div class="section-header">Demand Inputs (m³)</div>
         <div class="bottom-grid-demand" style="grid-column: 1 / -1;">
             
@@ -486,6 +496,7 @@
             </div>
         </div>
 
+        <!-- DEMAND VISUALIZATION ROW -->
         <div class="full-width-row visualization-split-row" style="margin-top: 15px;">
             <div class="card compact-table-card">
                 <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand</h4>
@@ -529,12 +540,13 @@
 
             <div class="card" style="height: 250px; display: flex; flex-direction: column;">
                 <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand Trend</h4>
-                <div style="flex: 1; min-height: 0; margin-top: 5px;">
+                <div style="flex: 1; min-height: 0; margin-top: 5px; position: relative;">
                     <canvas id="c-monthly-trend"></canvas>
                 </div>
             </div>
         </div>
 
+        <!-- SUPPLY INPUTS SECTION -->
         <div class="section-header">Supply Inputs (m³)</div>
         <div class="bottom-grid-supply" style="grid-column: 1 / -1; width: 100%;">
             <div class="card">
@@ -574,15 +586,153 @@
 
             <div class="card">
                 <h5 style="color: var(--primary); margin-bottom: 10px;">Ground Water</h5>
-                <div class="input-row"><label>Dug Well</label><input type="number" id="g-dug" class="calc-input" value="0"></div>
-                <div class="input-row"><label>Tube Well</label><input type="number" id="g-tube" class="calc-input" value="0"></div>
-                <div class="input-row"><label>Other</label><input type="number" id="g-oth" class="calc-input" value="0"></div>
+                <div class="input-row-dual">
+                    <label>Unconfined Aquifer</label>
+                    <div class="dual-inputs">
+                        <input type="number" id="g-dug" class="calc-input calc-input-md readonly-input" value="0" placeholder="m³" readonly>
+                    </div>
+                </div>
+                <!-- Hidden inputs for formula compatibility -->
+                <input type="hidden" id="g-tube" value="0">
+                <input type="hidden" id="g-oth" value="0">
+
+                <div style="margin-top: 52px; padding-top: 8px; border-top: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; font-weight: 600; color: var(--primary); display: block; margin-bottom: 4px;">Monthly Ground Water Storage Trend</span>
+                    <div style="height: 120px; position: relative;">
+                        <canvas id="c-ground-trend"></canvas>
+                    </div>
+                </div>
             </div>
 
             <div class="card">
                 <h5 style="color: var(--primary); margin-bottom: 10px;">Water Transfer</h5>
                 <div class="input-row"><label>Source-1</label><input type="number" id="t-s1" class="calc-input" value="0"></div>
                 <div class="input-row"><label>Source-2</label><input type="number" id="t-s2" class="calc-input" value="0"></div>
+            </div>
+        </div>
+
+        <!-- SUPPLY VISUALIZATION ROW -->
+        <div class="full-width-row visualization-split-row" style="margin-top: 15px;">
+            <div class="card compact-table-card">
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Supply</h4>
+                <div style="flex: 1; overflow-y: auto;">
+                    <table id="monthly-supply-table">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Total (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthly-supply-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card compact-table-card">
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Seasonal Water Supply</h4>
+                <div style="flex: 1; overflow-y: auto;">
+                    <table id="seasonal-supply-table">
+                        <thead>
+                            <tr>
+                                <th>Season</th>
+                                <th>Total (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seasonal-supply-body">
+                            <tr><td style="font-weight:600; background:#ffffff;">Kharif (Jun-Oct)</td><td><span id="supply-season-kharif">0</span></td></tr>
+                            <tr><td style="font-weight:600; background:#ffffff;">Rabi (Nov-Feb)</td><td><span id="supply-season-rabi">0</span></td></tr>
+                            <tr><td style="font-weight:600; background:#ffffff;">Summer (Mar-May)</td><td><span id="supply-season-summer">0</span></td></tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="border-top: 2px solid var(--border); background: #f8fafc;">
+                                <td style="font-weight:700; color: var(--primary);">Total Annual</td>
+                                <td style="font-weight:700; color: var(--primary);"><span id="supply-season-total-combined">0</span></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="height: 250px; display: flex; flex-direction: column;">
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Supply Trend</h4>
+                <div style="flex: 1; min-height: 0; margin-top: 5px; position: relative;">
+                    <canvas id="c-monthly-supply-trend"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- OVERVIEW OF SUPPLY AND DEMAND SECTION -->
+        <div class="section-header">Overview of Supply and Demand</div>
+        <div class="full-width-row visualization-split-row" style="margin-top: 10px;">
+            <!-- Combined Monthly Table -->
+            <div class="card compact-table-card">
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Budget Overview</h4>
+                <div style="flex: 1; overflow-y: auto;">
+                    <table id="overview-monthly-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; width: 22%;">Month</th>
+                                <th style="text-align: right; color: #3b82f6; width: 26%;">Supply</th>
+                                <th style="text-align: right; color: #f59e0b; width: 26%;">Demand</th>
+                                <th style="text-align: right; width: 26%;">Net</th>
+                            </tr>
+                        </thead>
+                        <tbody id="overview-monthly-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Combined Seasonal Table -->
+            <div class="card compact-table-card">
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Seasonal Budget Overview</h4>
+                <div style="flex: 1; overflow-y: auto;">
+                    <table id="overview-seasonal-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; width: 34%;">Season</th>
+                                <th style="text-align: right; color: #3b82f6; width: 22%;">Supply</th>
+                                <th style="text-align: right; color: #f59e0b; width: 22%;">Demand</th>
+                                <th style="text-align: right; width: 22%;">Net</th>
+                            </tr>
+                        </thead>
+                        <tbody id="overview-seasonal-body">
+                            <tr>
+                                <td style="font-weight:600; background:#ffffff;">Kharif</td>
+                                <td id="ov-sup-kharif" style="text-align:right;">0</td>
+                                <td id="ov-dem-kharif" style="text-align:right;">0</td>
+                                <td id="ov-net-kharif" style="text-align:right; font-weight:700;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:600; background:#ffffff;">Rabi</td>
+                                <td id="ov-sup-rabi" style="text-align:right;">0</td>
+                                <td id="ov-dem-rabi" style="text-align:right;">0</td>
+                                <td id="ov-net-rabi" style="text-align:right; font-weight:700;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:600; background:#ffffff;">Summer</td>
+                                <td id="ov-sup-summer" style="text-align:right;">0</td>
+                                <td id="ov-dem-summer" style="text-align:right;">0</td>
+                                <td id="ov-net-summer" style="text-align:right; font-weight:700;">0</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="border-top: 2px solid var(--border); background: #f8fafc; font-weight:700;">
+                                <td style="color: var(--primary);">Total</td>
+                                <td id="ov-sup-total" style="text-align:right; color:#3b82f6;">0</td>
+                                <td id="ov-dem-total" style="text-align:right; color:#f59e0b;">0</td>
+                                <td id="ov-net-total" style="text-align:right;">0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Combined Comparison Line Chart -->
+            <div class="card" style="height: 250px; display: flex; flex-direction: column;">
+                <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Supply vs Demand Trend</h4>
+                <div style="flex: 1; min-height: 0; margin-top: 5px; position: relative;">
+                    <canvas id="c-overview-trend"></canvas>
+                </div>
             </div>
         </div>
 
@@ -688,6 +838,10 @@
     </div>
 
     <script>
+        // Global Chart.js configuration for crisp vector rendering during browser zoom
+        Chart.defaults.devicePixelRatio = Math.max(window.devicePixelRatio || 1, 2);
+        Chart.defaults.font.family = "'Poppins', sans-serif";
+
         const MONTHLY_LOSS = {
             "Jan": 0.37, "Feb": 0.52, "Mar": 0.71, "Apr": 0.94,
             "May": 1.20, "Jun": 1.35, "Jul": 1.10, "Aug": 0.85,
@@ -735,7 +889,7 @@
                 "reservoir": { count: 1, area_m2: 1580.12, max_volume_m3: 395.03, monthly: { "Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 395.03, "Aug": 395.03, "Sep": 395.03, "Oct": 395.03, "Nov": 0.0, "Dec": 13.0 } },
                 "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
             },
-            "Khubhiapalli": {
+            "Kumbhiapalli": {
                 "ponds": { count: 24, area_m2: 88490.9, max_volume_m3: 266277.62, monthly: { "Jan": 233624.48, "Feb": 218545.63, "Mar": 201024.44, "Apr": 182892.65, "May": 161707.93, "Jun": 161707.93, "Jul": 266277.62, "Aug": 266277.62, "Sep": 266277.62, "Oct": 266277.62, "Nov": 254941.94, "Dec": 244880.53 } },
                 "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
                 "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
@@ -765,6 +919,21 @@
                 "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } },
                 "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }
             }
+        };
+
+        const gwStorageBackend = {
+            "Kalyanpur": { annual_m3: 816290, monthly: { "Jan": 690789, "Feb": 642723, "Mar": 602430, "Apr": 544360, "May": 454839, "Jun": 550804, "Jul": 657531, "Aug": 774945, "Sep": 803106, "Oct": 800382, "Nov": 763056, "Dec": 736065 } },
+            "Bhandar": { annual_m3: 574264, monthly: { "Jan": 430697, "Feb": 399066, "Mar": 366025, "Apr": 320521, "May": 260453, "Jun": 297631, "Jul": 404386, "Aug": 537219, "Sep": 566588, "Oct": 557643, "Nov": 514231, "Dec": 480564 } },
+            "Odagaon": { annual_m3: 538287, monthly: { "Jan": 439195, "Feb": 407478, "Mar": 378397, "Apr": 337238, "May": 278225, "Jun": 303082, "Jul": 388436, "Aug": 511630, "Sep": 525348, "Oct": 515488, "Nov": 483777, "Dec": 467294 } },
+            "Sikharpur": { annual_m3: 384872, monthly: { "Jan": 297061, "Feb": 285423, "Mar": 258936, "Apr": 221746, "May": 171918, "Jun": 195201, "Jul": 265116, "Aug": 356360, "Sep": 377258, "Oct": 372176, "Nov": 339313, "Dec": 324188 } },
+            "Jaringi": { annual_m3: 552618, monthly: { "Jan": 445055, "Feb": 415530, "Mar": 385118, "Apr": 342905, "May": 287169, "Jun": 310908, "Jul": 389708, "Aug": 523703, "Sep": 537050, "Oct": 525980, "Nov": 488398, "Dec": 470328 } },
+            "Nandighora": { annual_m3: 881815, monthly: { "Jan": 761006, "Feb": 707226, "Mar": 665980, "Apr": 593087, "May": 487916, "Jun": 508661, "Jul": 638162, "Aug": 827376, "Sep": 863954, "Oct": 860370, "Nov": 828725, "Dec": 805067 } },
+            "Badaput": { annual_m3: 513817, monthly: { "Jan": 422676, "Feb": 392358, "Mar": 363576, "Apr": 318992, "May": 260049, "Jun": 302715, "Jul": 379176, "Aug": 490003, "Sep": 509858, "Oct": 504071, "Nov": 474529, "Dec": 455157 } },
+            "Rabara": { annual_m3: 737167, monthly: { "Jan": 584667, "Feb": 546033, "Mar": 506574, "Apr": 449433, "May": 377419, "Jun": 410951, "Jul": 534797, "Aug": 692996, "Sep": 706534, "Oct": 693079, "Nov": 643637, "Dec": 621565 } },
+            "Kumbhiapalli": { annual_m3: 634742, monthly: { "Jan": 503043, "Feb": 457251, "Mar": 421995, "Apr": 372658, "May": 305103, "Jun": 348315, "Jul": 458018, "Aug": 600854, "Sep": 618525, "Oct": 603233, "Nov": 559686, "Dec": 539308 } },
+            "Badagarada": { annual_m3: 457331, monthly: { "Jan": 335295, "Feb": 307330, "Mar": 285118, "Apr": 256884, "May": 211572, "Jun": 253184, "Jul": 331389, "Aug": 433720, "Sep": 450281, "Oct": 432258, "Nov": 385020, "Dec": 364108 } },
+            "Saradapur": { annual_m3: 805872, monthly: { "Jan": 674981, "Feb": 611398, "Mar": 561565, "Apr": 482315, "May": 358196, "Jun": 348977, "Jul": 473329, "Aug": 669364, "Sep": 756867, "Oct": 795103, "Nov": 760670, "Dec": 731712 } },
+            "Dhusuma": { annual_m3: 377385, monthly: { "Jan": 305490, "Feb": 284821, "Mar": 264164, "Apr": 236058, "May": 195506, "Jun": 212343, "Jul": 267874, "Aug": 345560, "Sep": 367688, "Oct": 368570, "Nov": 343019, "Dec": 330219 } }
         };
 
         function getMwsSurfaceStorageData(mwsName) {
@@ -859,20 +1028,45 @@
             }
         }
 
+        function updateGroundWaterUI(mwsName) {
+            let gwInfo = gwStorageBackend[mwsName];
+            const calendarMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            let monthlyArr = Array(12).fill(0);
+
+            if (gwInfo) {
+                document.getElementById('g-dug').value = Math.round(gwInfo.annual_m3);
+                monthlyArr = calendarMonths.map(m => gwInfo.monthly[m] || 0);
+            } else if (dS.value === "Nayagarh" && cS.value === "Odagaon" && !mwsName) {
+                let totalGW = Object.values(gwStorageBackend).reduce((sum, item) => sum + item.annual_m3, 0);
+                document.getElementById('g-dug').value = Math.round(totalGW);
+                
+                calendarMonths.forEach((m, idx) => {
+                    monthlyArr[idx] = Object.values(gwStorageBackend).reduce((sum, item) => sum + (item.monthly[m] || 0), 0);
+                });
+            } else {
+                document.getElementById('g-dug').value = 0;
+            }
+
+            if (charts && charts.groundTrend) {
+                charts.groundTrend.data.datasets[0].data = monthlyArr;
+                charts.groundTrend.update();
+            }
+        }
+
         proj4.defs("EPSG:32645", "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs");
         const monthlyIrrigationReq = {
             "Jan": { p: 0,    pu: 31,    o: 68.4,  v: 0 },
             "Feb": { p: 0,    pu: 114.6, o: 167,   v: 50 },
             "Mar": { p: 0,    pu: 145.8, o: 72.6,  v: 107 },
             "Apr": { p: 0,    pu: 15.3,  o: 0,     v: 208 },
-            "May": { p: 0,    pu: 0,     o: 0,     v: 81 },
-            "Jun": { p: 258.6, pu: 0,    o: 0,     v: 0 },
-            "Jul": { p: 19.6,  pu: 0,    o: 0,     v: 0 },
-            "Aug": { p: 24.6,  pu: 0,    o: 0,     v: 0 },
-            "Sep": { p: 5.5,   pu: 0,    o: 0,     v: 0 },
-            "Oct": { p: 86.9,  pu: 0,    o: 0,     v: 0 },
-            "Nov": { p: 0,     pu: 0,    o: 0,     v: 0 },
-            "Dec": { p: 0,     pu: 14.1, o: 25,    v: 0 }
+            "May": { p: 0,    pu: 0,      o: 0,     v: 81 },
+            "Jun": { p: 258.6, pu: 0,     o: 0,     v: 0 },
+            "Jul": { p: 19.6,  pu: 0,     o: 0,     v: 0 },
+            "Aug": { p: 24.6,  pu: 0,     o: 0,     v: 0 },
+            "Sep": { p: 5.5,   pu: 0,     o: 0,     v: 0 },
+            "Oct": { p: 86.9,  pu: 0,     o: 0,     v: 0 },
+            "Nov": { p: 0,     pu: 0,     o: 0,     v: 0 },
+            "Dec": { p: 0,     pu: 14.1,  o: 25,    v: 0 }
         };
 
         function getClusterTotals(district, cluster) {
@@ -910,7 +1104,7 @@
                             "Rabara": { pop: 2508, ls: { c: 239, s: 427, p: 378, pig: 0 }, crops: { p: 140, pu: 60, o: 0, v: 5 } },
                             "Odagaon": { pop: 8514, ls: { c: 112, s: 44, p: 160, pig: 0 }, crops: { p: 100, pu: 20, o: 0, v: 10 } },
                             "Jaringi": { pop: 6172, ls: { c: 172, s: 215, p: 180, pig: 0 }, crops: { p: 130, pu: 40, o: 0, v: 5 } },
-                            "Khubhiapalli": { pop: 4766, ls: { c: 398, s: 453, p: 405, pig: 0 }, crops: { p: 200, pu: 80, o: 10, v: 15 } },
+                            "Kumbhiapalli": { pop: 4766, ls: { c: 398, s: 453, p: 405, pig: 0 }, crops: { p: 200, pu: 80, o: 10, v: 15 } },
                             "Kalyanpur": { pop: 4479, ls: { c: 204, s: 109, p: 270, pig: 0 }, crops: { p: 110, pu: 30, o: 5, v: 8 } },
                             "Bhandar": { pop: 8151, ls: { c: 122, s: 137, p: 136, pig: 0 }, crops: { p: 150, pu: 50, o: 0, v: 5 } },
                             "Sikharpur": { pop: 9745, ls: { c: 402, s: 244, p: 6235, pig: 0 }, crops: { p: 180, pu: 70, o: 10, v: 20 } },
@@ -1016,6 +1210,7 @@
                 }
             }
 
+            updateGroundWaterUI("");
             calculate();
         };
 
@@ -1026,20 +1221,37 @@
                 return;
             }
 
-            let mswData = geoData[dS.value].clusters[cS.value].msws[selectedName];
+            let mswData = geoData[dS.value]?.clusters[cS.value]?.msws[selectedName];
+            if (!mswData) return;
+
             document.getElementById('map-name').innerText = "MSW: " + selectedName;
             
             updateSurfaceWaterUI(selectedName);
+            updateGroundWaterUI(selectedName);
+
+            const norm = str => (str || "").toString().toLowerCase()
+                .replace(/[^a-z0-9]/g, '')
+                .replace(/kh/g, 'k')
+                .replace(/bh/g, 'b')
+                .replace(/um/g, 'u')
+                .replace(/ll/g, 'l')
+                .replace(/ee/g, 'i')
+                .replace(/oo/g, 'u');
+
+            const targetNorm = norm(selectedName);
 
             if (geoLayer) {
                 geoLayer.eachLayer(l => {
-                    let p = l.feature.properties;
-                    let jsonName = (p.MWS_Name || p.MICRO_WS || p.MWS_NAME || p.mws_name || p.Name || "").toString().toLowerCase().trim();
+                    let p = l.feature?.properties || {};
+                    let tooltipText = l.getTooltip() ? l.getTooltip().getContent() : "";
                     let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || p.MWS_CODE || p.mws_code || "").toString().trim();
+                    let featureProps = Object.values(p).map(v => norm(v));
                     
-                    let match = (jsonName === selectedName.toLowerCase()) || 
-                                (mswData.code && jsonCode === mswData.code.toString()) ||
-                                (l.getTooltip() && l.getTooltip().getContent().toLowerCase().trim() === selectedName.toLowerCase());
+                    let match = (norm(tooltipText) === targetNorm) ||
+                                (tooltipText && norm(tooltipText).includes(targetNorm)) ||
+                                (targetNorm && norm(tooltipText).includes(targetNorm.substring(0, 5))) ||
+                                featureProps.some(val => val === targetNorm || val.includes(targetNorm) || (targetNorm.length > 5 && targetNorm.includes(val))) ||
+                                (mswData.code && jsonCode === mswData.code.toString());
 
                     if (match) { 
                         l.setStyle({ color: 'red', fillOpacity: 0.5, weight: 4 }); 
@@ -1051,17 +1263,17 @@
             }
 
             document.getElementById('pop-urban').value = 0; 
-            document.getElementById('pop-rural').value = mswData.pop;
+            document.getElementById('pop-rural').value = mswData.pop || 0;
             
-            document.getElementById('l-cattle').value = mswData.ls.c;
-            document.getElementById('l-sheep').value = mswData.ls.s;
-            document.getElementById('l-poultry').value = mswData.ls.p;
-            document.getElementById('l-pigs').value = mswData.ls.pig || 0;
+            document.getElementById('l-cattle').value = mswData.ls?.c || 0;
+            document.getElementById('l-sheep').value = mswData.ls?.s || 0;
+            document.getElementById('l-poultry').value = mswData.ls?.p || 0;
+            document.getElementById('l-pigs').value = mswData.ls?.pig || 0;
             
-            document.getElementById('a-paddy').value = mswData.crops.p;
-            document.getElementById('a-pulses').value = mswData.crops.pu;
-            document.getElementById('a-oil').value = mswData.crops.o;
-            document.getElementById('a-veg').value = mswData.crops.v;
+            document.getElementById('a-paddy').value = mswData.crops?.p || 0;
+            document.getElementById('a-pulses').value = mswData.crops?.pu || 0;
+            document.getElementById('a-oil').value = mswData.crops?.o || 0;
+            document.getElementById('a-veg').value = mswData.crops?.v || 0;
             
             calculate();
         };
@@ -1080,6 +1292,13 @@
 
             document.querySelectorAll('.calc-input').forEach(input => { input.value = 0; });
             updateSurfaceWaterUI("");
+            updateGroundWaterUI("");
+            
+            if (charts && charts.overviewTrend) {
+                charts.overviewTrend.data.datasets[0].data = Array(12).fill(0);
+                charts.overviewTrend.data.datasets[1].data = Array(12).fill(0);
+                charts.overviewTrend.update();
+            }
             calculate();
         };
 
@@ -1235,7 +1454,79 @@
             document.getElementById('kpi-status').innerText = Math.round(net).toLocaleString();
             document.getElementById('kpi-status-box').style.background = net >= 0 ? '#10b981' : '#ef4444';
             
-            updateCharts(monthlyDemandArr, monthlyIrrigationArr);
+            // --- DYNAMICALLY CALCULATE AND POPULATE MONTHLY WATER SUPPLY ---
+            const calendarMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            let monthlySupplyArr = [];
+            let seasonalSupply = { kharif: 0, rabi: 0, summer: 0 };
+            let supplyTableHtml = "";
+
+            let surfChartData = charts.surfTrend ? charts.surfTrend.data.datasets[0].data : Array(12).fill(0);
+            let gwChartData = charts.groundTrend ? charts.groundTrend.data.datasets[0].data : Array(12).fill(0);
+            let monthlyTransfer = trans / 12;
+
+            calendarMonths.forEach((m, idx) => {
+                let mSurf = surfChartData[idx] || 0;
+                let mGW = gwChartData[idx] || 0;
+                let mSupplyTotal = Math.round(mSurf + mGW + monthlyTransfer);
+                
+                monthlySupplyArr.push(mSupplyTotal);
+
+                if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
+                    seasonalSupply.kharif += mSupplyTotal;
+                } else if (["Nov", "Dec", "Jan", "Feb"].includes(m)) {
+                    seasonalSupply.rabi += mSupplyTotal;
+                } else if (["Mar", "Apr", "May"].includes(m)) {
+                    seasonalSupply.summer += mSupplyTotal;
+                }
+
+                supplyTableHtml += `<tr><th>${m}</th><td>${mSupplyTotal.toLocaleString()}</td></tr>`;
+            });
+
+            document.getElementById('monthly-supply-body').innerHTML = supplyTableHtml;
+            document.getElementById('supply-season-kharif').innerText = seasonalSupply.kharif.toLocaleString();
+            document.getElementById('supply-season-rabi').innerText = seasonalSupply.rabi.toLocaleString();
+            document.getElementById('supply-season-summer').innerText = seasonalSupply.summer.toLocaleString();
+
+            let totalSupplySeasonalSum = seasonalSupply.kharif + seasonalSupply.rabi + seasonalSupply.summer;
+            document.getElementById('supply-season-total-combined').innerText = totalSupplySeasonalSum.toLocaleString();
+
+            // --- POPULATE COMBINED OVERVIEW OF SUPPLY AND DEMAND ---
+            let overviewTableHtml = "";
+            calendarMonths.forEach((m, idx) => {
+                let sVal = monthlySupplyArr[idx] || 0;
+                let dVal = monthlyDemandArr[idx] || 0;
+                let netVal = sVal - dVal;
+                let netColor = netVal >= 0 ? '#10b981' : '#ef4444';
+                overviewTableHtml += `<tr>
+                    <th style="text-align:left;">${m}</th>
+                    <td style="text-align:right;">${sVal.toLocaleString()}</td>
+                    <td style="text-align:right;">${dVal.toLocaleString()}</td>
+                    <td style="text-align:right; font-weight:600; color:${netColor}">${netVal.toLocaleString()}</td>
+                </tr>`;
+            });
+            document.getElementById('overview-monthly-body').innerHTML = overviewTableHtml;
+
+            const setSeasonOv = (idSup, idDem, idNet, supVal, demVal) => {
+                let netVal = supVal - demVal;
+                document.getElementById(idSup).innerText = supVal.toLocaleString();
+                document.getElementById(idDem).innerText = demVal.toLocaleString();
+                let netEl = document.getElementById(idNet);
+                netEl.innerText = netVal.toLocaleString();
+                netEl.style.color = netVal >= 0 ? '#10b981' : '#ef4444';
+            };
+
+            setSeasonOv('ov-sup-kharif', 'ov-dem-kharif', 'ov-net-kharif', seasonalSupply.kharif, seasonalDemands.kharif);
+            setSeasonOv('ov-sup-rabi', 'ov-dem-rabi', 'ov-net-rabi', seasonalSupply.rabi, seasonalDemands.rabi);
+            setSeasonOv('ov-sup-summer', 'ov-dem-summer', 'ov-net-summer', seasonalSupply.summer, seasonalDemands.summer);
+            setSeasonOv('ov-sup-total', 'ov-dem-total', 'ov-net-total', totalSupplySeasonalSum, totalSeasonalSum);
+
+            if (charts && charts.overviewTrend) {
+                charts.overviewTrend.data.datasets[0].data = monthlySupplyArr;
+                charts.overviewTrend.data.datasets[1].data = monthlyDemandArr;
+                charts.overviewTrend.update();
+            }
+
+            updateCharts(monthlyDemandArr, monthlyIrrigationArr, monthlySupplyArr);
         }
 
         let charts = {};
@@ -1251,7 +1542,9 @@
                     }] 
                 },
                 options: { 
+                    responsive: true,
                     maintainAspectRatio: false, 
+                    devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
                     plugins: {
                         legend: { display: false },
                         datalabels: {
@@ -1285,20 +1578,21 @@
                     }]
                 },
                 options: { 
-                    maintainAspectRatio: false, 
                     responsive: true,
+                    maintainAspectRatio: false, 
+                    devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
                     scales: { 
                         y: { 
                             beginAtZero: true,
                             ticks: { 
-                                font: { size: 8 },
+                                font: { size: 9 },
                                 callback: function(value) {
                                     return value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString();
                                 }
                             }
                         },
                         x: {
-                            ticks: { font: { size: 8 } },
+                            ticks: { font: { size: 9 } },
                             grid: { display: false }
                         }
                     }, 
@@ -1306,6 +1600,133 @@
                         legend: { display: false },
                         datalabels: { display: false }
                     } 
+                }
+            });
+
+            charts.groundTrend = new Chart(document.getElementById('c-ground-trend'), {
+                type: 'line',
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: [{ 
+                        label: 'Ground Water Storage (m³)', 
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                        borderColor: '#10b981', 
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)', 
+                        fill: true, 
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 2
+                    }]
+                },
+                options: { 
+                    responsive: true,
+                    maintainAspectRatio: false, 
+                    devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { 
+                                font: { size: 9 },
+                                callback: function(value) {
+                                    return value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }, 
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: { display: false }
+                    } 
+                }
+            });
+
+            charts.supplyTrend = new Chart(document.getElementById('c-monthly-supply-trend'), {
+                type: 'line',
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: [{ 
+                        label: 'Total Supply (m³)', 
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                        borderColor: '#3b82f6', 
+                        fill: true, 
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)', 
+                        tension: 0.4 
+                    }]
+                },
+                options: { 
+                    responsive: true,
+                    maintainAspectRatio: false, 
+                    devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { font: { size: 9 } },
+                            title: {
+                                display: true,
+                                text: 'Supply (m³)',
+                                font: { family: 'Poppins', size: 11, weight: '600' }
+                            }
+                        },
+                        x: { ticks: { font: { size: 9 } } }
+                    }, 
+                    plugins: { legend: { display: false } } 
+                }
+            });
+
+            charts.overviewTrend = new Chart(document.getElementById('c-overview-trend'), {
+                type: 'line',
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: [
+                        {
+                            label: 'Total Supply (m³)',
+                            data: Array(12).fill(0),
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                            fill: true,
+                            tension: 0.35,
+                            borderWidth: 2,
+                            pointRadius: 2
+                        },
+                        {
+                            label: 'Total Demand (m³)',
+                            data: Array(12).fill(0),
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                            fill: true,
+                            tension: 0.35,
+                            borderWidth: 2,
+                            pointRadius: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                font: { size: 9 },
+                                callback: function(value) {
+                                    return value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 9, family: 'Poppins' } } },
+                        datalabels: { display: false }
+                    }
                 }
             });
             
@@ -1320,16 +1741,20 @@
                     datasets: [{ label: 'Irrigation Demand (m³)', data: [], borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: true, tension: 0.4 }]
                 },
                 options: { 
+                    responsive: true,
                     maintainAspectRatio: false, 
+                    devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
                     scales: { 
                         y: { 
                             beginAtZero: true,
+                            ticks: { font: { size: 9 } },
                             title: {
                                 display: true,
                                 text: 'Demand (m³)',
                                 font: { family: 'Poppins', size: 10, weight: '600' }
                             }
-                        } 
+                        },
+                        x: { ticks: { font: { size: 9 } } }
                     }, 
                     plugins: { legend: { display: false } } 
                 }
@@ -1342,16 +1767,20 @@
                     datasets: [{ label: 'Total Demand (m³)', data: [], borderColor: '#0077b6', fill: true, backgroundColor: 'rgba(0,119,182,0.1)', tension: 0.4 }]
                 },
                 options: { 
+                    responsive: true,
                     maintainAspectRatio: false, 
+                    devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
                     scales: { 
                         y: { 
                             beginAtZero: true,
+                            ticks: { font: { size: 9 } },
                             title: {
                                 display: true,
                                 text: 'Demand (m³)',
                                 font: { family: 'Poppins', size: 11, weight: '600' }
                             }
-                        } 
+                        },
+                        x: { ticks: { font: { size: 9 } } }
                     }, 
                     plugins: { legend: { display: false } } 
                 }
@@ -1365,6 +1794,19 @@
         function closeSurfaceModal() {
             document.getElementById('surfaceModal').style.display = 'none';
         }
+
+        function updateModalVolume() {
+            let l = +document.getElementById('dim-length').value || 0;
+            let w = +document.getElementById('dim-width').value || 0;
+            let d = +document.getElementById('dim-depth').value || 0;
+            let vol = Math.round(l * w * d);
+            document.getElementById('dim-calc-volume').innerText = vol.toLocaleString() + ' m³';
+        }
+
+        ['dim-length', 'dim-width', 'dim-depth'].forEach(id => {
+            let el = document.getElementById(id);
+            if (el) el.oninput = updateModalVolume;
+        });
 
         function toggleAIChat() {
             const win = document.getElementById('ai-chat-window');
@@ -1481,7 +1923,7 @@
             }, 1000); 
         } 
 
-        function updateCharts(mValues, mIrrValues) { 
+        function updateCharts(mValues, mIrrValues, mSupplyValues) { 
             let popUrbanVal = +document.getElementById('pop-urban').value;
             let popRuralVal = +document.getElementById('pop-rural').value;
             let rFull = popRuralVal + (+document.getElementById('pop-add-a').value) + (+document.getElementById('pop-add-b').value);
@@ -1502,6 +1944,10 @@
             
             charts.irr.data.datasets[0].data = mIrrValues;
             charts.m.data.datasets[0].data = mValues;
+
+            if (mSupplyValues && charts.supplyTrend) {
+                charts.supplyTrend.data.datasets[0].data = mSupplyValues;
+            }
 
             Object.values(charts).forEach(c => c.update());
         } 
