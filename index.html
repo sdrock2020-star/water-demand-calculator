@@ -775,7 +775,7 @@
             </p>
 
             <!-- 2. Livestock Census (2019) -->
-            <div class="source-badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-cow"></i> 2. Livestock Water Demand Data Sources(For Odagaon cluster)</div>
+            <div class="source-badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-cow"></i> 2. Livestock Water Demand Data Sources (For Odagaon cluster)</div>
             <p style="margin-bottom: 10px;">
                 Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong>. Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day).
             </p>
@@ -814,8 +814,9 @@ Chart.defaults.font.family = "'Poppins', sans-serif";
 
 const DAYS_IN_MONTH = {"Jan": 31, "Feb": 28, "Mar": 31, "Apr": 30, "May": 31, "Jun": 30, "Jul": 31, "Aug": 31, "Sep": 30, "Oct": 31, "Nov": 30, "Dec": 31};
 
+// Exact AET Lookup Table directly matching Table 2 in Excel
 const AET_LOOKUP = {
-    "Kharif_Paddy": { Jan: 0.0, Feb: 0.0, Mar: 0.0, Apr: 0.0, May: 0.0, Jun: 0.0, Jul: 151.4964, Aug: 143.5593, Sep: 148.8313, Oct: 154.8947, Nov: 86.8107, Dec: 0.0 },
+    "Kharif_Paddy": { Jan: 0.0, Feb: 0.0, Mar: 0.0, Apr: 0.0, May: 0.0, Jun: 251.0162, Jul: 151.4964, Aug: 143.5593, Sep: 148.8313, Oct: 154.8947, Nov: 86.8107, Dec: 0.0 },
     "Kharif_Blackgram": { Jan: 0.0, Feb: 0.0, Mar: 0.0, Apr: 0.0, May: 0.0, Jun: 0.0, Jul: 57.7129, Aug: 143.5593, Sep: 135.8894, Oct: 45.1776, Nov: 0.0, Dec: 0.0 },
     "Kharif_Maize": { Jan: 0.0, Feb: 0.0, Mar: 0.0, Apr: 0.0, May: 0.0, Jun: 71.7189, Jul: 57.7129, Aug: 164.0678, Sep: 64.7092, Oct: 0.0, Nov: 0.0, Dec: 0.0 },
     "Rabi_Blackgram": { Jan: 119.6512, Feb: 47.58, Mar: 0.0, Apr: 0.0, May: 0.0, Jun: 0.0, Jul: 0.0, Aug: 0.0, Sep: 0.0, Oct: 0.0, Nov: 46.299, Dec: 113.3609 },
@@ -1122,7 +1123,6 @@ mS.onchange = function() {
             let tooltipText = l.getTooltip() ? l.getTooltip().getContent() : "";
             let jsonCode = (p.NEW_WS_COD || p.WS_LCODE_1 || p.Code || p.MWS_CODE || p.mws_code || "").toString().trim();
             
-            // Check matching by Code first, then Tooltip/Name, then specific GeoJSON properties (filtering out empty/short values)
             let matchByCode = mswData.code && jsonCode && (jsonCode === mswData.code.toString().trim() || jsonCode.endsWith(mswData.code.toString().trim()));
             let matchByTooltip = tooltipText && (norm(tooltipText) === targetNorm || norm(tooltipText).includes(targetNorm) || (targetNorm.length > 5 && targetNorm.includes(norm(tooltipText))));
             let matchByProps = Object.values(p).some(val => {
@@ -1499,7 +1499,7 @@ function initCharts() {
             devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
             scales: {
                 y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString() } },
-                x: { ticks: { font: { size: 9 } }, grid: { display: false } }
+                x: { ticks: { font: { size: 9 } } }
             },
             plugins: {
                 legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 9, family: 'Poppins' } } },
@@ -1679,13 +1679,17 @@ async function sendAIMessage() {
         document.getElementById(loadingId).remove();
         if (data.reply) {
             let formattedReply = data.reply
-                .replace(/^####?\s*(.*?)$/gm, '<h3 style="color: #0077b6; margin-top: 12px; margin-bottom: 6px; font-size: 0.95rem;">📊 $1</h3>')
-                .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
-                .replace(/^[\-*]\s*(.*?)$/gm, '<li>🔹 $1</li>')
+                .replace(/^###?\s*(.*?)$/gm, '<h3 style="color: #0077b6; margin-top: 10px; margin-bottom: 4px; font-size: 0.92rem; font-weight:600;">📊 $1</h3>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/`([^`]+)`/g, '<code style="background:#e2e8f0; padding:1px 4px; border-radius:3px; font-size:0.8rem;">$1</code>')
+                .replace(/^[\-*]\s*(.*?)$/gm, '<li style="margin-bottom:3px;">🔹 $1</li>')
+                .replace(/\n\n/g, '<div style="height:6px;"></div>')
                 .replace(/\n/g, '<br>');
-            if (formattedReply.includes('<li>') && !formattedReply.includes('<ul>')) {
-                formattedReply = formattedReply.replace(/<li>(.*?)<\/li>/g, '<ul><li style="list-style:none; padding-left:5px;">$1</li></ul>').replace(/<\/ul><br><ul>/g, '');
+
+            if (formattedReply.includes('<li') && !formattedReply.includes('<ul')) {
+                formattedReply = formattedReply.replace(/(<li.*<\/li>)/s, '<ul style="list-style:none; padding-left:0; margin:4px 0;">$1</ul>');
             }
+
             chatHistory.innerHTML += `<div class="ai-msg">${formattedReply}</div>`;
         }
     } catch (error) {
