@@ -1,340 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Water Budget Dashboard - (REWARD Project)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-  <style>
-    :root {
-      --primary: #0077b6;
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --border: #cbd5e1;
-      --text: #0f172a;
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-    }
-    body { background-color: var(--bg); color: var(--text); padding: 10px; }
-    .main-grid { display: grid; grid-template-columns: 360px 1fr; gap: 15px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .filter-group { margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-    .filter-group label { font-size: 0.85rem; font-weight: 600; width: 130px; }
-    .filter-group select { flex: 1; padding: 5px; border-radius: 5px; border: 1px solid var(--border); font-size: 0.85rem; }
-    #clear-all-btn { width: 100%; background-color: #ef4444; color: #ffffff; border: none; border-radius: 6px; padding: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.2s ease, transform 0.1s ease; }
-    #clear-all-btn:hover { background-color: #dc2626; }
-    #clear-all-btn:active { transform: scale(0.98); }
-    .budget-overview h4 { margin: 15px 0 5px 0; font-size: 0.95rem; color: var(--primary); border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
-    .budget-overview ul { list-style: none; font-size: 0.85rem; }
-    .budget-overview li { display: flex; justify-content: space-between; padding: 3px 0; }
-    .net-status-row { font-weight: 800; font-size: 1rem; margin-top: 15px; padding: 8px !important; background: #f8fafc; border-radius: 5px; border: 1px solid var(--border) !important; }
-    #map { height: 380px; width: 100%; border-radius: 8px; border: 1px solid var(--border); }
-    .section-header { grid-column: 1 / -1; font-weight: 700; font-size: 1.1rem; margin: 20px 0 10px 0; padding: 6px; background: #e2e8f0; border-radius: 6px; text-align: center; color: #334155; width: 100%; }
-    .bottom-grid-demand { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-    .bottom-grid-supply { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .input-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 0.72rem; }
-    .input-table th { background: #f8fafc; font-weight: 600; color: #475569; padding: 4px; text-align: center; border-bottom: 1px solid var(--border); }
-    .input-table td { padding: 4px; border-bottom: 1px dotted #e2e8f0; vertical-align: middle; }
-    .input-table input { width: 55px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.72rem; }
-    .input-table .val-lbl { font-weight: 600; color: #0f172a; text-align: right; display: block; }
-    .card-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .btn-add-surface { background-color: var(--primary); color: white; border: none; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: background-color 0.2s ease; }
-    .btn-add-surface:hover { background-color: #005f92; }
-    .input-row-dual { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.75rem; }
-    .dual-inputs { display: flex; gap: 6px; align-items: center; }
-    .calc-input-sm { width: 50px !important; padding: 2px 4px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
-    .calc-input-md { width: 80px !important; padding: 2px 4px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
-    .readonly-input { background-color: #f1f5f9 !important; color: #334155 !important; cursor: not-allowed; border-color: #cbd5e1 !important; font-weight: 600; }
-    .input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.75rem; }
-    .input-row input { width: 70px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
-    .chart-container { height: 100px; margin-top: 5px; position: relative; }
-    .full-width-row { grid-column: 1 / -1; width: 100%; }
-    .visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 5px; width: 100%; }
-    .compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
-    #monthly-table, #seasonal-table, #monthly-supply-table, #seasonal-supply-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 3px; }
-    #monthly-table th:first-child, #monthly-table td:first-child, #monthly-supply-table th:first-child, #monthly-supply-table td:first-child { width: 35%; text-align: left; }
-    #monthly-table th:last-child, #monthly-table td:last-child, #monthly-supply-table th:last-child, #monthly-supply-table td:last-child { width: 65%; text-align: right; }
-    #seasonal-table th:first-child, #seasonal-table td:first-child, #seasonal-supply-table th:first-child, #seasonal-supply-table td:first-child { width: 55%; text-align: left; }
-    #seasonal-table th:last-child, #seasonal-table td:last-child, #seasonal-supply-table th:last-child, #seasonal-supply-table td:last-child { width: 45%; text-align: right; }
-    #monthly-table th, #seasonal-table th, #monthly-supply-table th, #seasonal-supply-table th { background: #f1f5f9; font-weight: 600; color: #334155; position: sticky; top: 0; z-index: 5; padding: 5px 8px; }
-    #monthly-table td, #seasonal-table td, #monthly-supply-table td, #seasonal-supply-table td { border: 1px solid #e2e8f0; padding: 7px 8px; }
-    .header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .logo-box img { height: 80px; width: 80px; object-fit: contain; }
-    .title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 0 20px; }
-    .title-container h2 { font-size: 1.4rem; color: #475569; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
-    .title-container h2 .highlight-letter { color: var(--primary); font-weight: 800; }
-    .title-container h1 { font-size: 2.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; }
-    .tab-section-container { grid-column: 1 / -1; margin-top: 25px; background: #f8fafc; color: #334155; border: 1px solid var(--border); width: 100%; }
-    .tab-navigation { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-    .tab-btn { background: #ffffff; border: 2px solid var(--border); color: #64748b; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
-    .tab-btn:hover, .tab-btn.active { border-color: var(--primary); background-color: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2); }
-    .tab-pane { display: none; text-align: center; max-width: 800px; margin: 0 auto; animation: fadeIn 0.4s ease forwards; }
-    .tab-pane.active { display: block; }
-    .tab-pane h4 { font-size: 1.2rem; color: var(--primary); margin-bottom: 12px; font-weight: 600; }
-    .tab-pane p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #475569; }
-    .tab-pane strong { color: #0f172a; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Water Budget Dashboard - (REWARD Project)</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<style>
+:root {
+  --primary: #0077b6;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --border: #cbd5e1;
+  --text: #0f172a;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+body { background-color: var(--bg); color: var(--text); padding: 10px; }
+.main-grid { display: grid; grid-template-columns: 360px 1fr; gap: 15px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.filter-group { margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+.filter-group label { font-size: 0.85rem; font-weight: 600; width: 130px; }
+.filter-group select { flex: 1; padding: 5px; border-radius: 5px; border: 1px solid var(--border); font-size: 0.85rem; }
+#clear-all-btn { width: 100%; background-color: #ef4444; color: #ffffff; border: none; border-radius: 6px; padding: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.2s ease, transform 0.1s ease; }
+#clear-all-btn:hover { background-color: #dc2626; }
+#clear-all-btn:active { transform: scale(0.98); }
+.budget-overview h4 { margin: 15px 0 5px 0; font-size: 0.95rem; color: var(--primary); border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+.budget-overview ul { list-style: none; font-size: 0.85rem; }
+.budget-overview li { display: flex; justify-content: space-between; padding: 3px 0; }
+.net-status-row { font-weight: 800; font-size: 1rem; margin-top: 15px; padding: 8px !important; background: #f8fafc; border-radius: 5px; border: 1px solid var(--border) !important; }
+#map { height: 380px; width: 100%; border-radius: 8px; border: 1px solid var(--border); }
+.section-header { grid-column: 1 / -1; font-weight: 700; font-size: 1.1rem; margin: 20px 0 10px 0; padding: 6px; background: #e2e8f0; border-radius: 6px; text-align: center; color: #334155; width: 100%; }
+.bottom-grid-demand { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.bottom-grid-supply { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.input-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 0.72rem; }
+.input-table th { background: #f8fafc; font-weight: 600; color: #475569; padding: 4px; text-align: center; border-bottom: 1px solid var(--border); }
+.input-table td { padding: 4px; border-bottom: 1px dotted #e2e8f0; vertical-align: middle; }
+.input-table input { width: 55px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.72rem; }
+.input-table .val-lbl { font-weight: 600; color: #0f172a; text-align: right; display: block; }
+.card-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.btn-add-surface { background-color: var(--primary); color: white; border: none; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: background-color 0.2s ease; }
+.btn-add-surface:hover { background-color: #005f92; }
+.input-row-dual { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.75rem; }
+.dual-inputs { display: flex; gap: 6px; align-items: center; }
+.calc-input-sm { width: 50px !important; padding: 2px 4px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
+.calc-input-md { width: 80px !important; padding: 2px 4px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
+.readonly-input { background-color: #f1f5f9 !important; color: #334155 !important; cursor: not-allowed; border-color: #cbd5e1 !important; font-weight: 600; }
+.input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.75rem; }
+.input-row input { width: 70px; padding: 2px; text-align: right; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
+.chart-container { height: 100px; margin-top: 5px; position: relative; }
+.full-width-row { grid-column: 1 / -1; width: 100%; }
+.visualization-split-row { display: grid; grid-template-columns: 280px 280px 1fr; gap: 15px; margin-bottom: 5px; width: 100%; }
+.compact-table-card { height: 250px; overflow-y: auto; display: flex; flex-direction: column; }
+#monthly-table, #seasonal-table, #monthly-supply-table, #seasonal-supply-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 3px; }
+#monthly-table th:first-child, #monthly-table td:first-child, #monthly-supply-table th:first-child, #monthly-supply-table td:first-child { width: 35%; text-align: left; }
+#monthly-table th:last-child, #monthly-table td:last-child, #monthly-supply-table th:last-child, #monthly-supply-table td:last-child { width: 65%; text-align: right; }
+#seasonal-table th:first-child, #seasonal-table td:first-child, #seasonal-supply-table th:first-child, #seasonal-supply-table td:first-child { width: 55%; text-align: left; }
+#seasonal-table th:last-child, #seasonal-table td:last-child, #seasonal-supply-table th:last-child, #seasonal-supply-table td:last-child { width: 45%; text-align: right; }
+#monthly-table th, #seasonal-table th, #monthly-supply-table th, #seasonal-supply-table th { background: #f1f5f9; font-weight: 600; color: #334155; position: sticky; top: 0; z-index: 5; padding: 5px 8px; }
+#monthly-table td, #seasonal-table td, #monthly-supply-table td, #seasonal-supply-table td { border: 1px solid #e2e8f0; padding: 7px 8px; }
+.header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.logo-box img { height: 80px; width: 80px; object-fit: contain; }
+.title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 0 20px; }
+.title-container h2 { font-size: 1.4rem; color: #475569; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
+.title-container h2 .highlight-letter { color: var(--primary); font-weight: 800; }
+.title-container h1 { font-size: 2.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; }
 
-    /* Small Info Icon Button */
-    .info-btn { background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.95rem; padding: 2px 6px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
-    .info-btn:hover { color: #005f92; background-color: #e0f2fe; transform: scale(1.1); }
+/* Tabs Layout for Information Pages */
+.tab-section-container { grid-column: 1 / -1; margin-top: 25px; background: #f8fafc; color: #334155; border: 1px solid var(--border); width: 100%; }
+.tab-navigation { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; flex-wrap: wrap; }
+.tab-btn { background: #ffffff; border: 2px solid var(--border); color: #64748b; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
+.tab-btn:hover, .tab-btn.active { border-color: var(--primary); background-color: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2); }
+.tab-pane { display: none; width: 100%; animation: fadeIn 0.4s ease forwards; }
+.tab-pane.active { display: block; }
+.tab-info-content { text-align: center; max-width: 800px; margin: 0 auto; }
+.tab-info-content h4 { font-size: 1.2rem; color: var(--primary); margin-bottom: 12px; font-weight: 600; }
+.tab-info-content p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #475569; }
+.tab-info-content strong { color: #0f172a; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Modal Styles */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; }
-    .modal-container { background: #ffffff; width: 95%; max-width: 650px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden; animation: fadeIn 0.3s ease; }
-    .modal-header { background: var(--primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; }
-    .modal-close-btn { background: transparent; border: none; color: white; font-size: 1.4rem; cursor: pointer; line-height: 1; }
-    .modal-body { padding: 20px; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; }
-    .modal-group { display: flex; flex-direction: column; gap: 6px; }
-    .modal-group label { font-size: 0.85rem; font-weight: 600; color: #334155; }
-    .modal-group select, .modal-group input { padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.85rem; width: 100%; box-sizing: border-box; }
-    .dimension-box { border: 1px dashed var(--primary); background: #f8fafc; padding: 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 12px; }
-    .dimension-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
-    .result-box { background: #e0f2fe; border: 1px solid #7dd3fc; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: #0369a1; }
-    .modal-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
-    .btn-modal-cancel { background: #e2e8f0; color: #475569; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
-    .btn-modal-save { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+/* Small Info Icon Button */
+.info-btn { background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.95rem; padding: 2px 6px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+.info-btn:hover { color: #005f92; background-color: #e0f2fe; transform: scale(1.1); }
 
-    /* Source Badge and Link Styles */
-    .source-badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; }
-    .source-link { color: #0077b6; font-weight: 600; text-decoration: underline; word-break: break-all; }
+/* Modal Styles */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; }
+.modal-container { background: #ffffff; width: 95%; max-width: 650px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden; animation: fadeIn 0.3s ease; }
+.modal-header { background: var(--primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; }
+.modal-close-btn { background: transparent; border: none; color: white; font-size: 1.4rem; cursor: pointer; line-height: 1; }
+.modal-body { padding: 20px; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; }
+.modal-group { display: flex; flex-direction: column; gap: 6px; }
+.modal-group label { font-size: 0.85rem; font-weight: 600; color: #334155; }
+.modal-group select, .modal-group input { padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.85rem; width: 100%; box-sizing: border-box; }
+.dimension-box { border: 1px dashed var(--primary); background: #f8fafc; padding: 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 12px; }
+.dimension-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
+.result-box { background: #e0f2fe; border: 1px solid #7dd3fc; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: #0369a1; }
+.modal-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+.btn-modal-cancel { background: #e2e8f0; color: #475569; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+.btn-modal-save { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
 
-    /* AI Widget Styles */
-    #ai-widget-btn { position: fixed; bottom: 20px; right: 20px; background: #0077b6; color: white; border: none; border-radius: 30px; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; display: flex; align-items: center; gap: 8px; transition: transform 0.2s; }
-    #ai-widget-btn:hover { transform: scale(1.05); }
-    #ai-chat-window { position: fixed; bottom: 75px; right: 20px; width: 340px; height: 480px; background: white; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 1000; overflow: hidden; animation: slideUp 0.3s ease; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    #ai-chat-header { background: #0077b6; color: white; padding: 12px 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
-    #ai-close-btn { cursor: pointer; font-size: 1.2rem; }
-    #ai-chat-history { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; }
-    .ai-msg { background: white; border: 1px solid #cbd5e1; padding: 12px 15px; border-radius: 12px 12px 12px 0; align-self: flex-start; max-width: 85%; line-height: 1.5; color: #334155; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
-    .ai-msg h3 { font-size: 0.95rem; color: #0077b6; margin-top: 8px; margin-bottom: 4px; font-weight: 600; }
-    .ai-msg p { margin-bottom: 6px; }
-    .ai-msg ul, .ai-msg ol { margin-left: 18px; margin-bottom: 6px; padding-left: 0; }
-    .ai-msg li { margin-bottom: 3px; }
-    .user-msg { background: #0077b6; color: white; padding: 10px 14px; border-radius: 12px 12px 0 12px; align-self: flex-end; max-width: 85%; line-height: 1.4; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    #ai-input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #cbd5e1; }
-    #ai-chat-input { flex: 1; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; }
-    #ai-send-btn { background: #0077b6; color: white; border: none; border-radius: 6px; padding: 0 15px; margin-left: 8px; cursor: pointer; font-weight: 600; min-width: 60px; transition: background-color 0.2s; }
-    #ai-send-btn:disabled { background: #94a3b8; cursor: not-allowed; }
-    .leaflet-tooltip { background: transparent !important; border: none !important; box-shadow: none !important; font-weight: 700; font-size: 0.85rem; color: #0f172a; text-shadow: 1px 1px 2px #ffffff, -1px -1px 2px #ffffff; }
-    .leaflet-tooltip-top:before, .leaflet-tooltip-bottom:before, .leaflet-tooltip-left:before, .leaflet-tooltip-right:before { display: none !important; }
+/* Source Badge and Link Styles */
+.source-badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; }
+.source-link { color: #0077b6; font-weight: 600; text-decoration: underline; word-break: break-all; }
 
-    /* --- Overview of Supply and Demand Styles --- */
-    .overview-single-row {
-      display: grid;
-      grid-template-columns: 310px 310px 1fr;
-      gap: 12px;
-      width: 100%;
-      margin-top: 10px;
-    }
-    .overview-title, .table-card-title {
-      margin-top: 0;
-      color: var(--primary);
-      font-weight: 600;
-      font-size: 0.9rem;
-      border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 5px;
-    }
-    .overview-card {
-      height: 250px;
-      display: flex;
-      flex-direction: column;
-      padding: 12px;
-    }
-    .overview-table-body {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden !important;
-    }
-    #overview-monthly-table, #overview-seasonal-table {
-      width: 100% !important;
-      border-collapse: collapse;
-      table-layout: fixed;
-      font-size: 0.74rem;
-    }
-    #overview-monthly-table th, #overview-monthly-table td,
-    #overview-seasonal-table th, #overview-seasonal-table td {
-      border: 1px solid #e2e8f0;
-      padding: 5px 4px !important;
-      white-space: nowrap;
-    }
-    #overview-monthly-table th, #overview-seasonal-table th {
-      background: #f1f5f9;
-      font-weight: 600;
-      color: #334155;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-    #overview-monthly-table th:first-child, #overview-monthly-table td:first-child { width: 18%; }
-    #overview-monthly-table th:not(:first-child), #overview-monthly-table td:not(:first-child) { width: 27.3%; }
-    #overview-seasonal-table th:first-child, #overview-seasonal-table td:first-child { width: 25%; }
-    #overview-seasonal-table th:not(:first-child), #overview-seasonal-table td:not(:first-child) { width: 25%; }
+/* AI Widget Styles */
+#ai-widget-btn { position: fixed; bottom: 20px; right: 20px; background: #0077b6; color: white; border: none; border-radius: 30px; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; display: flex; align-items: center; gap: 8px; transition: transform 0.2s; }
+#ai-widget-btn:hover { transform: scale(1.05); }
+#ai-chat-window { position: fixed; bottom: 75px; right: 20px; width: 340px; height: 480px; background: white; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 1000; overflow: hidden; animation: slideUp 0.3s ease; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+#ai-chat-header { background: #0077b6; color: white; padding: 12px 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+#ai-close-btn { cursor: pointer; font-size: 1.2rem; }
+#ai-chat-history { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; }
+.ai-msg { background: white; border: 1px solid #cbd5e1; padding: 12px 15px; border-radius: 12px 12px 12px 0; align-self: flex-start; max-width: 85%; line-height: 1.5; color: #334155; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+.ai-msg h3 { font-size: 0.95rem; color: #0077b6; margin-top: 8px; margin-bottom: 4px; font-weight: 600; }
+.ai-msg p { margin-bottom: 6px; }
+.ai-msg ul, .ai-msg ol { margin-left: 18px; margin-bottom: 6px; padding-left: 0; }
+.ai-msg li { margin-bottom: 3px; }
+.user-msg { background: #0077b6; color: white; padding: 10px 14px; border-radius: 12px 12px 0 12px; align-self: flex-end; max-width: 85%; line-height: 1.4; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+#ai-input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #cbd5e1; }
+#ai-chat-input { flex: 1; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; }
+#ai-send-btn { background: #0077b6; color: white; border: none; border-radius: 6px; padding: 0 15px; margin-left: 8px; cursor: pointer; font-weight: 600; min-width: 60px; transition: background-color 0.2s; }
+#ai-send-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+.leaflet-tooltip { background: transparent !important; border: none !important; box-shadow: none !important; font-weight: 700; font-size: 0.85rem; color: #0f172a; text-shadow: 1px 1px 2px #ffffff, -1px -1px 2px #ffffff; }
+.leaflet-tooltip-top:before, .leaflet-tooltip-bottom:before, .leaflet-tooltip-left:before, .leaflet-tooltip-right:before { display: none !important; }
 
-    /* Scenario Header & KPI Box Styling */
-    .kpi-scenario-wrapper {
-      margin-bottom: 12px;
-      width: 100%;
-    }
-    .scenario-section-title {
-      text-align: center !important;
-      width: 100%;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 10px;
-      display: block;
-    }
-    .kpi-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 0;
-    }
-    .kpi-box {
-      padding: 10px 8px;
-      border-radius: 8px;
-      text-align: center;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 72px;
-    }
-    .supply-bg { background: #3b82f6; }
-    .demand-bg { background: #f59e0b; }
-    .status-bg { background: #10b981; }
-    .kpi-title {
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 3px;
-      line-height: 1.25;
-      color: #ffffff;
-      text-align: center;
-    }
-    .kpi-box h2 {
-      font-size: 1.35rem;
-      font-weight: 700;
-      margin: 0;
-      letter-spacing: 0.5px;
-    }
+/* Overview of Supply and Demand Styles */
+.overview-single-row { display: grid; grid-template-columns: 310px 310px 1fr; gap: 12px; width: 100%; margin-top: 10px; }
+.overview-title, .table-card-title { margin-top: 0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+.overview-card { height: 250px; display: flex; flex-direction: column; padding: 12px; }
+.overview-table-body { flex: 1; overflow-y: auto; min-height: 0; width: 100%; padding-right: 4px; }
+.table-scroll-wrapper { flex: 1; overflow-y: auto; overflow-x: auto !important; width: 100%; }
+#overview-monthly-table, #overview-seasonal-table { width: 100% !important; border-collapse: collapse; table-layout: fixed; font-size: 0.74rem; }
+#overview-monthly-table th, #overview-monthly-table td, #overview-seasonal-table th, #overview-seasonal-table td { border: 1px solid #e2e8f0; padding: 5px 4px !important; white-space: nowrap; }
+#overview-monthly-table th, #overview-seasonal-table th { background: #f1f5f9; font-weight: 600; color: #334155; position: sticky; top: 0; z-index: 5; }
+#overview-monthly-table th:first-child, #overview-monthly-table td:first-child { width: 18%; }
+#overview-monthly-table th:not(:first-child), #overview-monthly-table td:not(:first-child) { width: 27.3%; }
+#overview-seasonal-table th:first-child, #overview-seasonal-table td:first-child { width: 25%; }
+#overview-seasonal-table th:not(:first-child), #overview-seasonal-table td:not(:first-child) { width: 25%; }
 
-    /* --- Potential for Rainwater Harvesting Section Styles --- */
-    .overview-tables-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      width: 100%;
-    }
-    .full-table-card {
-      height: auto !important;
-      max-height: none !important;
-      overflow: visible !important;
-      display: flex;
-      flex-direction: column;
-    }
-    .table-scroll-wrapper {
-      flex: 1;
-      overflow: visible !important;
-      width: 100%;
-    }
-    #rwh-monthly-table, #rwh-seasonal-table {
-      width: 100% !important;
-      border-collapse: collapse;
-      font-size: 0.76rem;
-    }
-    #rwh-monthly-table th, #rwh-monthly-table td,
-    #rwh-seasonal-table th, #rwh-seasonal-table td {
-      border: 1px solid #e2e8f0;
-      padding: 6px 8px !important;
-      white-space: nowrap;
-    }
-    #rwh-monthly-table th, #rwh-seasonal-table th {
-      background: #f1f5f9;
-      font-weight: 600;
-      color: #334155;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
+/* Scenario Header & KPI Box Styling */
+.kpi-scenario-wrapper { margin-bottom: 12px; width: 100%; }
+.scenario-section-title { text-align: center !important; width: 100%; font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 10px; display: block; }
+.kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 0; }
+.kpi-box { padding: 10px 8px; border-radius: 8px; text-align: center; color: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 72px; }
+.supply-bg { background: #3b82f6; }
+.demand-bg { background: #f59e0b; }
+.status-bg { background: #10b981; }
+.kpi-title { font-size: 0.82rem; font-weight: 600; margin-bottom: 3px; line-height: 1.25; color: #ffffff; text-align: center; }
+.kpi-box h2 { font-size: 1.35rem; font-weight: 700; margin: 0; letter-spacing: 0.5px; }
 
-    @media screen and (max-width: 1100px) {
-      .overview-single-row { grid-template-columns: 1fr; }
-    }
-    @media screen and (max-width: 992px) {
-      .main-grid { grid-template-columns: 1fr; }
-      .bottom-grid-demand { grid-template-columns: repeat(2, 1fr); }
-      .bottom-grid-supply { grid-template-columns: 1fr; }
-      .visualization-split-row { grid-template-columns: 1fr; }
-      .overview-tables-row { grid-template-columns: 1fr; }
-      .header-container { flex-direction: column; gap: 12px; text-align: center; padding: 15px; }
-      .title-container h1 { font-size: 1.8rem; }
-      .title-container h2 { font-size: 0.95rem; margin-bottom: 5px; }
-    }
-    @media screen and (max-width: 600px) {
-      body { padding: 6px; }
-      .kpi-row { grid-template-columns: 1fr; gap: 8px; }
-      .bottom-grid-demand { grid-template-columns: 1fr; }
-      #map { height: 280px; }
-      .tab-navigation { flex-wrap: wrap; gap: 8px; }
-      .tab-btn { padding: 6px 14px; font-size: 0.8rem; }
-      .card { padding: 10px; }
-      .dimension-grid { grid-template-columns: 1fr; }
-      .modal-container { width: 95%; margin: 10px; }
-      #ai-chat-window { width: calc(100vw - 30px); right: 15px; left: 15px; bottom: 70px; height: 420px; }
-      #ai-widget-btn { bottom: 15px; right: 15px; padding: 10px 16px; font-size: 0.85rem; }
-    }
-  </style>
+/* 3-Column RWH Row Style (Expanded width for both tables so headers fit nicely without cutoff) */
+.rwh-three-column-row { display: grid; grid-template-columns: 420px 420px 1fr; gap: 12px; width: 100%; margin-top: 10px; }
+.table-scroll-wrapper { flex: 1; overflow-y: auto; overflow-x: auto !important; width: 100%; }
+#rwh-monthly-table, #rwh-seasonal-table { width: 100% !important; border-collapse: collapse; font-size: 0.74rem; }
+#rwh-monthly-table th, #rwh-monthly-table td, #rwh-seasonal-table th, #rwh-seasonal-table td { border: 1px solid #e2e8f0; padding: 5px 4px !important; white-space: nowrap; }
+
+@media screen and (max-width: 1300px) {
+  .rwh-three-column-row { grid-template-columns: 1fr; }
+}
+@media screen and (max-width: 1100px) {
+  .overview-single-row { grid-template-columns: 1fr; }
+}
+@media screen and (max-width: 992px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .bottom-grid-demand { grid-template-columns: repeat(2, 1fr); }
+  .bottom-grid-supply { grid-template-columns: 1fr; }
+  .visualization-split-row { grid-template-columns: 1fr; }
+  .header-container { flex-direction: column; gap: 12px; text-align: center; padding: 15px; }
+  .title-container h1 { font-size: 1.8rem; }
+  .title-container h2 { font-size: 0.95rem; margin-bottom: 5px; }
+}
+@media screen and (max-width: 600px) {
+  body { padding: 6px; }
+  .kpi-row { grid-template-columns: 1fr; gap: 8px; }
+  .bottom-grid-demand { grid-template-columns: 1fr; }
+  #map { height: 280px; }
+  .tab-navigation { flex-wrap: wrap; gap: 8px; }
+  .tab-btn { padding: 6px 14px; font-size: 0.8rem; }
+  .card { padding: 10px; }
+  .dimension-grid { grid-template-columns: 1fr; }
+  .modal-container { width: 95%; margin: 10px; }
+  #ai-chat-window { width: calc(100vw - 30px); right: 15px; left: 15px; bottom: 70px; height: 420px; }
+  #ai-widget-btn { bottom: 15px; right: 15px; padding: 10px 16px; font-size: 0.85rem; }
+}
+</style>
 </head>
 <body>
 
 <header class="header-container">
-  <div class="logo-box">
-    <img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo">
-  </div>
+  <div class="logo-box"><img src="icar-logo-png_seeklogo-158112.png" alt="ICAR-IIWM Logo"></div>
   <div class="title-container">
     <h2><span class="highlight-letter">Re</span>juvenating <span class="highlight-letter">W</span>atersheds for <span class="highlight-letter">A</span>gricultural <span class="highlight-letter">R</span>esilience through Innovative <span class="highlight-letter">D</span>evelopment</h2>
     <h1>Water Budget Dashboard</h1>
   </div>
-  <div class="logo-box">
-    <img src="top_logo.jpg.png" alt="REWARD Logo">
-  </div>
+  <div class="logo-box"><img src="top_logo.jpg.png" alt="REWARD Logo"></div>
 </header>
 
 <div class="main-grid">
   <div class="left-col">
     <div class="card">
-      <div class="filter-group">
-        <label>District</label>
-        <select id="district-select"><option value="">Select District</option></select>
-      </div>
-      <div class="filter-group">
-        <label>Cluster</label>
-        <select id="cluster-select" disabled></select>
-      </div>
-      <div class="filter-group">
-        <label>Micro-watershed</label>
-        <select id="msw-select" disabled></select>
-      </div>
-      <div class="filter-group">
-        <label>Year</label>
-        <select><option>2023-2024</option></select>
-      </div>
+      <div class="filter-group"><label>District</label><select id="district-select"><option value="">Select District</option></select></div>
+      <div class="filter-group"><label>Cluster</label><select id="cluster-select" disabled></select></div>
+      <div class="filter-group"><label>Micro-watershed</label><select id="msw-select" disabled></select></div>
+      <div class="filter-group"><label>Year</label><select><option>2023-2024</option></select></div>
       <button id="clear-all-btn" type="button"><i class="fa-solid fa-rotate-left"></i> Clear All</button>
     </div>
 
@@ -377,9 +257,7 @@
     </div>
 
     <div class="card">
-      <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-weight:600;">
-        <span id="map-name">Project Map View</span>
-      </div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-weight:600;"><span id="map-name">Project Map View</span></div>
       <div id="map"></div>
     </div>
   </div>
@@ -468,8 +346,14 @@
 <div class="full-width-row visualization-split-row" style="margin-top: 15px;">
   <div class="card compact-table-card">
     <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand</h4>
-    <div style="flex: 1; overflow-y: auto;"><table id="monthly-table"><thead><tr><th>Month</th><th>Total (m³)</th></tr></thead><tbody id="monthly-body"></tbody></table></div>
+    <div style="flex: 1; overflow-y: auto;">
+      <table id="monthly-table">
+        <thead><tr><th>Month</th><th>Total (m³)</th></tr></thead>
+        <tbody id="monthly-body"></tbody>
+      </table>
+    </div>
   </div>
+
   <div class="card compact-table-card">
     <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Seasonal Water Demand</h4>
     <div style="flex: 1; overflow-y: auto;">
@@ -481,14 +365,20 @@
           <tr><td style="font-weight:600; background:#ffffff;">Summer (Mar-May)</td><td><span id="season-summer">0</span></td></tr>
         </tbody>
         <tfoot>
-          <tr style="border-top: 2px solid var(--border); background: #f8fafc;"><td style="font-weight:700; color: var(--primary);">Total Annual</td><td style="font-weight:700; color: var(--primary);"><span id="season-total-combined">0</span></td></tr>
+          <tr style="border-top: 2px solid var(--border); background: #f8fafc;">
+            <td style="font-weight:700; color: var(--primary);">Total Annual</td>
+            <td style="font-weight:700; color: var(--primary);"><span id="season-total-combined">0</span></td>
+          </tr>
         </tfoot>
       </table>
     </div>
   </div>
+
   <div class="card" style="height: 250px; display: flex; flex-direction: column;">
     <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Demand Trend</h4>
-    <div style="flex: 1; min-height: 0; margin-top: 5px; position: relative;"><canvas id="c-monthly-trend"></canvas></div>
+    <div style="flex: 1; min-height: 0; margin-top: 5px; position: relative;">
+      <canvas id="c-monthly-trend"></canvas>
+    </div>
   </div>
 </div>
 
@@ -554,8 +444,14 @@
 <div class="full-width-row visualization-split-row" style="margin-top: 15px;">
   <div class="card compact-table-card">
     <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Supply</h4>
-    <div style="flex: 1; overflow-y: auto;"><table id="monthly-supply-table"><thead><tr><th>Month</th><th>Total (m³)</th></tr></thead><tbody id="monthly-supply-body"></tbody></table></div>
+    <div style="flex: 1; overflow-y: auto;">
+      <table id="monthly-supply-table">
+        <thead><tr><th>Month</th><th>Total (m³)</th></tr></thead>
+        <tbody id="monthly-supply-body"></tbody>
+      </table>
+    </div>
   </div>
+
   <div class="card compact-table-card">
     <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Seasonal Water Supply</h4>
     <div style="flex: 1; overflow-y: auto;">
@@ -567,21 +463,26 @@
           <tr><td style="font-weight:600; background:#ffffff;">Summer (Mar-May)</td><td><span id="supply-season-summer">0</span></td></tr>
         </tbody>
         <tfoot>
-          <tr style="border-top: 2px solid var(--border); background: #f8fafc;"><td style="font-weight:700; color: var(--primary);">Total Annual</td><td style="font-weight:700; color: var(--primary);"><span id="supply-season-total-combined">0</span></td></tr>
+          <tr style="border-top: 2px solid var(--border); background: #f8fafc;">
+            <td style="font-weight:700; color: var(--primary);">Total Annual</td>
+            <td style="font-weight:700; color: var(--primary);"><span id="supply-season-total-combined">0</span></td>
+          </tr>
         </tfoot>
       </table>
     </div>
   </div>
+
   <div class="card" style="height: 250px; display: flex; flex-direction: column;">
     <h4 style="margin-top:0; color: var(--primary); font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Monthly Water Supply Trend</h4>
-    <div style="flex: 1; min-height: 0; margin-top: 5px; position: relative;"><canvas id="c-monthly-supply-trend"></canvas></div>
+    <div style="flex: 1; min-height: 0; margin-top: 5px; position: relative;">
+      <canvas id="c-monthly-supply-trend"></canvas>
+    </div>
   </div>
 </div>
 
-<!-- OVERVIEW OF SUPPLY AND DEMAND SECTION (Single row layout, no horizontal scrollbars) -->
+<!-- OVERVIEW OF SUPPLY AND DEMAND SECTION -->
 <div class="section-header">Overview of Supply and Demand</div>
 <div class="full-width-row overview-single-row">
-  <!-- Monthly Budget Overview -->
   <div class="card overview-card">
     <h4 class="overview-title">Monthly Budget Overview</h4>
     <div class="overview-table-body">
@@ -599,7 +500,6 @@
     </div>
   </div>
 
-  <!-- Seasonal Budget Overview -->
   <div class="card overview-card">
     <h4 class="overview-title">Seasonal Budget Overview</h4>
     <div class="overview-table-body">
@@ -613,24 +513,9 @@
           </tr>
         </thead>
         <tbody id="overview-seasonal-body">
-          <tr>
-            <td style="font-weight:600; background:#ffffff;">Kharif</td>
-            <td id="ov-sup-kharif" style="text-align:right;">0</td>
-            <td id="ov-dem-kharif" style="text-align:right;">0</td>
-            <td id="ov-net-kharif" style="text-align:right; font-weight:700;">0</td>
-          </tr>
-          <tr>
-            <td style="font-weight:600; background:#ffffff;">Rabi</td>
-            <td id="ov-sup-rabi" style="text-align:right;">0</td>
-            <td id="ov-dem-rabi" style="text-align:right;">0</td>
-            <td id="ov-net-rabi" style="text-align:right; font-weight:700;">0</td>
-          </tr>
-          <tr>
-            <td style="font-weight:600; background:#ffffff;">Summer</td>
-            <td id="ov-sup-summer" style="text-align:right;">0</td>
-            <td id="ov-dem-summer" style="text-align:right;">0</td>
-            <td id="ov-net-summer" style="text-align:right; font-weight:700;">0</td>
-          </tr>
+          <tr><td style="font-weight:600; background:#ffffff;">Kharif</td><td id="ov-sup-kharif" style="text-align:right;">0</td><td id="ov-dem-kharif" style="text-align:right;">0</td><td id="ov-net-kharif" style="text-align:right; font-weight:700;">0</td></tr>
+          <tr><td style="font-weight:600; background:#ffffff;">Rabi</td><td id="ov-sup-rabi" style="text-align:right;">0</td><td id="ov-dem-rabi" style="text-align:right;">0</td><td id="ov-net-rabi" style="text-align:right; font-weight:700;">0</td></tr>
+          <tr><td style="font-weight:600; background:#ffffff;">Summer</td><td id="ov-sup-summer" style="text-align:right;">0</td><td id="ov-dem-summer" style="text-align:right;">0</td><td id="ov-net-summer" style="text-align:right; font-weight:700;">0</td></tr>
         </tbody>
         <tfoot>
           <tr style="border-top: 2px solid var(--border); background: #f8fafc; font-weight:700;">
@@ -644,7 +529,6 @@
     </div>
   </div>
 
-  <!-- Compressed Trend Graph to the Right -->
   <div class="card" style="height: 250px; display: flex; flex-direction: column; min-width: 0;">
     <h4 class="overview-title">Supply vs Demand Trend</h4>
     <div style="flex: 1; min-height: 0; margin-top: 5px; position: relative;">
@@ -655,17 +539,17 @@
 
 <!-- POTENTIAL FOR RAINWATER HARVESTING SECTION -->
 <div class="section-header">Potential for Rainwater Harvesting</div>
-<div class="full-width-row overview-tables-row" style="margin-top: 10px;">
+<div class="full-width-row rwh-three-column-row">
   <!-- Monthly Rainfall & Runoff Data -->
-  <div class="card full-table-card">
+  <div class="card compact-table-card" style="height: 340px;">
     <h4 class="table-card-title">Monthly Rainfall & Runoff Overview</h4>
     <div class="table-scroll-wrapper">
       <table id="rwh-monthly-table">
         <thead>
           <tr>
             <th style="text-align: left; width: 16%;">Month</th>
-            <th style="text-align: right; color: #0077b6; width: 21%;">Rain (mm)</th>
-            <th style="text-align: right; color: #3b82f6; width: 31%;">Rainfall (m³)</th>
+            <th style="text-align: right; color: #0077b6; width: 24%;">Rain (mm)</th>
+            <th style="text-align: right; color: #3b82f6; width: 28%;">Rainfall (m³)</th>
             <th style="text-align: right; color: #10b981; width: 32%;">Runoff (m³)</th>
           </tr>
         </thead>
@@ -675,16 +559,16 @@
   </div>
 
   <!-- Seasonal Rainfall & Runoff Data -->
-  <div class="card full-table-card">
+  <div class="card compact-table-card" style="height: 340px;">
     <h4 class="table-card-title">Seasonal Rainfall & Runoff Overview</h4>
     <div class="table-scroll-wrapper">
       <table id="rwh-seasonal-table">
         <thead>
           <tr>
-            <th style="text-align: left; width: 28%;">Season</th>
+            <th style="text-align: left; width: 24%;">Season</th>
             <th style="text-align: right; color: #0077b6; width: 22%;">Rain (mm)</th>
-            <th style="text-align: right; color: #3b82f6; width: 25%;">Rainfall (m³)</th>
-            <th style="text-align: right; color: #10b981; width: 25%;">Runoff (m³)</th>
+            <th style="text-align: right; color: #3b82f6; width: 27%;">Rainfall (m³)</th>
+            <th style="text-align: right; color: #10b981; width: 27%;">Runoff (m³)</th>
           </tr>
         </thead>
         <tbody id="rwh-seasonal-body">
@@ -718,13 +602,13 @@
       </table>
     </div>
   </div>
-</div>
 
-<!-- Potential for Rainwater Harvesting Multi-line Trend Chart -->
-<div class="card full-width-row" style="margin-top: 15px; height: 340px; display: flex; flex-direction: column;">
-  <h4 class="table-card-title">Runoff, Supply, Demand & Net Supply Trend</h4>
-  <div style="flex: 1; min-height: 0; margin-top: 8px; position: relative;">
-    <canvas id="c-rwh-trend"></canvas>
+  <!-- Rainwater Harvesting Multi-line Trend Chart -->
+  <div class="card" style="height: 340px; display: flex; flex-direction: column; min-width: 0;">
+    <h4 class="table-card-title">Rainfall, Supply, Demand & Net Supply Trend</h4>
+    <div style="flex: 1; min-height: 0; margin-top: 8px; position: relative;">
+      <canvas id="c-rwh-trend"></canvas>
+    </div>
   </div>
 </div>
 
@@ -736,28 +620,40 @@
     <button class="tab-btn" onclick="switchTab(event, 'team-tab')">Research Team</button>
     <button class="tab-btn" onclick="switchTab(event, 'copyright-tab')">Copyright</button>
   </div>
+
   <div class="tab-wrapper">
     <div id="about-tab" class="tab-pane active">
-      <h4>About ICAR-IIWM</h4>
-      <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production.</p>
-      <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building.</p>
-      <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions.</p>
+      <div class="tab-info-content">
+        <h4>About ICAR-IIWM</h4>
+        <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production[cite: 1].</p>
+        <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building[cite: 1].</p>
+        <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions[cite: 1].</p>
+      </div>
     </div>
+
     <div id="contact-tab" class="tab-pane">
-      <h4>Contact Information</h4>
-      <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD</p>
-      <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023</p>
+      <div class="tab-info-content">
+        <h4>Contact Information</h4>
+        <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD[cite: 1]</p>
+        <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023[cite: 1]</p>
+      </div>
     </div>
+
     <div id="team-tab" class="tab-pane">
-      <h4>Research Team</h4>
-      <p>DR. SUSANTA SKUMAR JENA (P.I REWARD)</p>
-      <p>DR. SAMEER MANDAL (RA)</p>
-      <p>ER. SUBRAT DASH (YP-1)</p>
+      <div class="tab-info-content">
+        <h4>Research Team</h4>
+        <p>DR. SUSANTA SKUMAR JENA (P.I REWARD)[cite: 1]</p>
+        <p>DR. SAMEER MANDAL (RA)[cite: 1]</p>
+        <p>ER. SUBRAT DASH (YP-1)[cite: 1]</p>
+      </div>
     </div>
+
     <div id="copyright-tab" class="tab-pane">
-      <h4>Copyright & Acknowledgments</h4>
-      <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved.</p>
-      <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India</p>
+      <div class="tab-info-content">
+        <h4>Copyright & Acknowledgments</h4>
+        <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved[cite: 1].</p>
+        <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India[cite: 1]</p>
+      </div>
     </div>
   </div>
 </div>
@@ -807,17 +703,12 @@
     </div>
     <div class="modal-body" style="font-size: 0.85rem; line-height: 1.6; color: #334155; max-height: 70vh; overflow-y: auto;">
       <div class="source-badge"><i class="fa-solid fa-users"></i> Domestic Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary. As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong> with male <strong>36,449</strong> and female <strong>32,840</strong>.</p>
-      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong>.</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;">
-        <strong>Source:</strong> <a href="https://law.resource.org/pub/in/bis/S03/is.1172.1993.html" target="_blank" rel="noopener noreferrer" class="source-link">https://law.resource.org/pub/in/bis/S03/is.1172.1993.html <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a>
-      </p>
-
+      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary[cite: 1]. As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong> with male <strong>36,449</strong> and female <strong>32,840</strong>[cite: 1].</p>
+      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong>[cite: 1].</p>
+      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://law.resource.org/pub/in/bis/S03/is.1172.1993.html" target="_blank" rel="noopener noreferrer" class="source-link">https://law.resource.org/pub/in/bis/S03/is.1172.1993.html[cite: 1] <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
       <div class="source-badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-cow"></i> 2. Livestock Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong>. Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day).</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 0;">
-        <strong>Source:</strong> <a href="https://epubs.icar.org.in/index.php/IJAnS/article/view/44302" target="_blank" rel="noopener noreferrer" class="source-link">https://epubs.icar.org.in/index.php/IJAnS/article/view/44302 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a>
-      </p>
+      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong>[cite: 1]. Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day)[cite: 1].</p>
+      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 0;"><strong>Source:</strong><a href="https://epubs.icar.org.in/index.php/IJAnS/article/view/44302" target="_blank" rel="noopener noreferrer" class="source-link">https://epubs.icar.org.in/index.php/IJAnS/article/view/44302[cite: 1] <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
     </div>
     <div class="modal-footer"><button class="btn-modal-save" onclick="closeSummarySourceModal()">Close</button></div>
   </div>
@@ -826,8 +717,13 @@
 <!-- HydroAI Widget -->
 <button id="ai-widget-btn" onclick="toggleAIChat()"><i class="fa-solid fa-robot"></i> HydroAI</button>
 <div id="ai-chat-window">
-  <div id="ai-chat-header"><span>Water Budget Assistant</span><span id="ai-close-btn" onclick="toggleAIChat()">&times;</span></div>
-  <div id="ai-chat-history"><div class="ai-msg">Hello! Select a district and micro-watershed, then ask me anything related to the water budget!</div></div>
+  <div id="ai-chat-header">
+    <span>Water Budget Assistant</span>
+    <span id="ai-close-btn" onclick="toggleAIChat()">&times;</span>
+  </div>
+  <div id="ai-chat-history">
+    <div class="ai-msg">Hello! Select a district and micro-watershed, then ask me anything related to the water budget!</div>
+  </div>
   <div id="ai-input-area">
     <input type="text" id="ai-chat-input" placeholder="Ask about the data..." onkeypress="handleAIKeyPress(event)" />
     <button id="ai-send-btn" onclick="sendAIMessage()">Send</button>
@@ -883,7 +779,6 @@ const gwStorageBackend = {
   "Dhusuma": { annual_m3: 377385, monthly: { "Jan": 305490, "Feb": 284821, "Mar": 264164, "Apr": 236058, "May": 195506, "Jun": 212343, "Jul": 267874, "Aug": 345560, "Sep": 367688, "Oct": 368570, "Nov": 343019, "Dec": 330219 } }
 };
 
-// Data extracted from Odogaon_MWS.xlsx (Long-term Avg mm & m3, and Net Supply)
 const RWH_BACKEND_DATA = {
   rainfall_mm: {
     "Badagarada": [5.2, 24.6, 27.0, 39.0, 115.1, 201.9, 310.1, 441.1, 270.8, 141.7, 45.9, 11.6],
@@ -976,24 +871,13 @@ function updateRWHSection(selectedMws) {
   }
 
   let tableHtml = "";
-  let seasonal = {
-    kharif: { mm: 0, m3: 0, runoff: 0 },
-    rabi: { mm: 0, m3: 0, runoff: 0 },
-    summer: { mm: 0, m3: 0, runoff: 0 }
-  };
+  let seasonal = { kharif: { mm: 0, m3: 0, runoff: 0 }, rabi: { mm: 0, m3: 0, runoff: 0 }, summer: { mm: 0, m3: 0, runoff: 0 } };
 
   calendarMonths.forEach((m, idx) => {
     let mm = rain_mm[idx] || 0;
     let m3 = rain_m3[idx] || 0;
     let ro = runoff_m3[idx] || 0;
-
-    tableHtml += `<tr>
-      <th style="text-align:left;">${m}</th>
-      <td style="text-align:right;">${mm.toLocaleString()}</td>
-      <td style="text-align:right;">${Math.round(m3).toLocaleString()}</td>
-      <td style="text-align:right; font-weight:600; color:#10b981;">${Math.round(ro).toLocaleString()}</td>
-    </tr>`;
-
+    tableHtml += `<tr><th style="text-align:left;">${m}</th><td style="text-align:right;">${mm.toLocaleString()}</td><td style="text-align:right;">${Math.round(m3).toLocaleString()}</td><td style="text-align:right; font-weight:600; color:#10b981;">${Math.round(ro).toLocaleString()}</td></tr>`;
     if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
       seasonal.kharif.mm += mm;
       seasonal.kharif.m3 += m3;
@@ -1029,9 +913,8 @@ function updateRWHSection(selectedMws) {
   document.getElementById('rwh-rain-m3-total').innerText = Math.round(totalM3).toLocaleString();
   document.getElementById('rwh-runoff-total').innerText = Math.round(totalRunoff).toLocaleString();
 
-  // Update RWH 4-line trend chart
   if (charts && charts.rwhTrend) {
-    charts.rwhTrend.data.datasets[0].data = runoff_m3;
+    charts.rwhTrend.data.datasets[0].data = rain_m3;
     charts.rwhTrend.data.datasets[1].data = lastMonthlySupply;
     charts.rwhTrend.data.datasets[2].data = lastMonthlyDemand;
     charts.rwhTrend.data.datasets[3].data = net_supp_m3;
@@ -1113,6 +996,7 @@ function updateGroundWaterUI(mwsName) {
   let gwInfo = gwStorageBackend[mwsName];
   const calendarMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   let monthlyArr = Array(12).fill(0);
+
   if (gwInfo) {
     document.getElementById('g-dug').value = Math.round(gwInfo.annual_m3);
     monthlyArr = calendarMonths.map(m => gwInfo.monthly[m] || 0);
@@ -1125,6 +1009,7 @@ function updateGroundWaterUI(mwsName) {
   } else {
     document.getElementById('g-dug').value = 0;
   }
+
   if (charts && charts.groundTrend) {
     charts.groundTrend.data.datasets[0].data = monthlyArr;
     charts.groundTrend.update();
@@ -1224,36 +1109,27 @@ dS.onchange = function() {
   if (districtLayer) map.removeLayer(districtLayer);
   if (geoLayer) map.removeLayer(geoLayer);
   if (!this.value) return;
-
   let distInfo = geoData[this.value];
   for (let c in distInfo.clusters) cS.add(new Option(c, c));
-
-  fetch(distInfo.districtBoundaryFile)
-    .then(r => r.json())
-    .then(data => {
-      data.features.forEach(f => processCoords(f));
-      districtLayer = L.geoJSON(data, { style: { color: '#334155', weight: 3, fillOpacity: 0, dashArray: '5, 10' } }).addTo(map);
-      map.flyToBounds(districtLayer.getBounds(), { duration: 1.5 });
-    });
+  fetch(distInfo.districtBoundaryFile).then(r => r.json()).then(data => {
+    data.features.forEach(f => processCoords(f));
+    districtLayer = L.geoJSON(data, { style: { color: '#334155', weight: 3, fillOpacity: 0, dashArray: '5, 10' } }).addTo(map);
+    map.flyToBounds(districtLayer.getBounds(), { duration: 1.5 });
+  });
 };
 
 cS.onchange = function() {
   mS.innerHTML = '<option value="">All Micro-watersheds</option>';
   mS.disabled = !this.value;
   if (!this.value) return;
-
   let clusterName = this.value;
   let cluster = geoData[dS.value].clusters[clusterName];
   for (let m in cluster.msws) mS.add(new Option(m, m));
-
-  fetch(cluster.file)
-    .then(r => r.json())
-    .then(data => {
-      data.features.forEach(f => processCoords(f));
-      plotMap(data);
-      if (geoLayer) map.flyToBounds(geoLayer.getBounds(), { duration: 1.2 });
-    });
-
+  fetch(cluster.file).then(r => r.json()).then(data => {
+    data.features.forEach(f => processCoords(f));
+    plotMap(data);
+    if (geoLayer) map.flyToBounds(geoLayer.getBounds(), { duration: 1.2 });
+  });
   let totals = getClusterTotals(dS.value, clusterName);
   document.getElementById('map-name').innerText = "Cluster Overview: " + clusterName;
   document.getElementById('pop-urban').value = 0;
@@ -1277,6 +1153,7 @@ cS.onchange = function() {
       charts.surfTrend.update();
     }
   }
+
   updateGroundWaterUI("");
   calculate();
   updateRWHSection("");
@@ -1300,15 +1177,14 @@ mS.onchange = function() {
   if (!selectedName) { cS.onchange(); return; }
   let mswData = geoData[dS.value]?.clusters[cS.value]?.msws[selectedName];
   if (!mswData) return;
-
   document.getElementById('map-name').innerText = "MSW: " + selectedName;
   updateSurfaceWaterUI(selectedName);
   updateGroundWaterUI(selectedName);
 
   const norm = str => (str || "").toString().toLowerCase().replace(/[^a-z0-9]/g, '').replace(/kh/g, 'k').replace(/bh/g, 'b').replace(/um/g, 'u').replace(/ll/g, 'l').replace(/ee/g, 'i').replace(/oo/g, 'u');
   const targetNorm = norm(selectedName);
-  let selectedLayer = null;
 
+  let selectedLayer = null;
   if (geoLayer) {
     geoLayer.eachLayer(l => {
       let p = l.feature?.properties || {};
@@ -1329,12 +1205,13 @@ mS.onchange = function() {
         l.setStyle({ color: '#0077b6', fillColor: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
       }
     });
+
     if (selectedLayer) {
       map.flyToBounds(selectedLayer.getBounds(), { duration: 1, padding: [40, 40] });
     }
   }
 
-  document.getElementById('pop-urban').value = 0; 
+  document.getElementById('pop-urban').value = 0;
   document.getElementById('pop-rural').value = mswData.pop || 0;
   document.getElementById('l-cattle').value = mswData.ls?.c || 0;
   document.getElementById('l-sheep').value = mswData.ls?.s || 0;
@@ -1423,32 +1300,33 @@ function plotMap(data) {
 function calculate() {
   const calendarMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-  // 1. Domestic Water Demand
   let popUrbanVal = +document.getElementById('pop-urban').value || 0;
   let popRuralVal = +document.getElementById('pop-rural').value || 0;
   let totalPop = popUrbanVal + popRuralVal + (+document.getElementById('pop-add-a').value || 0) + (+document.getElementById('pop-add-b').value || 0);
   let dailyDomesticM3 = totalPop * 135 * 0.001;
   let annualDomesticM3 = dailyDomesticM3 * 365;
+
   document.getElementById('lbl-demand-urban').innerText = Math.round(popUrbanVal * 135 * 365 * 0.001).toLocaleString();
   document.getElementById('lbl-demand-rural').innerText = Math.round((totalPop - popUrbanVal) * 135 * 365 * 0.001).toLocaleString();
 
-  // 2. Livestock Water Demand
   let c = +document.getElementById('l-cattle').value || 0;
   let s = +document.getElementById('l-sheep').value || 0;
   let p = +document.getElementById('l-poultry').value || 0;
   let pig = +document.getElementById('l-pigs').value || 0;
+
   let cattleDemandAnnual = (c * 67) * 365 / 1000;
   let sheepDemandAnnual = (s * 7) * 365 / 1000;
   let poultryDemandAnnual = (p * 0.32) * 365 / 1000;
   let pigDemandAnnual = (pig * 22) * 365 / 1000;
+
   let dailyLivestockM3 = ((c * 67) + (s * 7) + (p * 0.32) + (pig * 22)) * 0.001;
   let annualLivestockM3 = dailyLivestockM3 * 365;
+
   document.getElementById('lbl-demand-cattle').innerText = Math.round(cattleDemandAnnual).toLocaleString();
   document.getElementById('lbl-demand-sheep').innerText = Math.round(sheepDemandAnnual).toLocaleString();
   document.getElementById('lbl-demand-poultry').innerText = Math.round(poultryDemandAnnual).toLocaleString();
   document.getElementById('lbl-demand-pigs').innerText = Math.round(pigDemandAnnual).toLocaleString();
 
-  // 3. Crop Water Demand Matrix
   let cropAreas = {
     "Kharif_Paddy": +document.getElementById('a-paddy').value || 0,
     "Kharif_Blackgram": +document.getElementById('a-k-blackgram').value || 0,
@@ -1475,6 +1353,7 @@ function calculate() {
     let mDomestic = dailyDomesticM3 * days;
     let mLivestock = dailyLivestockM3 * days;
     let mCropWater = 0;
+
     for (let cropKey in cropAreas) {
       let areaHa = cropAreas[cropKey];
       let aet_mm = AET_LOOKUP[cropKey] ? (AET_LOOKUP[cropKey][m] || 0) : 0;
@@ -1482,6 +1361,7 @@ function calculate() {
       mCropWater += reqM3;
       cropAnnualTotals[cropKey] += reqM3;
     }
+
     let monthTotal = Math.round(mDomestic + mLivestock + mCropWater);
     totalIrrigationAnnual += mCropWater;
     monthlyDemandArr.push(monthTotal);
@@ -1508,6 +1388,7 @@ function calculate() {
   let ind1Val = +document.getElementById('ind-1').value || 0;
   let ind2Val = +document.getElementById('ind-2').value || 0;
   let indDem = ind1Val + ind2Val;
+
   document.getElementById('lbl-demand-heavy').innerText = Math.round(ind1Val).toLocaleString();
   document.getElementById('lbl-demand-light').innerText = Math.round(ind2Val).toLocaleString();
 
@@ -1518,7 +1399,6 @@ function calculate() {
   let totalSeasonalSum = seasonalDemands.kharif + seasonalDemands.rabi + seasonalDemands.summer;
   document.getElementById('season-total-combined').innerText = totalSeasonalSum.toLocaleString();
 
-  // 4. Supply Calculations
   let surf = (+document.getElementById('s-pond').value || 0) + (+document.getElementById('s-res').value || 0) + (+document.getElementById('s-riv').value || 0);
   let ground = (+document.getElementById('g-dug').value || 0) + (+document.getElementById('g-tube').value || 0) + (+document.getElementById('g-oth').value || 0);
   let trans = (+document.getElementById('t-s1').value || 0) + (+document.getElementById('t-s2').value || 0);
@@ -1568,11 +1448,9 @@ function calculate() {
   let totalSupplySeasonalSum = seasonalSupply.kharif + seasonalSupply.rabi + seasonalSupply.summer;
   document.getElementById('supply-season-total-combined').innerText = totalSupplySeasonalSum.toLocaleString();
 
-  // Store for RWH comparison trend graph
   lastMonthlySupply = monthlySupplyArr;
   lastMonthlyDemand = monthlyDemandArr;
 
-  // Overview Table Population
   let overviewTableHtml = "";
   calendarMonths.forEach((m, idx) => {
     let sVal = monthlySupplyArr[idx] || 0;
@@ -1712,18 +1590,17 @@ function initCharts() {
     }
   });
 
-  // Potential for Rainwater Harvesting Trend Chart (Runoff, Supply, Demand, Net Supply)
   charts.rwhTrend = new Chart(document.getElementById('c-rwh-trend'), {
     type: 'line',
     data: {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       datasets: [
-        { label: 'Runoff', data: Array(12).fill(0), borderColor: '#2563eb', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
+        { label: 'Rainfall', data: Array(12).fill(0), borderColor: '#2563eb', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
         { label: 'Supply', data: Array(12).fill(0), borderColor: '#f97316', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
         { label: 'Demand', data: Array(12).fill(0), borderColor: '#94a3b8', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
-        { label: 'Net Supply', data: Array(12).fill(0), borderColor: '#eab308', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 }
-      ]
-    },
+        { label: 'Net Supply', data: Array(12).fill(0), borderColor: '#eab308', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2, borderDash: [5, 5] }
+        ]
+    },  
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -1804,6 +1681,7 @@ function saveSurfaceStructure() {
     document.getElementById('s-riv').value = (+document.getElementById('s-riv').value || 0) + vol;
     document.getElementById('s-riv-nos').value = (+document.getElementById('s-riv-nos').value || 0) + 1;
   }
+
   closeSurfaceModal();
   calculate();
 }
@@ -1843,6 +1721,7 @@ async function sendAIMessage() {
   const chatHistory = document.getElementById('ai-chat-history');
   const btn = document.getElementById('ai-send-btn');
   const userText = inputField.value.trim();
+
   if (!userText || btn.disabled) return;
 
   chatHistory.innerHTML += `<div class="user-msg">${userText}</div>`;
@@ -1900,6 +1779,7 @@ async function sendAIMessage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: userText, dashboardState })
     });
+
     const data = await res.json();
     document.getElementById(loadingId).remove();
 
@@ -1915,6 +1795,7 @@ async function sendAIMessage() {
       if (formattedReply.includes('<li') && !formattedReply.includes('<ul')) {
         formattedReply = formattedReply.replace(/(<li.*<\/li>)/s, '<ul style="list-style:none; padding-left:0; margin:4px 0;">$1</ul>');
       }
+
       chatHistory.innerHTML += `<div class="ai-msg">${formattedReply}</div>`;
     }
   } catch (error) {
@@ -1966,16 +1847,20 @@ function updateCharts(mValues, mIrrValues, mSupplyValues) {
 function switchTab(event, tabId) {
   const tabPanes = document.querySelectorAll('.tab-pane');
   tabPanes.forEach(pane => pane.classList.remove('active'));
+
   const tabButtons = document.querySelectorAll('.tab-btn');
   tabButtons.forEach(btn => btn.classList.remove('active'));
+
   document.getElementById(tabId).classList.add('active');
   event.currentTarget.classList.add('active');
 }
 
 document.querySelectorAll('.calc-input').forEach(i => i.oninput = calculate);
+
 initCharts();
 calculate();
 updateRWHSection("");
 </script>
 </body>
 </html>
+
