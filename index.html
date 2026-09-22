@@ -250,7 +250,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
           <h2 id="kpi-demand">0</h2>
         </div>
         <div class="kpi-box status-bg" id="kpi-status-box">
-          <p class="kpi-title">Net Status</p>
+          <p class="kpi-title">Net Annual Status</p>
           <h2 id="kpi-status">0</h2>
         </div>
       </div>
@@ -330,11 +330,20 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     <div style="overflow-x: auto;">
       <table class="input-table">
         <thead>
-          <tr><th style="text-align: left;">Industry Type</th><th>Input (m³)</th><th style="text-align: right;">Demand (m³)</th></tr>
+          <tr>
+            <th style="text-align: left;">Industry Type</th>
+            <th style="text-align: right;">Demand / month (m³)</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td style="font-weight: 500;">Heavy</td><td style="text-align: center;"><input type="number" id="ind-1" class="calc-input" value="0"></td><td><span id="lbl-demand-heavy" class="val-lbl">0</span></td></tr>
-          <tr><td style="font-weight: 500;">Light</td><td style="text-align: center;"><input type="number" id="ind-2" class="calc-input" value="0"></td><td><span id="lbl-demand-light" class="val-lbl">0</span></td></tr>
+          <tr>
+            <td style="font-weight: 500;">Heavy</td>
+            <td style="text-align: right;"><input type="number" id="ind-1" class="calc-input" value="0" style="width: 80px;"></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 500;">Light</td>
+            <td style="text-align: right;"><input type="number" id="ind-2" class="calc-input" value="0" style="width: 80px;"></td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -671,7 +680,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
         <select id="modal-struct-type">
           <option value="pond">Ponds / Lakes</option>
           <option value="res">Reservoir / Check Dam</option>
-          <option value="riv">River</option>
         </select>
       </div>
       <div class="dimension-box">
@@ -689,7 +697,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
     <div class="modal-footer">
       <button class="btn-modal-cancel" onclick="closeSurfaceModal()">Cancel</button>
-      <button class="btn-modal-save" onclick="saveSurfaceStructure()">Save Structure</button>
+      <button class="btn-modal-save" onclick="saveSurfaceStructure()">Add Structure</button>
     </div>
   </div>
 </div>
@@ -1327,6 +1335,11 @@ function calculate() {
   document.getElementById('lbl-demand-poultry').innerText = Math.round(poultryDemandAnnual).toLocaleString();
   document.getElementById('lbl-demand-pigs').innerText = Math.round(pigDemandAnnual).toLocaleString();
 
+  let ind1Val = +document.getElementById('ind-1').value || 0;
+  let ind2Val = +document.getElementById('ind-2').value || 0;
+  let monthlyIndDem = ind1Val + ind2Val;
+  let annualIndDem = monthlyIndDem * 12;
+
   let cropAreas = {
     "Kharif_Paddy": +document.getElementById('a-paddy').value || 0,
     "Kharif_Blackgram": +document.getElementById('a-k-blackgram').value || 0,
@@ -1362,7 +1375,7 @@ function calculate() {
       cropAnnualTotals[cropKey] += reqM3;
     }
 
-    let monthTotal = Math.round(mDomestic + mLivestock + mCropWater);
+    let monthTotal = Math.round(mDomestic + mLivestock + mCropWater + monthlyIndDem);
     totalIrrigationAnnual += mCropWater;
     monthlyDemandArr.push(monthTotal);
     monthlyIrrigationArr.push(Math.round(mCropWater));
@@ -1385,13 +1398,6 @@ function calculate() {
   document.getElementById('lbl-demand-r-veg').innerText = Math.round(cropAnnualTotals["Rabi_Vegetables"]).toLocaleString();
   document.getElementById('lbl-demand-s-veg').innerText = Math.round(cropAnnualTotals["Summer_Vegetables"]).toLocaleString();
 
-  let ind1Val = +document.getElementById('ind-1').value || 0;
-  let ind2Val = +document.getElementById('ind-2').value || 0;
-  let indDem = ind1Val + ind2Val;
-
-  document.getElementById('lbl-demand-heavy').innerText = Math.round(ind1Val).toLocaleString();
-  document.getElementById('lbl-demand-light').innerText = Math.round(ind2Val).toLocaleString();
-
   document.getElementById('monthly-body').innerHTML = tableHtml;
   document.getElementById('season-kharif').innerText = seasonalDemands.kharif.toLocaleString();
   document.getElementById('season-rabi').innerText = seasonalDemands.rabi.toLocaleString();
@@ -1403,14 +1409,14 @@ function calculate() {
   let ground = (+document.getElementById('g-dug').value || 0) + (+document.getElementById('g-tube').value || 0) + (+document.getElementById('g-oth').value || 0);
   let trans = (+document.getElementById('t-s1').value || 0) + (+document.getElementById('t-s2').value || 0);
 
-  let totalD = annualDomesticM3 + annualLivestockM3 + totalIrrigationAnnual + indDem;
+  let totalD = annualDomesticM3 + annualLivestockM3 + totalIrrigationAnnual + annualIndDem;
   let totalS = surf + ground + trans;
   let net = totalS - totalD;
 
   document.getElementById('txt-human').innerText = Math.round(annualDomesticM3).toLocaleString();
   document.getElementById('txt-livestock').innerText = Math.round(annualLivestockM3).toLocaleString();
   document.getElementById('txt-irrigation').innerText = Math.round(totalIrrigationAnnual).toLocaleString();
-  document.getElementById('txt-industry').innerText = Math.round(indDem).toLocaleString();
+  document.getElementById('txt-industry').innerText = Math.round(annualIndDem).toLocaleString();
   document.getElementById('txt-surface').innerText = Math.round(surf).toLocaleString();
   document.getElementById('txt-ground').innerText = Math.round(ground).toLocaleString();
   document.getElementById('txt-transfer').innerText = Math.round(trans).toLocaleString();
@@ -1595,11 +1601,11 @@ function initCharts() {
     data: {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       datasets: [
-        { label: 'Rainfall', data: Array(12).fill(0), borderColor: '#2563eb', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
-        { label: 'Supply', data: Array(12).fill(0), borderColor: '#f97316', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
-        { label: 'Demand', data: Array(12).fill(0), borderColor: '#94a3b8', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
-        { label: 'Net Supply', data: Array(12).fill(0), borderColor: '#eab308', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2, borderDash: [5, 5] }
-        ]
+        { label: 'Rainfall', data: Array(12).fill(0), borderColor: '#2563eb', backgroundColor: 'transparent', tension: 0, borderWidth: 2.5, pointRadius: 2 },
+        { label: 'Supply', data: Array(12).fill(0), borderColor: '#f97316', backgroundColor: 'transparent', tension: 0, borderWidth: 2.5, pointRadius: 2 },
+        { label: 'Demand', data: Array(12).fill(0), borderColor: '#94a3b8', backgroundColor: 'transparent', tension: 0, borderWidth: 2.5, pointRadius: 2 },
+        { label: 'Net Supply', data: Array(12).fill(0), borderColor: '#eab308', backgroundColor: 'transparent', tension: 0, borderWidth: 2.5, pointRadius: 2, borderDash: [5, 5] }
+      ]
     },  
     options: {
       responsive: true,
@@ -1677,9 +1683,6 @@ function saveSurfaceStructure() {
   } else if (type === 'res') {
     document.getElementById('s-res').value = (+document.getElementById('s-res').value || 0) + vol;
     document.getElementById('s-res-nos').value = (+document.getElementById('s-res-nos').value || 0) + 1;
-  } else if (type === 'riv') {
-    document.getElementById('s-riv').value = (+document.getElementById('s-riv').value || 0) + vol;
-    document.getElementById('s-riv-nos').value = (+document.getElementById('s-riv-nos').value || 0) + 1;
   }
 
   closeSurfaceModal();
@@ -1835,7 +1838,11 @@ function updateCharts(mValues, mIrrValues, mSupplyValues) {
 
   charts.h.data.datasets[0].data = [urbanDemandAnnual, ruralDemandAnnual];
   charts.l.data.datasets[0].data = [cattleDemandAnnual, sheepDemandAnnual, poultryDemandAnnual, pigDemandAnnual];
-  charts.ind.data.datasets[0].data = [+document.getElementById('ind-1').value || 0, +document.getElementById('ind-2').value || 0];
+  
+  let ind1 = (+document.getElementById('ind-1').value || 0) * 12;
+  let ind2 = (+document.getElementById('ind-2').value || 0) * 12;
+  charts.ind.data.datasets[0].data = [ind1, ind2];
+  
   charts.irr.data.datasets[0].data = mIrrValues;
   charts.m.data.datasets[0].data = mValues;
   if (mSupplyValues && charts.supplyTrend) {
@@ -1863,4 +1870,3 @@ updateRWHSection("");
 </script>
 </body>
 </html>
-
