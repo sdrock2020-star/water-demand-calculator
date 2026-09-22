@@ -1601,9 +1601,9 @@ function initCharts() {
     data: {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       datasets: [
-        { label: 'Rainfall', data: Array(12).fill(0), borderColor: '#2563eb', backgroundColor: 'transparent', tension: 0, borderWidth: 2.5, pointRadius: 2 },
-        { label: 'Supply', data: Array(12).fill(0), borderColor: '#f97316', backgroundColor: 'transparent', tension: 0, borderWidth: 2.5, pointRadius: 2 },
-        { label: 'Demand', data: Array(12).fill(0), borderColor: '#94a3b8', backgroundColor: 'transparent', tension: 0, borderWidth: 2.5, pointRadius: 2 },
+        { label: 'Rainfall', data: Array(12).fill(0), borderColor: '#2563eb', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
+        { label: 'Supply', data: Array(12).fill(0), borderColor: '#10b981', backgroundColor: 'transparent', tension: 0.2, borderWidth: 2.5, pointRadius: 2 }, /* Changed to Green */
+        { label: 'Demand', data: Array(12).fill(0), borderColor: '#ef4444', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 }, /* Changed to Red */
         { label: 'Net Supply', data: Array(12).fill(0), borderColor: '#eab308', backgroundColor: 'transparent', tension: 0, borderWidth: 2.5, pointRadius: 2, borderDash: [5, 5] }
       ]
     },  
@@ -1620,7 +1620,7 @@ function initCharts() {
         x: { ticks: { font: { size: 9 } } }
       },
       plugins: {
-        legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 10, family: 'Poppins' } } },
+        legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 9, family: 'Poppins' } } },
         datalabels: { display: false }
       }
     }
