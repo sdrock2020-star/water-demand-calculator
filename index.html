@@ -82,7 +82,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   box-shadow: 0 4px 8px rgba(0,0,0,0.12); 
   border-radius: 8px; 
 }
-
 .logo-box img { 
   height: 95px; 
   width: 95px;  
@@ -95,16 +94,12 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   mix-blend-mode: multiply; 
   transition: transform 0.2s ease;
 }
-
-.logo-box img:hover {
-  transform: scale(1.06);
-}
+.logo-box img:hover { transform: scale(1.06); }
 .title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 0 20px; }
 .title-container h2 { font-size: 1.45rem; color: #ffffff; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.4; text-shadow: 0 2px 4px rgba(0,0,0,0.15); }
 .title-container h2 .highlight-letter { color: #fde047; font-weight: 800; }
 .title-container h1 { font-size: 2.0rem; color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 0; margin-bottom: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-/* Tabs Layout for Information Pages */
 .tab-section-container { grid-column: 1 / -1; margin-top: 25px; background: linear-gradient(135deg, #0077b6 0%, #03045e 100%); color: #ffffff; border: 1px solid #005f92; width: 100%; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); padding: 20px; }
 .tab-navigation { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 15px; flex-wrap: wrap; }
 .tab-btn { background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); color: #e0f2fe; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
@@ -117,11 +112,9 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 .tab-info-content strong { color: #ffffff; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Small Info Icon Button */
 .info-btn { background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.95rem; padding: 2px 6px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
 .info-btn:hover { color: #005f92; background-color: #e0f2fe; transform: scale(1.1); }
 
-/* Modal Styles */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; }
 .modal-container { background: #ffffff; width: 95%; max-width: 650px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden; animation: fadeIn 0.3s ease; }
 .modal-header { background: var(--primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; }
@@ -137,11 +130,9 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 .btn-modal-cancel { background: #e2e8f0; color: #475569; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
 .btn-modal-save { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
 
-/* Source Badge and Link Styles */
 .source-badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; }
 .source-link { color: #0077b6; font-weight: 600; text-decoration: underline; word-break: break-all; }
 
-/* AI Widget Styles */
 #ai-widget-btn { position: fixed; bottom: 20px; right: 20px; background: #0077b6; color: white; border: none; border-radius: 30px; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; display: flex; align-items: center; gap: 8px; transition: transform 0.2s; }
 #ai-widget-btn:hover { transform: scale(1.05); }
 #ai-chat-window { position: fixed; bottom: 75px; right: 20px; width: 340px; height: 480px; background: white; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 1000; overflow: hidden; animation: slideUp 0.3s ease; }
@@ -156,17 +147,13 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 #ai-send-btn { background: #0077b6; color: white; border: none; border-radius: 6px; padding: 0 15px; margin-left: 8px; cursor: pointer; font-weight: 600; min-width: 60px; transition: background-color 0.2s; }
 #ai-send-btn:disabled { background: #94a3b8; cursor: not-allowed; }
 
-/* Animated Flashing / Glowing Border for Selected MWS */
 @keyframes pulseBorder {
   0% { stroke-width: 4px; stroke: #dc2626; stroke-opacity: 1; filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.7)); }
   50% { stroke-width: 7px; stroke: #f87171; stroke-opacity: 0.8; filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.9)); }
   100% { stroke-width: 4px; stroke: #dc2626; stroke-opacity: 1; filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.7)); }
 }
-.selected-mws-outline {
-  animation: pulseBorder 1.5s infinite ease-in-out;
-}
+.selected-mws-outline { animation: pulseBorder 1.5s infinite ease-in-out; }
 
-/* Overview of Supply and Demand Styles */
 .overview-single-row { display: grid; grid-template-columns: 310px 310px 1fr; gap: 12px; width: 100%; margin-top: 10px; }
 .overview-title, .table-card-title { margin-top: 0; color: var(--primary); font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
 .overview-card { height: 250px; display: flex; flex-direction: column; padding: 12px; }
@@ -180,7 +167,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 #overview-seasonal-table th:first-child, #overview-seasonal-table td:first-child { width: 25%; }
 #overview-seasonal-table th:not(:first-child), #overview-seasonal-table td:not(:first-child) { width: 25%; }
 
-/* Scenario Header & KPI Box Styling */
 .kpi-scenario-wrapper { margin-bottom: 12px; width: 100%; }
 .scenario-section-title { text-align: center !important; width: 100%; font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 10px; display: block; }
 .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 0; }
@@ -191,7 +177,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 .kpi-title { font-size: 0.82rem; font-weight: 600; margin-bottom: 3px; line-height: 1.25; color: #ffffff; text-align: center; }
 .kpi-box h2 { font-size: 1.35rem; font-weight: 700; margin: 0; letter-spacing: 0.5px; }
 
-/* 3-Column RWH Row Style */
 .rwh-three-column-row { display: grid; grid-template-columns: 420px 420px 1fr; gap: 12px; width: 100%; margin-top: 10px; }
 .table-scroll-wrapper { flex: 1; overflow-y: auto; overflow-x: auto !important; width: 100%; }
 #rwh-monthly-table, #rwh-seasonal-table { width: 100% !important; border-collapse: collapse; font-size: 0.74rem; }
@@ -461,7 +446,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
   </div>
 
-  <div class="card">
+<div class="card">
     <div class="card-header-flex">
       <h5 style="color: var(--primary); margin-bottom: 0;">Water Transfer</h5>
       <button class="btn-add-surface" onclick="openTransferModal()"><i class="fa-solid fa-plus"></i> Add</button>
@@ -477,11 +462,11 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
         <tbody>
           <tr>
             <td style="font-weight: 500;">Source-1</td>
-            <td style="text-align: right;"><input type="number" min="0" id="t-s1" class="calc-input" value="0" style="width: 80px;" oninput="handleDirectTransferInput()"></td>
+            <td style="text-align: right;"><input type="number" min="0" id="t-s1" class="calc-input" value="0" placeholder="0" style="width: 80px;" oninput="handleDirectTransferInput()"></td>
           </tr>
           <tr>
             <td style="font-weight: 500;">Source-2</td>
-            <td style="text-align: right;"><input type="number" min="0" id="t-s2" class="calc-input" value="0" style="width: 80px;" oninput="handleDirectTransferInput()"></td>
+            <td style="text-align: right;"><input type="number" min="0" id="t-s2" class="calc-input" value="0" placeholder="0" style="width: 80px;" oninput="handleDirectTransferInput()"></td>
           </tr>
         </tbody>
       </table>
@@ -671,34 +656,34 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     <div id="about-tab" class="tab-pane active">
       <div class="tab-info-content">
         <h4>About ICAR-IIWM</h4>
-        <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production[cite: 1].</p>
-        <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building[cite: 1].</p>
-        <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions[cite: 1].</p>
+        <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production.</p>
+        <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building.</p>
+        <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions.</p>
       </div>
     </div>
 
     <div id="contact-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Contact Information</h4>
-        <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD[cite: 1]</p>
-        <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023[cite: 1]</p>
+        <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD</p>
+        <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023</p>
       </div>
     </div>
 
     <div id="team-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Research Team</h4>
-        <p>DR. SUSANTA SKUMAR JENA (P.I REWARD)[cite: 1]</p>
-        <p>DR. SAMEER MANDAL (RA)[cite: 1]</p>
-        <p>ER. SUBRAT DASH (YP-1)[cite: 1]</p>
+        <p>DR. SUSANTA SKUMAR JENA (P.I REWARD)</p>
+        <p>DR. SAMEER MANDAL (RA)</p>
+        <p>ER. SUBRAT DASH (YP-1)</p>
       </div>
     </div>
 
     <div id="copyright-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Copyright & Acknowledgments</h4>
-        <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved[cite: 1].</p>
-        <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India[cite: 1]</p>
+        <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved.</p>
+        <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India</p>
       </div>
     </div>
   </div>
@@ -769,7 +754,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
             </tr>
           </thead>
           <tbody id="ind-months-table-body">
-            <!-- Populated dynamically via JS -->
           </tbody>
         </table>
       </div>
@@ -815,9 +799,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
               <th style="text-align: right; width: 60%;">Volume (m³)</th>
             </tr>
           </thead>
-          <tbody id="trans-months-table-body">
-            <!-- Populated dynamically via JS -->
-          </tbody>
+          <tbody id="trans-months-table-body"></tbody>
         </table>
       </div>
 
@@ -841,14 +823,12 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
       <button class="modal-close-btn" onclick="closeSummarySourceModal()">&times;</button>
     </div>
     <div class="modal-body" style="font-size: 0.85rem; line-height: 1.6; color: #334155; max-height: 70vh; overflow-y: auto;">
-      <div class="source-badge"><i class="fa-solid fa-users"></i> Domestic Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary[cite: 1]. As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong> with male <strong>36,449</strong> and female <strong>32,840</strong>[cite: 1].</p>
-      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong>[cite: 1].</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://law.resource.org/pub/in/bis/S03/is.1172.1993.html" target="_blank" rel="noopener noreferrer" class="source-link">https://law.resource.org/pub/in/bis/S03/is.1172.1993.html[cite: 1] <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+      <div class="source-badge"><i class="fa-solid fa-users"></i> Domestic Water Demand Data Sources</div>
+      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary. As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong>.</p>
+      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong>.</p>
       
-      <div class="source-badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-cow"></i> 2. Livestock Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong>[cite: 1]. Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day)[cite: 1].</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://epubs.icar.org.in/index.php/IJAnS/article/view/44302" target="_blank" rel="noopener noreferrer" class="source-link">https://epubs.icar.org.in/index.php/IJAnS/article/view/44302[cite: 1] <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+      <div class="source-badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-cow"></i> 2. Livestock Water Demand Data Sources</div>
+      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong>. Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day).</p>
 
       <div class="source-badge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a;"><i class="fa-solid fa-map"></i> 3. Map Layers & Base Map Contributors</div>
       <p style="margin-bottom: 6px;">Map visualization is powered by Leaflet with multi-layer support for geographic context:</p>
@@ -987,24 +967,14 @@ const RWH_BACKEND_DATA = {
   }
 };
 
-// Store monthly breakdown for industrial data
-let industrialMonthlyData = {
-  heavy: Array(12).fill(0),
-  light: Array(12).fill(0)
-};
-
-// Store monthly breakdown for water transfer data
-let transferMonthlyData = {
-  source1: Array(12).fill(0),
-  source2: Array(12).fill(0)
-};
-
+let industrialMonthlyData = { heavy: Array(12).fill(0), light: Array(12).fill(0) };
 let isMonthWiseIndustrial = false;
+
+let transferMonthlyData = { source1: Array(12).fill(0), source2: Array(12).fill(0) };
 let isMonthWiseTransfer = false;
 
 const calendarMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-// Industrial Modal Functions
 function openIndustrialModal() {
   document.getElementById('industrialModal').style.display = 'flex';
   renderIndustrialMonthsInputs();
@@ -1093,13 +1063,14 @@ function saveIndustrialData() {
 
   document.getElementById('ind-1').value = Math.round(heavySum / 12);
   document.getElementById('ind-2').value = Math.round(lightSum / 12);
-  document.getElementById('ind-header-label').innerText = "Demand / year (m³)";
+  document.getElementById('ind-header-label').innerText = "Avg. Demand / month (m³)";
 
   closeIndustrialModal();
   calculate(); 
 }
 
-// Water Transfer Modal Functions
+
+// --- WATER TRANSFER MODAL LOGIC ---
 function openTransferModal() {
   document.getElementById('transferModal').style.display = 'flex';
   renderTransferMonthsInputs();
@@ -1188,18 +1159,13 @@ function saveTransferData() {
 
   document.getElementById('t-s1').value = Math.round(s1Sum / 12);
   document.getElementById('t-s2').value = Math.round(s2Sum / 12);
-  document.getElementById('trans-header-label').innerText = "Volume / year (m³)";
+  document.getElementById('trans-header-label').innerText = "Avg. Volume / month (m³)";
 
   closeTransferModal();
   calculate();
 }
+// --- END WATER TRANSFER MODAL LOGIC ---
 
-window.addEventListener('click', function(e) {
-  const indModal = document.getElementById('industrialModal');
-  const transModal = document.getElementById('transferModal');
-  if (e.target === indModal) closeIndustrialModal();
-  if (e.target === transModal) closeTransferModal();
-});
 
 let lastMonthlySupply = Array(12).fill(0);
 let lastMonthlyDemand = Array(12).fill(0);
@@ -1460,11 +1426,11 @@ const map = L.map('map').setView([20.1226, 85.1051], 9);
 const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '© OpenStreetMap contributors'
-}).addTo(map);
+}).addTo(map); 
 
 const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     maxZoom: 19,
-    attribution: 'Esri'
+    attribution: 'Esri (Environmental Systems Research Institute)'
 });
 
 const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
@@ -1640,14 +1606,15 @@ document.getElementById('clear-all-btn').onclick = function() {
   document.querySelectorAll('.calc-input').forEach(input => { input.value = 0; });
   
   isMonthWiseIndustrial = false;
-  isMonthWiseTransfer = false;
   industrialMonthlyData = { heavy: Array(12).fill(0), light: Array(12).fill(0) };
-  transferMonthlyData = { source1: Array(12).fill(0), source2: Array(12).fill(0) };
   document.getElementById('ind-1').value = 0;
   document.getElementById('ind-2').value = 0;
+  document.getElementById('ind-header-label').innerText = "Demand / month (m³)";
+
+  isMonthWiseTransfer = false;
+  transferMonthlyData = { source1: Array(12).fill(0), source2: Array(12).fill(0) };
   document.getElementById('t-s1').value = 0;
   document.getElementById('t-s2').value = 0;
-  document.getElementById('ind-header-label').innerText = "Demand / month (m³)";
   document.getElementById('trans-header-label').innerText = "Volume / month (m³)";
 
   updateSurfaceWaterUI("");
@@ -1747,6 +1714,8 @@ function calculate() {
 
   let ind1Val = +document.getElementById('ind-1').value || 0;
   let ind2Val = +document.getElementById('ind-2').value || 0;
+  let tS1Val = +document.getElementById('t-s1').value || 0;
+  let tS2Val = +document.getElementById('t-s2').value || 0;
 
   let cropAreas = {
     "Kharif_Paddy": +document.getElementById('a-paddy').value || 0,
@@ -1783,7 +1752,12 @@ function calculate() {
       cropAnnualTotals[cropKey] += reqM3;
     }
 
-    let mIndustry = isMonthWiseIndustrial ? ((industrialMonthlyData.heavy[idx] || 0) + (industrialMonthlyData.light[idx] || 0)) : (ind1Val + ind2Val);
+    let mIndustry = 0;
+    if (isMonthWiseIndustrial) {
+      mIndustry = (industrialMonthlyData.heavy[idx] || 0) + (industrialMonthlyData.light[idx] || 0);
+    } else {
+      mIndustry = ind1Val + ind2Val;
+    }
 
     let monthTotal = Math.round(mDomestic + mLivestock + mCropWater + mIndustry);
     totalIrrigationAnnual += mCropWater;
@@ -1817,20 +1791,24 @@ function calculate() {
 
   let surf = (+document.getElementById('s-pond').value || 0) + (+document.getElementById('s-res').value || 0) + (+document.getElementById('s-riv').value || 0);
   let ground = (+document.getElementById('g-dug').value || 0) + (+document.getElementById('g-tube').value || 0) + (+document.getElementById('g-oth').value || 0);
-  
-  // Annual transfer sum
+
   let annualTransSum = 0;
   if (isMonthWiseTransfer) {
     let s1Sum = transferMonthlyData.source1.reduce((a, b) => a + b, 0);
     let s2Sum = transferMonthlyData.source2.reduce((a, b) => a + b, 0);
     annualTransSum = s1Sum + s2Sum;
   } else {
-    let t1 = +document.getElementById('t-s1').value || 0;
-    let t2 = +document.getElementById('t-s2').value || 0;
-    annualTransSum = (t1 + t2) * 12;
+    annualTransSum = (tS1Val + tS2Val) * 12;
   }
 
-  let annualIndSum = isMonthWiseIndustrial ? (industrialMonthlyData.heavy.reduce((a, b) => a + b, 0) + industrialMonthlyData.light.reduce((a, b) => a + b, 0)) : (ind1Val + ind2Val) * 12;
+  let annualIndSum = 0;
+  if (isMonthWiseIndustrial) {
+    let hSum = industrialMonthlyData.heavy.reduce((a, b) => a + b, 0);
+    let lSum = industrialMonthlyData.light.reduce((a, b) => a + b, 0);
+    annualIndSum = hSum + lSum;
+  } else {
+    annualIndSum = (ind1Val + ind2Val) * 12;
+  }
 
   let totalD = annualDomesticM3 + annualLivestockM3 + totalIrrigationAnnual + annualIndSum;
   let totalS = surf + ground + annualTransSum;
@@ -1859,8 +1837,15 @@ function calculate() {
   calendarMonths.forEach((m, idx) => {
     let mSurf = surfChartData[idx] || 0;
     let mGW = gwChartData[idx] || 0;
-    let mTrans = isMonthWiseTransfer ? ((transferMonthlyData.source1[idx] || 0) + (transferMonthlyData.source2[idx] || 0)) : ((+document.getElementById('t-s1').value || 0) + (+document.getElementById('t-s2').value || 0));
-    let mSupplyTotal = Math.round(mSurf + mGW + mTrans);
+    
+    let mTransfer = 0;
+    if (isMonthWiseTransfer) {
+      mTransfer = (transferMonthlyData.source1[idx] || 0) + (transferMonthlyData.source2[idx] || 0);
+    } else {
+      mTransfer = tS1Val + tS2Val;
+    }
+
+    let mSupplyTotal = Math.round(mSurf + mGW + mTransfer);
     monthlySupplyArr.push(mSupplyTotal);
 
     if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) seasonalSupply.kharif += mSupplyTotal;
@@ -2171,7 +2156,37 @@ async function sendAIMessage() {
       msw: document.getElementById('msw-select').value || "None Selected",
       totalSupply: document.getElementById('kpi-supply').innerText,
       totalDemand: document.getElementById('kpi-demand').innerText,
-      netStatus: document.getElementById('kpi-status').innerText
+      netStatus: document.getElementById('kpi-status').innerText,
+      popUrban: document.getElementById('pop-urban').value,
+      popRural: document.getElementById('pop-rural').value,
+      popCattle: document.getElementById('l-cattle').value,
+      popSheep: document.getElementById('l-sheep').value,
+      popPoultry: document.getElementById('l-poultry').value,
+      popPigs: document.getElementById('l-pigs').value,
+      areaPaddy: document.getElementById('a-paddy').value,
+      areaKBlackgram: document.getElementById('a-k-blackgram').value,
+      areaKMaize: document.getElementById('a-k-maize').value,
+      areaRBlackgram: document.getElementById('a-r-blackgram').value,
+      areaRGreengram: document.getElementById('a-r-greengram').value,
+      areaRMustard: document.getElementById('a-r-mustard').value,
+      areaRMaize: document.getElementById('a-r-maize').value,
+      areaRSugarcane: document.getElementById('a-r-sugarcane').value,
+      areaRVeg: document.getElementById('a-r-veg').value,
+      areaSVeg: document.getElementById('a-s-veg').value,
+      indHeavy: document.getElementById('ind-1').value,
+      indLight: document.getElementById('ind-2').value,
+      supPond: document.getElementById('s-pond').value,
+      supRes: document.getElementById('s-res').value,
+      supRiv: document.getElementById('s-riv').value,
+      supDug: document.getElementById('g-dug').value,
+      supTube: document.getElementById('g-tube').value,
+      demandHuman: document.getElementById('txt-human').innerText,
+      demandLivestock: document.getElementById('txt-livestock').innerText,
+      demandIrrigation: document.getElementById('txt-irrigation').innerText,
+      demandIndustry: document.getElementById('txt-industry').innerText,
+      seasonKharif: document.getElementById('season-kharif').innerText,
+      seasonRabi: document.getElementById('season-rabi').innerText,
+      seasonSummer: document.getElementById('season-summer').innerText
     };
 
     const res = await fetch('/.netlify/functions/smartbot', {
@@ -2191,6 +2206,10 @@ async function sendAIMessage() {
         .replace(/^[\-*]\s*(.*?)$/gm, '<li style="margin-bottom:3px;">🔹 $1</li>')
         .replace(/\n\n/g, '<div style="height:6px;"></div>')
         .replace(/\n/g, '<br>');
+
+      if (formattedReply.includes('<li') && !formattedReply.includes('<ul')) {
+        formattedReply = formattedReply.replace(/(<li.*<\/li>)/s, '<ul style="list-style:none; padding-left:0; margin:4px 0;">$1</ul>');
+      }
 
       chatHistory.innerHTML += `<div class="ai-msg">${formattedReply}</div>`;
     }
@@ -2213,6 +2232,37 @@ async function sendAIMessage() {
   }
 }
 
+function updateCharts(mValues, mIrrValues, mSupplyValues) {
+  let popUrbanVal = +document.getElementById('pop-urban').value || 0;
+  let popRuralVal = +document.getElementById('pop-rural').value || 0;
+  let urbanDemandAnnual = (popUrbanVal * 135) * 365 / 1000;
+  let ruralDemandAnnual = (popRuralVal * 135) * 365 / 1000;
+
+  let c = +document.getElementById('l-cattle').value || 0;
+  let s = +document.getElementById('l-sheep').value || 0;
+  let p = +document.getElementById('l-poultry').value || 0;
+  let pig = +document.getElementById('l-pigs').value || 0;
+
+  let cattleDemandAnnual = (c * 67) * 365 / 1000;
+  let sheepDemandAnnual = (s * 7) * 365 / 1000;
+  let poultryDemandAnnual = (p * 0.32) * 365 / 1000;
+  let pigDemandAnnual = (pig * 22) * 365 / 1000;
+
+  charts.h.data.datasets[0].data = [urbanDemandAnnual, ruralDemandAnnual];
+  charts.l.data.datasets[0].data = [cattleDemandAnnual, sheepDemandAnnual, poultryDemandAnnual, pigDemandAnnual];
+  
+  let ind1 = (+document.getElementById('ind-1').value || 0) * 12;
+  let ind2 = (+document.getElementById('ind-2').value || 0) * 12;
+  charts.ind.data.datasets[0].data = [ind1, ind2];
+  
+  charts.irr.data.datasets[0].data = mIrrValues;
+  charts.m.data.datasets[0].data = mValues;
+  if (mSupplyValues && charts.supplyTrend) {
+    charts.supplyTrend.data.datasets[0].data = mSupplyValues;
+  }
+  Object.values(charts).forEach(c => c.update());
+}
+
 function switchTab(event, tabId) {
   const tabPanes = document.querySelectorAll('.tab-pane');
   tabPanes.forEach(pane => pane.classList.remove('active'));
@@ -2232,3 +2282,4 @@ updateRWHSection("");
 </script>
 </body>
 </html>
+
