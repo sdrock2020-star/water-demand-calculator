@@ -76,7 +76,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   align-items: center; 
   justify-content: space-between; 
   background-color: var(--primary); 
-  padding: 22px 35px; /* Increased vertical and horizontal padding for a bigger header */
+  padding: 22px 35px; 
   margin-bottom: 20px; 
   border-bottom: 4px solid #005f92; 
   box-shadow: 0 4px 8px rgba(0,0,0,0.12); 
@@ -84,8 +84,8 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 }
 
 .logo-box img { 
-  height: 95px; /* Increased logo height */
-  width: 95px;  /* Increased logo width */
+  height: 95px; 
+  width: 95px;  
   object-fit: contain; 
   background: transparent; 
   padding: 2px; 
@@ -150,17 +150,21 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 #ai-close-btn { cursor: pointer; font-size: 1.2rem; }
 #ai-chat-history { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; }
 .ai-msg { background: white; border: 1px solid #cbd5e1; padding: 12px 15px; border-radius: 12px 12px 12px 0; align-self: flex-start; max-width: 85%; line-height: 1.5; color: #334155; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
-.ai-msg h3 { font-size: 0.95rem; color: #0077b6; margin-top: 8px; margin-bottom: 4px; font-weight: 600; }
-.ai-msg p { margin-bottom: 6px; }
-.ai-msg ul, .ai-msg ol { margin-left: 18px; margin-bottom: 6px; padding-left: 0; }
-.ai-msg li { margin-bottom: 3px; }
 .user-msg { background: #0077b6; color: white; padding: 10px 14px; border-radius: 12px 12px 0 12px; align-self: flex-end; max-width: 85%; line-height: 1.4; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 #ai-input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #cbd5e1; }
 #ai-chat-input { flex: 1; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; }
 #ai-send-btn { background: #0077b6; color: white; border: none; border-radius: 6px; padding: 0 15px; margin-left: 8px; cursor: pointer; font-weight: 600; min-width: 60px; transition: background-color 0.2s; }
 #ai-send-btn:disabled { background: #94a3b8; cursor: not-allowed; }
-.leaflet-tooltip { background: transparent !important; border: none !important; box-shadow: none !important; font-weight: 700; font-size: 0.85rem; color: #0f172a; text-shadow: 1px 1px 2px #ffffff, -1px -1px 2px #ffffff; }
-.leaflet-tooltip-top:before, .leaflet-tooltip-bottom:before, .leaflet-tooltip-left:before, .leaflet-tooltip-right:before { display: none !important; }
+
+/* Animated Flashing / Glowing Border for Selected MWS */
+@keyframes pulseBorder {
+  0% { stroke-width: 4px; stroke: #dc2626; stroke-opacity: 1; filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.7)); }
+  50% { stroke-width: 7px; stroke: #f87171; stroke-opacity: 0.8; filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.9)); }
+  100% { stroke-width: 4px; stroke: #dc2626; stroke-opacity: 1; filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.7)); }
+}
+.selected-mws-outline {
+  animation: pulseBorder 1.5s infinite ease-in-out;
+}
 
 /* Overview of Supply and Demand Styles */
 .overview-single-row { display: grid; grid-template-columns: 310px 310px 1fr; gap: 12px; width: 100%; margin-top: 10px; }
@@ -187,7 +191,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 .kpi-title { font-size: 0.82rem; font-weight: 600; margin-bottom: 3px; line-height: 1.25; color: #ffffff; text-align: center; }
 .kpi-box h2 { font-size: 1.35rem; font-weight: 700; margin: 0; letter-spacing: 0.5px; }
 
-/* 3-Column RWH Row Style (Expanded width for both tables so headers fit nicely without cutoff) */
+/* 3-Column RWH Row Style */
 .rwh-three-column-row { display: grid; grid-template-columns: 420px 420px 1fr; gap: 12px; width: 100%; margin-top: 10px; }
 .table-scroll-wrapper { flex: 1; overflow-y: auto; overflow-x: auto !important; width: 100%; }
 #rwh-monthly-table, #rwh-seasonal-table { width: 100% !important; border-collapse: collapse; font-size: 0.74rem; }
@@ -207,19 +211,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   .header-container { flex-direction: column; gap: 12px; text-align: center; padding: 15px; }
   .title-container h1 { font-size: 1.8rem; }
   .title-container h2 { font-size: 0.95rem; margin-bottom: 5px; }
-}
-@media screen and (max-width: 600px) {
-  body { padding: 6px; }
-  .kpi-row { grid-template-columns: 1fr; gap: 8px; }
-  .bottom-grid-demand { grid-template-columns: 1fr; }
-  #map { height: 280px; }
-  .tab-navigation { flex-wrap: wrap; gap: 8px; }
-  .tab-btn { padding: 6px 14px; font-size: 0.8rem; }
-  .card { padding: 10px; }
-  .dimension-grid { grid-template-columns: 1fr; }
-  .modal-container { width: 95%; margin: 10px; }
-  #ai-chat-window { width: calc(100vw - 30px); right: 15px; left: 15px; bottom: 70px; height: 420px; }
-  #ai-widget-btn { bottom: 15px; right: 15px; padding: 10px 16px; font-size: 0.85rem; }
 }
 </style>
 </head>
@@ -263,7 +254,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   </div>
 
   <div class="right-col">
-    <!-- Annual Water Budget Scenario Centered Title & KPI Cards -->
     <div class="kpi-scenario-wrapper">
       <h3 class="scenario-section-title">Annual Water Budget Scenario</h3>
       <div class="kpi-row">
@@ -472,23 +462,26 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   </div>
 
   <div class="card">
-    <h5 style="margin-bottom: 8px; color: var(--primary);">Water Transfer</h5>
-    <div style="overflow-x: auto;">
+    <div class="card-header-flex">
+      <h5 style="color: var(--primary); margin-bottom: 0;">Water Transfer</h5>
+      <button class="btn-add-surface" onclick="openTransferModal()"><i class="fa-solid fa-plus"></i> Add</button>
+    </div>
+    <div style="overflow-x: auto; margin-top: 8px;">
       <table class="input-table">
         <thead>
           <tr>
             <th style="text-align: left;">Transfer Source</th>
-            <th style="text-align: right;">Volume / month (m³)</th>
+            <th style="text-align: right;" id="trans-header-label">Volume / month (m³)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td style="font-weight: 500;">Source-1</td>
-            <td style="text-align: right;"><input type="number" id="t-s1" class="calc-input" value="0" style="width: 80px;"></td>
+            <td style="text-align: right;"><input type="number" min="0" id="t-s1" class="calc-input" value="0" style="width: 80px;" oninput="handleDirectTransferInput()"></td>
           </tr>
           <tr>
             <td style="font-weight: 500;">Source-2</td>
-            <td style="text-align: right;"><input type="number" id="t-s2" class="calc-input" value="0" style="width: 80px;"></td>
+            <td style="text-align: right;"><input type="number" min="0" id="t-s2" class="calc-input" value="0" style="width: 80px;" oninput="handleDirectTransferInput()"></td>
           </tr>
         </tbody>
       </table>
@@ -596,7 +589,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 <!-- POTENTIAL FOR RAINWATER HARVESTING SECTION -->
 <div class="section-header">Potential for Rainwater Harvesting</div>
 <div class="full-width-row rwh-three-column-row">
-  <!-- Monthly Rainfall & Runoff Data -->
   <div class="card compact-table-card" style="height: 340px;">
     <h4 class="table-card-title">Monthly Rainfall & Runoff Overview</h4>
     <div class="table-scroll-wrapper">
@@ -614,7 +606,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
   </div>
 
-  <!-- Seasonal Rainfall & Runoff Data -->
   <div class="card compact-table-card" style="height: 340px;">
     <h4 class="table-card-title">Seasonal Rainfall & Runoff Overview</h4>
     <div class="table-scroll-wrapper">
@@ -659,7 +650,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
   </div>
 
-  <!-- Rainwater Harvesting Multi-line Trend Chart -->
   <div class="card" style="height: 340px; display: flex; flex-direction: column; min-width: 0;">
     <h4 class="table-card-title">Rainfall, Supply, Demand & Net Supply Trend</h4>
     <div style="flex: 1; min-height: 0; margin-top: 8px; position: relative;">
@@ -681,34 +671,34 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     <div id="about-tab" class="tab-pane active">
       <div class="tab-info-content">
         <h4>About ICAR-IIWM</h4>
-        <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production  .</p>
-        <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building  .</p>
-        <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions  .</p>
+        <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production[cite: 1].</p>
+        <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building[cite: 1].</p>
+        <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions[cite: 1].</p>
       </div>
     </div>
 
     <div id="contact-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Contact Information</h4>
-        <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD  </p>
-        <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023  </p>
+        <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD[cite: 1]</p>
+        <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023[cite: 1]</p>
       </div>
     </div>
 
     <div id="team-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Research Team</h4>
-        <p>DR. SUSANTA SKUMAR JENA (P.I REWARD)  </p>
-        <p>DR. SAMEER MANDAL (RA)  </p>
-        <p>ER. SUBRAT DASH (YP-1)  </p>
+        <p>DR. SUSANTA SKUMAR JENA (P.I REWARD)[cite: 1]</p>
+        <p>DR. SAMEER MANDAL (RA)[cite: 1]</p>
+        <p>ER. SUBRAT DASH (YP-1)[cite: 1]</p>
       </div>
     </div>
 
     <div id="copyright-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Copyright & Acknowledgments</h4>
-        <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved  .</p>
-        <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India  </p>
+        <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved[cite: 1].</p>
+        <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India[cite: 1]</p>
       </div>
     </div>
   </div>
@@ -796,6 +786,53 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   </div>
 </div>
 
+<!-- Water Transfer Monthly Data Modal Popup -->
+<div id="transferModal" class="modal-overlay">
+  <div class="modal-container" style="max-width: 550px;">
+    <div class="modal-header">
+      <span>Add Monthly Water Transfer Data</span>
+      <button class="modal-close-btn" onclick="closeTransferModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+        <div class="modal-group" style="flex: 1; margin-bottom: 0;">
+          <label>Select Transfer Source</label>
+          <select id="modal-trans-type">
+            <option value="source1">Source-1</option>
+            <option value="source2">Source-2</option>
+          </select>
+        </div>
+        <button type="button" onclick="clearTransferModalInputs()" style="background-color: #ef4444; color: white; border: none; border-radius: 6px; padding: 7px 12px; font-size: 0.8rem; font-weight: 600; cursor: pointer; height: 35px; align-self: flex-end; display: flex; align-items: center; gap: 5px;">
+          <i class="fa-solid fa-rotate-left"></i> Clear All
+        </button>
+      </div>
+
+      <div class="dimension-box" style="max-height: 260px; overflow-y: auto; padding: 10px;">
+        <table class="input-table" style="margin-bottom: 0;">
+          <thead>
+            <tr>
+              <th style="text-align: left; width: 40%;">Month</th>
+              <th style="text-align: right; width: 60%;">Volume (m³)</th>
+            </tr>
+          </thead>
+          <tbody id="trans-months-table-body">
+            <!-- Populated dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="result-box">
+        <span>Calculated Annual Total:</span>
+        <span id="trans-calc-annual-volume">0 m³</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeTransferModal()">Cancel</button>
+      <button class="btn-modal-save" onclick="saveTransferData()">Save Values</button>
+    </div>
+  </div>
+</div>
+
 <!-- Data Sources & Methodology Modal -->
 <div id="summarySourceModal" class="modal-overlay">
   <div class="modal-container" style="max-width: 620px;">
@@ -805,13 +842,13 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
     <div class="modal-body" style="font-size: 0.85rem; line-height: 1.6; color: #334155; max-height: 70vh; overflow-y: auto;">
       <div class="source-badge"><i class="fa-solid fa-users"></i> Domestic Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary  . As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong> with male <strong>36,449</strong> and female <strong>32,840</strong>  .</p>
-      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong>  .</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://law.resource.org/pub/in/bis/S03/is.1172.1993.html" target="_blank" rel="noopener noreferrer" class="source-link">https://law.resource.org/pub/in/bis/S03/is.1172.1993.html   <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary[cite: 1]. As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong> with male <strong>36,449</strong> and female <strong>32,840</strong>[cite: 1].</p>
+      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong>[cite: 1].</p>
+      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://law.resource.org/pub/in/bis/S03/is.1172.1993.html" target="_blank" rel="noopener noreferrer" class="source-link">https://law.resource.org/pub/in/bis/S03/is.1172.1993.html[cite: 1] <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
       
       <div class="source-badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-cow"></i> 2. Livestock Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong>  . Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day)  .</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://epubs.icar.org.in/index.php/IJAnS/article/view/44302" target="_blank" rel="noopener noreferrer" class="source-link">https://epubs.icar.org.in/index.php/IJAnS/article/view/44302   <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong>[cite: 1]. Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day)[cite: 1].</p>
+      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://epubs.icar.org.in/index.php/IJAnS/article/view/44302" target="_blank" rel="noopener noreferrer" class="source-link">https://epubs.icar.org.in/index.php/IJAnS/article/view/44302[cite: 1] <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
 
       <div class="source-badge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a;"><i class="fa-solid fa-map"></i> 3. Map Layers & Base Map Contributors</div>
       <p style="margin-bottom: 6px;">Map visualization is powered by Leaflet with multi-layer support for geographic context:</p>
@@ -819,8 +856,9 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
         <li><strong>Standard Map:</strong> OpenStreetMap contributors (Open Database License)</li>
         <li><strong>Satellite View:</strong> Esri World Imagery (Source: Esri, Maxar, GeoEye, USDA, USGS)</li>
         <li><strong>Topographic View:</strong> OpenTopoMap (utilizing SRTM elevation data)</li>
-        <li><strong>MWS Framework</strong> ICAR-IIWM REWARD Project GIS Watershed Boundaries </li>
+        <li><strong>MWS Framework:</strong> ICAR-IIWM REWARD Project GIS Watershed Boundaries</li>
       </ul>
+    </div>
     <div class="modal-footer"><button class="btn-modal-save" onclick="closeSummarySourceModal()">Close</button></div>
   </div>
 </div>
@@ -949,17 +987,24 @@ const RWH_BACKEND_DATA = {
   }
 };
 
-// Store monthly breakdown separately for Heavy and Light industries
+// Store monthly breakdown for industrial data
 let industrialMonthlyData = {
   heavy: Array(12).fill(0),
   light: Array(12).fill(0)
 };
 
-// Track whether user customized exact month-by-month values via the modal
+// Store monthly breakdown for water transfer data
+let transferMonthlyData = {
+  source1: Array(12).fill(0),
+  source2: Array(12).fill(0)
+};
+
 let isMonthWiseIndustrial = false;
+let isMonthWiseTransfer = false;
 
 const calendarMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+// Industrial Modal Functions
 function openIndustrialModal() {
   document.getElementById('industrialModal').style.display = 'flex';
   renderIndustrialMonthsInputs();
@@ -1006,13 +1051,11 @@ function updateIndustrialModalTotal() {
   document.getElementById('ind-calc-annual-volume').innerText = sum.toLocaleString() + ' m³';
 }
 
-// Triggered when typing directly into the Heavy or Light table boxes (Uniform Monthly Entry)
 function handleDirectIndustrialInput() {
-  isMonthWiseIndustrial = false; // Switch to uniform direct entry mode
+  isMonthWiseIndustrial = false;
   let hVal = +document.getElementById('ind-1').value || 0;
   let lVal = +document.getElementById('ind-2').value || 0;
 
-  // Apply value uniformly across all 12 months for backend tracking
   industrialMonthlyData.heavy = Array(12).fill(hVal);
   industrialMonthlyData.light = Array(12).fill(lVal);
 
@@ -1043,25 +1086,121 @@ function saveIndustrialData() {
     return;
   }
 
-  isMonthWiseIndustrial = true; // Switch to custom month-wise entry mode
+  isMonthWiseIndustrial = true;
 
   let heavySum = industrialMonthlyData.heavy.reduce((a, b) => a + b, 0);
   let lightSum = industrialMonthlyData.light.reduce((a, b) => a + b, 0);
 
-  // Update direct input boxes to reflect monthly averages for reference
   document.getElementById('ind-1').value = Math.round(heavySum / 12);
   document.getElementById('ind-2').value = Math.round(lightSum / 12);
-
   document.getElementById('ind-header-label').innerText = "Demand / year (m³)";
 
   closeIndustrialModal();
   calculate(); 
 }
 
+// Water Transfer Modal Functions
+function openTransferModal() {
+  document.getElementById('transferModal').style.display = 'flex';
+  renderTransferMonthsInputs();
+}
+
+function closeTransferModal() {
+  document.getElementById('transferModal').style.display = 'none';
+}
+
+function renderTransferMonthsInputs() {
+  const type = document.getElementById('modal-trans-type').value;
+  const currentValues = transferMonthlyData[type];
+  const tableBody = document.getElementById('trans-months-table-body');
+  tableBody.innerHTML = "";
+
+  calendarMonthNames.forEach((m, idx) => {
+    let displayVal = currentValues[idx] === 0 ? '' : currentValues[idx];
+    tableBody.innerHTML += `
+      <tr>
+        <td style="font-weight: 500; padding: 6px 4px;">${m}</td>
+        <td style="text-align: right; padding: 6px 4px;">
+          <input type="number" min="0" class="trans-month-input" data-index="${idx}" value="${displayVal}" placeholder="0" oninput="handleTransferModalInput(${idx}, this.value)" style="width: 120px; text-align: right; padding: 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem;">
+        </td>
+      </tr>
+    `;
+  });
+  updateTransferModalTotal();
+}
+
+function handleTransferModalInput(idx, val) {
+  const type = document.getElementById('modal-trans-type').value;
+  transferMonthlyData[type][idx] = val === '' ? 0 : +val;
+  updateTransferModalTotal();
+}
+
+document.getElementById('modal-trans-type').onchange = renderTransferMonthsInputs;
+
+function updateTransferModalTotal() {
+  let sum = 0;
+  document.querySelectorAll('.trans-month-input').forEach(input => {
+    let val = +input.value || 0;
+    sum += val;
+  });
+  document.getElementById('trans-calc-annual-volume').innerText = sum.toLocaleString() + ' m³';
+}
+
+function handleDirectTransferInput() {
+  isMonthWiseTransfer = false;
+  let s1Val = +document.getElementById('t-s1').value || 0;
+  let s2Val = +document.getElementById('t-s2').value || 0;
+
+  transferMonthlyData.source1 = Array(12).fill(s1Val);
+  transferMonthlyData.source2 = Array(12).fill(s2Val);
+
+  document.getElementById('trans-header-label').innerText = "Volume / month (m³)";
+  calculate();
+}
+
+function clearTransferModalInputs() {
+  const type = document.getElementById('modal-trans-type').value;
+  transferMonthlyData[type] = Array(12).fill(0);
+  renderTransferMonthsInputs();
+}
+
+function saveTransferData() {
+  const type = document.getElementById('modal-trans-type').value;
+  let hasNegative = false;
+
+  document.querySelectorAll('.trans-month-input').forEach((input, idx) => {
+    let val = input.value === '' ? 0 : +input.value;
+    if (val < 0) {
+      hasNegative = true;
+    }
+    transferMonthlyData[type][idx] = val;
+  });
+
+  if (hasNegative) {
+    alert("Please add valid data. Negative values are not allowed.");
+    return;
+  }
+
+  isMonthWiseTransfer = true;
+
+  let s1Sum = transferMonthlyData.source1.reduce((a, b) => a + b, 0);
+  let s2Sum = transferMonthlyData.source2.reduce((a, b) => a + b, 0);
+
+  document.getElementById('t-s1').value = Math.round(s1Sum / 12);
+  document.getElementById('t-s2').value = Math.round(s2Sum / 12);
+  document.getElementById('trans-header-label').innerText = "Volume / year (m³)";
+
+  closeTransferModal();
+  calculate();
+}
+
 window.addEventListener('click', function(e) {
   const indModal = document.getElementById('industrialModal');
+  const transModal = document.getElementById('transferModal');
   if (e.target === indModal) closeIndustrialModal();
+  if (e.target === transModal) closeTransferModal();
 });
+
 let lastMonthlySupply = Array(12).fill(0);
 let lastMonthlyDemand = Array(12).fill(0);
 
@@ -1318,15 +1457,14 @@ function getClusterTotals(district, cluster) {
 
 const map = L.map('map').setView([20.1226, 85.1051], 9);
 
-// 1. Define Different Base Map Options
 const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '© OpenStreetMap contributors'
-}).addTo(map); // Default active layer
+}).addTo(map);
 
 const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     maxZoom: 19,
-    attribution: 'Esri (Environmental Systems Research Institute)'
+    attribution: 'Esri'
 });
 
 const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
@@ -1341,11 +1479,7 @@ const baseMaps = {
 };
 
 let geoLayer = null, districtLayer = null;
-
-// 2. Initialize Empty Overlays Object for Layer Control
 const overlayMaps = {};
-
-// 3. Add Leaflet Layer Control UI to Top Right
 const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
 
 const dS = document.getElementById('district-select'),
@@ -1450,8 +1584,20 @@ mS.onchange = function() {
         return nVal && nVal.length >= 3 && (nVal === targetNorm || nVal.includes(targetNorm) || (targetNorm.length > 5 && targetNorm.includes(nVal)));
       });
 
+      if (l._path) {
+        l._path.classList.remove('selected-mws-outline');
+      }
+
       if (matchByCode || matchByTooltip || matchByProps) {
-        l.setStyle({ color: '#ef4444', fillColor: '#ef4444', fillOpacity: 0.55, weight: 3 });
+        l.setStyle({ 
+          color: '#dc2626', 
+          weight: 5, 
+          fillColor: '#0077b6', 
+          fillOpacity: 0.12 
+        });
+        if (l._path) {
+          l._path.classList.add('selected-mws-outline');
+        }
         l.bringToFront();
         selectedLayer = l;
       } else {
@@ -1481,17 +1627,28 @@ document.getElementById('clear-all-btn').onclick = function() {
   document.getElementById('cluster-select').disabled = true;
   document.getElementById('msw-select').innerHTML = "";
   document.getElementById('msw-select').disabled = true;
-  if (geoLayer) map.removeLayer(geoLayer);
+  if (geoLayer) {
+    geoLayer.eachLayer(l => {
+      if (l._path) l._path.classList.remove('selected-mws-outline');
+      l.setStyle({ color: '#0077b6', fillColor: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
+    });
+    map.removeLayer(geoLayer);
+  }
   if (districtLayer) map.removeLayer(districtLayer);
   map.setView([20.1226, 85.1051], 9);
   document.getElementById('map-name').innerText = "Project Map View";
   document.querySelectorAll('.calc-input').forEach(input => { input.value = 0; });
   
   isMonthWiseIndustrial = false;
+  isMonthWiseTransfer = false;
   industrialMonthlyData = { heavy: Array(12).fill(0), light: Array(12).fill(0) };
+  transferMonthlyData = { source1: Array(12).fill(0), source2: Array(12).fill(0) };
   document.getElementById('ind-1').value = 0;
   document.getElementById('ind-2').value = 0;
+  document.getElementById('t-s1').value = 0;
+  document.getElementById('t-s2').value = 0;
   document.getElementById('ind-header-label').innerText = "Demand / month (m³)";
+  document.getElementById('trans-header-label').innerText = "Volume / month (m³)";
 
   updateSurfaceWaterUI("");
   updateGroundWaterUI("");
@@ -1626,13 +1783,7 @@ function calculate() {
       cropAnnualTotals[cropKey] += reqM3;
     }
 
-    // Industrial monthly contribution based on mode (Direct vs Month-wise Modal)
-    let mIndustry = 0;
-    if (isMonthWiseIndustrial) {
-      mIndustry = (industrialMonthlyData.heavy[idx] || 0) + (industrialMonthlyData.light[idx] || 0);
-    } else {
-      mIndustry = ind1Val + ind2Val;
-    }
+    let mIndustry = isMonthWiseIndustrial ? ((industrialMonthlyData.heavy[idx] || 0) + (industrialMonthlyData.light[idx] || 0)) : (ind1Val + ind2Val);
 
     let monthTotal = Math.round(mDomestic + mLivestock + mCropWater + mIndustry);
     totalIrrigationAnnual += mCropWater;
@@ -1666,20 +1817,23 @@ function calculate() {
 
   let surf = (+document.getElementById('s-pond').value || 0) + (+document.getElementById('s-res').value || 0) + (+document.getElementById('s-riv').value || 0);
   let ground = (+document.getElementById('g-dug').value || 0) + (+document.getElementById('g-tube').value || 0) + (+document.getElementById('g-oth').value || 0);
-  let trans = (+document.getElementById('t-s1').value || 0) + (+document.getElementById('t-s2').value || 0);
-
-  // Accurate annual industrial demand sum depending on mode
-  let annualIndSum = 0;
-  if (isMonthWiseIndustrial) {
-    let hSum = industrialMonthlyData.heavy.reduce((a, b) => a + b, 0);
-    let lSum = industrialMonthlyData.light.reduce((a, b) => a + b, 0);
-    annualIndSum = hSum + lSum;
+  
+  // Annual transfer sum
+  let annualTransSum = 0;
+  if (isMonthWiseTransfer) {
+    let s1Sum = transferMonthlyData.source1.reduce((a, b) => a + b, 0);
+    let s2Sum = transferMonthlyData.source2.reduce((a, b) => a + b, 0);
+    annualTransSum = s1Sum + s2Sum;
   } else {
-    annualIndSum = (ind1Val + ind2Val) * 12;
+    let t1 = +document.getElementById('t-s1').value || 0;
+    let t2 = +document.getElementById('t-s2').value || 0;
+    annualTransSum = (t1 + t2) * 12;
   }
 
+  let annualIndSum = isMonthWiseIndustrial ? (industrialMonthlyData.heavy.reduce((a, b) => a + b, 0) + industrialMonthlyData.light.reduce((a, b) => a + b, 0)) : (ind1Val + ind2Val) * 12;
+
   let totalD = annualDomesticM3 + annualLivestockM3 + totalIrrigationAnnual + annualIndSum;
-  let totalS = surf + ground + trans;
+  let totalS = surf + ground + annualTransSum;
   let net = totalS - totalD;
 
   document.getElementById('txt-human').innerText = Math.round(annualDomesticM3).toLocaleString();
@@ -1688,7 +1842,7 @@ function calculate() {
   document.getElementById('txt-industry').innerText = Math.round(annualIndSum).toLocaleString();
   document.getElementById('txt-surface').innerText = Math.round(surf).toLocaleString();
   document.getElementById('txt-ground').innerText = Math.round(ground).toLocaleString();
-  document.getElementById('txt-transfer').innerText = Math.round(trans).toLocaleString();
+  document.getElementById('txt-transfer').innerText = Math.round(annualTransSum).toLocaleString();
   document.getElementById('txt-net').innerText = Math.round(net).toLocaleString();
 
   document.getElementById('kpi-supply').innerText = Math.round(totalS).toLocaleString();
@@ -1701,12 +1855,12 @@ function calculate() {
   let supplyTableHtml = "";
   let surfChartData = charts.surfTrend ? charts.surfTrend.data.datasets[0].data : Array(12).fill(0);
   let gwChartData = charts.groundTrend ? charts.groundTrend.data.datasets[0].data : Array(12).fill(0);
-  let monthlyTransfer = trans / 12;
 
   calendarMonths.forEach((m, idx) => {
     let mSurf = surfChartData[idx] || 0;
     let mGW = gwChartData[idx] || 0;
-    let mSupplyTotal = Math.round(mSurf + mGW + monthlyTransfer);
+    let mTrans = isMonthWiseTransfer ? ((transferMonthlyData.source1[idx] || 0) + (transferMonthlyData.source2[idx] || 0)) : ((+document.getElementById('t-s1').value || 0) + (+document.getElementById('t-s2').value || 0));
+    let mSupplyTotal = Math.round(mSurf + mGW + mTrans);
     monthlySupplyArr.push(mSupplyTotal);
 
     if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) seasonalSupply.kharif += mSupplyTotal;
@@ -1871,8 +2025,8 @@ function initCharts() {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       datasets: [
         { label: 'Rainfall', data: Array(12).fill(0), borderColor: '#2563eb', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
-        { label: 'Supply', data: Array(12).fill(0), borderColor: '#10b981', backgroundColor: 'transparent', tension: 0.2, borderWidth: 2.5, pointRadius: 2 }, /* Changed to Green */
-        { label: 'Demand', data: Array(12).fill(0), borderColor: '#ef4444', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 }, /* Changed to Red */
+        { label: 'Supply', data: Array(12).fill(0), borderColor: '#10b981', backgroundColor: 'transparent', tension: 0.2, borderWidth: 2.5, pointRadius: 2 },
+        { label: 'Demand', data: Array(12).fill(0), borderColor: '#ef4444', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2.5, pointRadius: 2 },
         { label: 'Net Supply', data: Array(12).fill(0), borderColor: '#eab308', backgroundColor: 'transparent', tension: 0, borderWidth: 2.5, pointRadius: 2, borderDash: [5, 5] }
       ]
     },  
@@ -1964,8 +2118,12 @@ function closeSummarySourceModal() { document.getElementById('summarySourceModal
 window.addEventListener('click', function(e) {
   const summaryModal = document.getElementById('summarySourceModal');
   const surfaceModal = document.getElementById('surfaceModal');
+  const indModal = document.getElementById('industrialModal');
+  const transModal = document.getElementById('transferModal');
   if (e.target === summaryModal) closeSummarySourceModal();
   if (e.target === surfaceModal) closeSurfaceModal();
+  if (e.target === indModal) closeIndustrialModal();
+  if (e.target === transModal) closeTransferModal();
 });
 
 function updateModalVolume() {
@@ -2013,37 +2171,7 @@ async function sendAIMessage() {
       msw: document.getElementById('msw-select').value || "None Selected",
       totalSupply: document.getElementById('kpi-supply').innerText,
       totalDemand: document.getElementById('kpi-demand').innerText,
-      netStatus: document.getElementById('kpi-status').innerText,
-      popUrban: document.getElementById('pop-urban').value,
-      popRural: document.getElementById('pop-rural').value,
-      popCattle: document.getElementById('l-cattle').value,
-      popSheep: document.getElementById('l-sheep').value,
-      popPoultry: document.getElementById('l-poultry').value,
-      popPigs: document.getElementById('l-pigs').value,
-      areaPaddy: document.getElementById('a-paddy').value,
-      areaKBlackgram: document.getElementById('a-k-blackgram').value,
-      areaKMaize: document.getElementById('a-k-maize').value,
-      areaRBlackgram: document.getElementById('a-r-blackgram').value,
-      areaRGreengram: document.getElementById('a-r-greengram').value,
-      areaRMustard: document.getElementById('a-r-mustard').value,
-      areaRMaize: document.getElementById('a-r-maize').value,
-      areaRSugarcane: document.getElementById('a-r-sugarcane').value,
-      areaRVeg: document.getElementById('a-r-veg').value,
-      areaSVeg: document.getElementById('a-s-veg').value,
-      indHeavy: document.getElementById('ind-1').value,
-      indLight: document.getElementById('ind-2').value,
-      supPond: document.getElementById('s-pond').value,
-      supRes: document.getElementById('s-res').value,
-      supRiv: document.getElementById('s-riv').value,
-      supDug: document.getElementById('g-dug').value,
-      supTube: document.getElementById('g-tube').value,
-      demandHuman: document.getElementById('txt-human').innerText,
-      demandLivestock: document.getElementById('txt-livestock').innerText,
-      demandIrrigation: document.getElementById('txt-irrigation').innerText,
-      demandIndustry: document.getElementById('txt-industry').innerText,
-      seasonKharif: document.getElementById('season-kharif').innerText,
-      seasonRabi: document.getElementById('season-rabi').innerText,
-      seasonSummer: document.getElementById('season-summer').innerText
+      netStatus: document.getElementById('kpi-status').innerText
     };
 
     const res = await fetch('/.netlify/functions/smartbot', {
@@ -2064,10 +2192,6 @@ async function sendAIMessage() {
         .replace(/\n\n/g, '<div style="height:6px;"></div>')
         .replace(/\n/g, '<br>');
 
-      if (formattedReply.includes('<li') && !formattedReply.includes('<ul')) {
-        formattedReply = formattedReply.replace(/(<li.*<\/li>)/s, '<ul style="list-style:none; padding-left:0; margin:4px 0;">$1</ul>');
-      }
-
       chatHistory.innerHTML += `<div class="ai-msg">${formattedReply}</div>`;
     }
   } catch (error) {
@@ -2087,37 +2211,6 @@ async function sendAIMessage() {
       }
     }, 1000);
   }
-}
-
-function updateCharts(mValues, mIrrValues, mSupplyValues) {
-  let popUrbanVal = +document.getElementById('pop-urban').value || 0;
-  let popRuralVal = +document.getElementById('pop-rural').value || 0;
-  let urbanDemandAnnual = (popUrbanVal * 135) * 365 / 1000;
-  let ruralDemandAnnual = (popRuralVal * 135) * 365 / 1000;
-
-  let c = +document.getElementById('l-cattle').value || 0;
-  let s = +document.getElementById('l-sheep').value || 0;
-  let p = +document.getElementById('l-poultry').value || 0;
-  let pig = +document.getElementById('l-pigs').value || 0;
-
-  let cattleDemandAnnual = (c * 67) * 365 / 1000;
-  let sheepDemandAnnual = (s * 7) * 365 / 1000;
-  let poultryDemandAnnual = (p * 0.32) * 365 / 1000;
-  let pigDemandAnnual = (pig * 22) * 365 / 1000;
-
-  charts.h.data.datasets[0].data = [urbanDemandAnnual, ruralDemandAnnual];
-  charts.l.data.datasets[0].data = [cattleDemandAnnual, sheepDemandAnnual, poultryDemandAnnual, pigDemandAnnual];
-  
-  let ind1 = (+document.getElementById('ind-1').value || 0) * 12;
-  let ind2 = (+document.getElementById('ind-2').value || 0) * 12;
-  charts.ind.data.datasets[0].data = [ind1, ind2];
-  
-  charts.irr.data.datasets[0].data = mIrrValues;
-  charts.m.data.datasets[0].data = mValues;
-  if (mSupplyValues && charts.supplyTrend) {
-    charts.supplyTrend.data.datasets[0].data = mSupplyValues;
-  }
-  Object.values(charts).forEach(c => c.update());
 }
 
 function switchTab(event, tabId) {
