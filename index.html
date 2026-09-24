@@ -71,24 +71,24 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 #seasonal-table th:last-child, #seasonal-table td:last-child, #seasonal-supply-table th:last-child, #seasonal-supply-table td:last-child { width: 45%; text-align: right; }
 #monthly-table th, #seasonal-table th, #monthly-supply-table th, #seasonal-supply-table th { background: #f1f5f9; font-weight: 600; color: #334155; position: sticky; top: 0; z-index: 5; padding: 5px 8px; }
 #monthly-table td, #seasonal-table td, #monthly-supply-table td, #seasonal-supply-table td { border: 1px solid #e2e8f0; padding: 7px 8px; }
-.header-container { display: flex; align-items: center; justify-content: space-between; background-color: #ffffff; padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-.logo-box img { height: 80px; width: 80px; object-fit: contain; }
+.header-container { display: flex; align-items: center; justify-content: space-between; background-color: var(--primary); padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid #005f92; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 8px; }
+.logo-box img { height: 80px; width: 80px; object-fit: contain; background: white; padding: 4px; border-radius: 6px; }
 .title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 0 20px; }
-.title-container h2 { font-size: 1.4rem; color: #475569; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
-.title-container h2 .highlight-letter { color: var(--primary); font-weight: 800; }
-.title-container h1 { font-size: 2.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; }
+.title-container h2 { font-size: 1.3rem; color: #e0f2fe; font-weight: 500; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
+.title-container h2 .highlight-letter { color: #1c1c1b; font-weight: 800; }
+.title-container h1 { font-size: 2.5rem; color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); }
 
 /* Tabs Layout for Information Pages */
-.tab-section-container { grid-column: 1 / -1; margin-top: 25px; background: #f8fafc; color: #334155; border: 1px solid var(--border); width: 100%; }
-.tab-navigation { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; flex-wrap: wrap; }
-.tab-btn { background: #ffffff; border: 2px solid var(--border); color: #64748b; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
-.tab-btn:hover, .tab-btn.active { border-color: var(--primary); background-color: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2); }
+.tab-section-container { grid-column: 1 / -1; margin-top: 25px; background: linear-gradient(135deg, #0077b6 0%, #03045e 100%); color: #ffffff; border: 1px solid #005f92; width: 100%; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); padding: 20px; }
+.tab-navigation { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 15px; flex-wrap: wrap; }
+.tab-btn { background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); color: #e0f2fe; padding: 8px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
+.tab-btn:hover, .tab-btn.active { border-color: #3c9bda; background-color: #3c9bda; color: #03045e; box-shadow: 0 4px 12px rgba(253, 224, 71, 0.3); font-weight: 600; }
 .tab-pane { display: none; width: 100%; animation: fadeIn 0.4s ease forwards; }
 .tab-pane.active { display: block; }
 .tab-info-content { text-align: center; max-width: 800px; margin: 0 auto; }
-.tab-info-content h4 { font-size: 1.2rem; color: var(--primary); margin-bottom: 12px; font-weight: 600; }
-.tab-info-content p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #475569; }
-.tab-info-content strong { color: #0f172a; }
+.tab-info-content h4 { font-size: 1.2rem; color: #fefffd; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.tab-info-content p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #f1f5f9; }
+.tab-info-content strong { color: #ffffff; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Small Info Icon Button */
@@ -442,12 +442,29 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
   </div>
 
-  <div class="card">
-    <h5 style="color: var(--primary); margin-bottom: 10px;">Water Transfer</h5>
-    <div class="input-row"><label>Source-1</label><input type="number" id="t-s1" class="calc-input" value="0"></div>
-    <div class="input-row"><label>Source-2</label><input type="number" id="t-s2" class="calc-input" value="0"></div>
+ <div class="card">
+    <h5 style="margin-bottom: 8px; color: var(--primary);">Water Transfer</h5>
+    <div style="overflow-x: auto;">
+      <table class="input-table">
+        <thead>
+          <tr>
+            <th style="text-align: left;">Transfer Source</th>
+            <th style="text-align: right;">Volume / month (m³)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight: 500;">Source-1</td>
+            <td style="text-align: right;"><input type="number" id="t-s1" class="calc-input" value="0" style="width: 80px;"></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 500;">Source-2</td>
+            <td style="text-align: right;"><input type="number" id="t-s2" class="calc-input" value="0" style="width: 80px;"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
 
 <!-- SUPPLY VISUALIZATION ROW -->
 <div class="full-width-row visualization-split-row" style="margin-top: 15px;">
@@ -634,34 +651,34 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     <div id="about-tab" class="tab-pane active">
       <div class="tab-info-content">
         <h4>About ICAR-IIWM</h4>
-        <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production[cite: 1].</p>
-        <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building[cite: 1].</p>
-        <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions[cite: 1].</p>
+        <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production .</p>
+        <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building .</p>
+        <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions .</p>
       </div>
     </div>
 
     <div id="contact-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Contact Information</h4>
-        <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD[cite: 1]</p>
-        <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023[cite: 1]</p>
+        <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD </p>
+        <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023 </p>
       </div>
     </div>
 
     <div id="team-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Research Team</h4>
-        <p>DR. SUSANTA SKUMAR JENA (P.I REWARD)[cite: 1]</p>
-        <p>DR. SAMEER MANDAL (RA)[cite: 1]</p>
-        <p>ER. SUBRAT DASH (YP-1)[cite: 1]</p>
+        <p>DR. SUSANTA SKUMAR JENA (P.I REWARD) </p>
+        <p>DR. SAMEER MANDAL (RA) </p>
+        <p>ER. SUBRAT DASH (YP-1) </p>
       </div>
     </div>
 
     <div id="copyright-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Copyright & Acknowledgments</h4>
-        <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved[cite: 1].</p>
-        <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India[cite: 1]</p>
+        <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved .</p>
+        <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India </p>
       </div>
     </div>
   </div>
@@ -711,12 +728,22 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
     <div class="modal-body" style="font-size: 0.85rem; line-height: 1.6; color: #334155; max-height: 70vh; overflow-y: auto;">
       <div class="source-badge"><i class="fa-solid fa-users"></i> Domestic Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary[cite: 1]. As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong> with male <strong>36,449</strong> and female <strong>32,840</strong>[cite: 1].</p>
-      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong>[cite: 1].</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://law.resource.org/pub/in/bis/S03/is.1172.1993.html" target="_blank" rel="noopener noreferrer" class="source-link">https://law.resource.org/pub/in/bis/S03/is.1172.1993.html[cite: 1] <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary . As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong> with male <strong>36,449</strong> and female <strong>32,840</strong> .</p>
+      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong> .</p>
+      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://law.resource.org/pub/in/bis/S03/is.1172.1993.html" target="_blank" rel="noopener noreferrer" class="source-link">https://law.resource.org/pub/in/bis/S03/is.1172.1993.html  <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+      
       <div class="source-badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-cow"></i> 2. Livestock Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong>[cite: 1]. Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day)[cite: 1].</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 0;"><strong>Source:</strong><a href="https://epubs.icar.org.in/index.php/IJAnS/article/view/44302" target="_blank" rel="noopener noreferrer" class="source-link">https://epubs.icar.org.in/index.php/IJAnS/article/view/44302[cite: 1] <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong> . Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day) .</p>
+      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://epubs.icar.org.in/index.php/IJAnS/article/view/44302" target="_blank" rel="noopener noreferrer" class="source-link">https://epubs.icar.org.in/index.php/IJAnS/article/view/44302  <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+
+      <div class="source-badge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a;"><i class="fa-solid fa-map"></i> 3. Map Layers & Base Map Contributors</div>
+      <p style="margin-bottom: 6px;">Map visualization is powered by <strong>Leaflet</strong> with multi-layer support for geographic context:</p>
+      <ul style="margin-left: 18px; margin-bottom: 10px; font-size: 0.82rem;">
+        <li><strong>Standard Map:</strong> OpenStreetMap contributors (Open Database License)</li>
+        <li><strong>Satellite View:</strong> Esri World Imagery (Source: Esri, Maxar, GeoEye, USDA, USGS)</li>
+        <li><strong>Topographic View:</strong> OpenTopoMap (utilizing SRTM elevation data)</li>
+      </ul>
+      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 0;"><strong>MWS Framework:</strong> ICAR-IIWM REWARD Project GIS Watershed Boundaries</p>
     </div>
     <div class="modal-footer"><button class="btn-modal-save" onclick="closeSummarySourceModal()">Close</button></div>
   </div>
@@ -1101,8 +1128,36 @@ function getClusterTotals(district, cluster) {
 }
 
 const map = L.map('map').setView([20.1226, 85.1051], 9);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+// 1. Define Different Base Map Options
+const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map); // Default active layer
+
+const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    attribution: 'Esri (Environmental Systems Research Institute)'
+});
+
+const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    maxZoom: 17,
+    attribution: 'Map data: © OpenStreetMap contributors'
+});
+
+const baseMaps = {
+    "OpenStreetMap View": osmLayer,
+    "Satellite View": satelliteLayer,
+    "Topographic View": topoLayer
+};
+
 let geoLayer = null, districtLayer = null;
+
+// 2. Initialize Empty Overlays Object for Layer Control
+const overlayMaps = {};
+
+// 3. Add Leaflet Layer Control UI to Top Right
+const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
 
 const dS = document.getElementById('district-select'),
       cS = document.getElementById('cluster-select'),
@@ -1122,6 +1177,7 @@ dS.onchange = function() {
   fetch(distInfo.districtBoundaryFile).then(r => r.json()).then(data => {
     data.features.forEach(f => processCoords(f));
     districtLayer = L.geoJSON(data, { style: { color: '#334155', weight: 3, fillOpacity: 0, dashArray: '5, 10' } }).addTo(map);
+    layerControl.addOverlay(districtLayer, "District Boundary");
     map.flyToBounds(districtLayer.getBounds(), { duration: 1.5 });
   });
 };
@@ -1303,6 +1359,7 @@ function plotMap(data) {
       layer.bindTooltip(mwsName.toString(), { permanent: true, direction: 'center', className: 'custom-mws-label'});
     }
   }).addTo(map);
+  layerControl.addOverlay(geoLayer, "Micro-Watersheds");
 }
 
 function calculate() {
