@@ -71,12 +71,38 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 #seasonal-table th:last-child, #seasonal-table td:last-child, #seasonal-supply-table th:last-child, #seasonal-supply-table td:last-child { width: 45%; text-align: right; }
 #monthly-table th, #seasonal-table th, #monthly-supply-table th, #seasonal-supply-table th { background: #f1f5f9; font-weight: 600; color: #334155; position: sticky; top: 0; z-index: 5; padding: 5px 8px; }
 #monthly-table td, #seasonal-table td, #monthly-supply-table td, #seasonal-supply-table td { border: 1px solid #e2e8f0; padding: 7px 8px; }
-.header-container { display: flex; align-items: center; justify-content: space-between; background-color: var(--primary); padding: 15px 30px; margin-bottom: 20px; border-bottom: 4px solid #005f92; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 8px; }
-.logo-box img { height: 80px; width: 80px; object-fit: contain; background: white; padding: 4px; border-radius: 6px; }
+.header-container { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  background-color: var(--primary); 
+  padding: 22px 35px; /* Increased vertical and horizontal padding for a bigger header */
+  margin-bottom: 20px; 
+  border-bottom: 4px solid #005f92; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12); 
+  border-radius: 8px; 
+}
+
+.logo-box img { 
+  height: 95px; /* Increased logo height */
+  width: 95px;  /* Increased logo width */
+  object-fit: contain; 
+  background: transparent; 
+  padding: 2px; 
+  border-radius: 8px; 
+  border: none;
+  box-shadow: none;
+  mix-blend-mode: multiply; 
+  transition: transform 0.2s ease;
+}
+
+.logo-box img:hover {
+  transform: scale(1.06);
+}
 .title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 0 20px; }
-.title-container h2 { font-size: 1.3rem; color: #e0f2fe; font-weight: 500; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.5; }
-.title-container h2 .highlight-letter { color: #1c1c1b; font-weight: 800; }
-.title-container h1 { font-size: 2.5rem; color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+.title-container h2 { font-size: 1.45rem; color: #ffffff; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.4; text-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+.title-container h2 .highlight-letter { color: #fde047; font-weight: 800; }
+.title-container h1 { font-size: 2.0rem; color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 0; margin-bottom: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
 /* Tabs Layout for Information Pages */
 .tab-section-container { grid-column: 1 / -1; margin-top: 25px; background: linear-gradient(135deg, #0077b6 0%, #03045e 100%); color: #ffffff; border: 1px solid #005f92; width: 100%; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); padding: 20px; }
@@ -325,7 +351,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     <div class="chart-container"><canvas id="c-irrigation"></canvas></div>
   </div>
 
-<div class="card">
+  <div class="card">
     <div class="card-header-flex">
       <h5 style="color: var(--primary); margin-bottom: 0;">Industrial Water Demand</h5>
       <button class="btn-add-surface" onclick="openIndustrialModal()"><i class="fa-solid fa-plus"></i> Add</button>
@@ -341,19 +367,14 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
         <tbody>
           <tr>
             <td style="font-weight: 500;">Heavy</td>
-            <td style="text-align: right;"><span id="lbl-ind-heavy-annual" class="val-lbl">0</span></td>
+            <td style="text-align: right;"><input type="number" min="0" id="ind-1" class="calc-input" value="0" placeholder="0" style="width: 80px;" oninput="handleDirectIndustrialInput()"></td>
           </tr>
           <tr>
             <td style="font-weight: 500;">Light</td>
-            <td style="text-align: right;"><span id="lbl-ind-light-annual" class="val-lbl">0</span></td>
+            <td style="text-align: right;"><input type="number" min="0" id="ind-2" class="calc-input" value="0" placeholder="0" style="width: 80px;" oninput="handleDirectIndustrialInput()"></td>
           </tr>
         </tbody>
       </table>
-    </div>
-    <!-- Hidden inputs to preserve backend compatibility with calculation logic -->
-    <div style="display:none;">
-      <input type="number" id="ind-1" class="calc-input" value="0">
-      <input type="number" id="ind-2" class="calc-input" value="0">
     </div>
     <div class="chart-container"><canvas id="c-industry"></canvas></div>
   </div>
@@ -450,7 +471,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
   </div>
 
- <div class="card">
+  <div class="card">
     <h5 style="margin-bottom: 8px; color: var(--primary);">Water Transfer</h5>
     <div style="overflow-x: auto;">
       <table class="input-table">
@@ -473,6 +494,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
       </table>
     </div>
   </div>
+</div>
 
 <!-- SUPPLY VISUALIZATION ROW -->
 <div class="full-width-row visualization-split-row" style="margin-top: 15px;">
@@ -659,34 +681,34 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     <div id="about-tab" class="tab-pane active">
       <div class="tab-info-content">
         <h4>About ICAR-IIWM</h4>
-        <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production .</p>
-        <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building .</p>
-        <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions .</p>
+        <p>The ICAR-Indian Institute of Water Management (IIWM) was established on 12th May 1988 to develop improved water management technologies for sustainable agricultural production  .</p>
+        <p><strong>Mission:</strong> Basic, applied, and strategic research to address water management issues with institutional linkages, infrastructural support, and capacity building  .</p>
+        <p><strong>REWARD Project:</strong> World Bank funded initiative for watershed rejuvenation and agricultural resilience through innovative water management solutions  .</p>
       </div>
     </div>
 
     <div id="contact-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Contact Information</h4>
-        <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD </p>
-        <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023 </p>
+        <p><strong>Dr. Susanta Kumar Jena</strong><br>(Principal Scientist) <br>P.I REWARD  </p>
+        <p>ICAR - Indian Institute of Water Management, Opposite Rail Vihar, Maitri Vihar, Bhubaneswar, Odisha 751023  </p>
       </div>
     </div>
 
     <div id="team-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Research Team</h4>
-        <p>DR. SUSANTA SKUMAR JENA (P.I REWARD) </p>
-        <p>DR. SAMEER MANDAL (RA) </p>
-        <p>ER. SUBRAT DASH (YP-1) </p>
+        <p>DR. SUSANTA SKUMAR JENA (P.I REWARD)  </p>
+        <p>DR. SAMEER MANDAL (RA)  </p>
+        <p>ER. SUBRAT DASH (YP-1)  </p>
       </div>
     </div>
 
     <div id="copyright-tab" class="tab-pane">
       <div class="tab-info-content">
         <h4>Copyright & Acknowledgments</h4>
-        <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved .</p>
-        <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India </p>
+        <p>&copy; 2025-2026 ICAR-Indian Institute of Water Management, Bhubaneswar. All Rights Reserved  .</p>
+        <p><strong>REWARD Project</strong> - All Rights Reserved.<br><strong>Funding:</strong> The World Bank<br><strong>Implementation:</strong> ICAR-IIWM, Government of India  </p>
       </div>
     </div>
   </div>
@@ -783,23 +805,22 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
     <div class="modal-body" style="font-size: 0.85rem; line-height: 1.6; color: #334155; max-height: 70vh; overflow-y: auto;">
       <div class="source-badge"><i class="fa-solid fa-users"></i> Domestic Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary . As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong> with male <strong>36,449</strong> and female <strong>32,840</strong> .</p>
-      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong> .</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://law.resource.org/pub/in/bis/S03/is.1172.1993.html" target="_blank" rel="noopener noreferrer" class="source-link">https://law.resource.org/pub/in/bis/S03/is.1172.1993.html  <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+      <p style="margin-bottom: 8px;">Socio-economic survey of the SWS are based on both primary baseline survey and secondary sources of information such as block level of offices of Department of Agriculture and Veterinary  . As per the census information and the primary survey, the total population of the Odogaon Cluster is <strong>69,289</strong> with male <strong>36,449</strong> and female <strong>32,840</strong>  .</p>
+      <p style="margin-bottom: 10px;">Per capita water demand is considered as <strong>135 lpcd</strong> based on <strong>IS 1172:1993</strong>  .</p>
+      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://law.resource.org/pub/in/bis/S03/is.1172.1993.html" target="_blank" rel="noopener noreferrer" class="source-link">https://law.resource.org/pub/in/bis/S03/is.1172.1993.html   <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
       
       <div class="source-badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-cow"></i> 2. Livestock Water Demand Data Sources (For Odagaon cluster)</div>
-      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong> . Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day) .</p>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://epubs.icar.org.in/index.php/IJAnS/article/view/44302" target="_blank" rel="noopener noreferrer" class="source-link">https://epubs.icar.org.in/index.php/IJAnS/article/view/44302  <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
+      <p style="margin-bottom: 10px;">Livestock population are based on the <strong>20th census of livestock</strong> carried out during <strong>2019</strong>  . Daily consumption norms: Cattle/Buffalo (67 L/day), Sheep/Goat (7 L/day), Poultry (0.32 L/day), and Pigs (22 L/day)  .</p>
+      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 14px;"><strong>Source:</strong><a href="https://epubs.icar.org.in/index.php/IJAnS/article/view/44302" target="_blank" rel="noopener noreferrer" class="source-link">https://epubs.icar.org.in/index.php/IJAnS/article/view/44302   <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a></p>
 
       <div class="source-badge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a;"><i class="fa-solid fa-map"></i> 3. Map Layers & Base Map Contributors</div>
-      <p style="margin-bottom: 6px;">Map visualization is powered by <strong>Leaflet</strong> with multi-layer support for geographic context:</p>
+      <p style="margin-bottom: 6px;">Map visualization is powered by Leaflet with multi-layer support for geographic context:</p>
       <ul style="margin-left: 18px; margin-bottom: 10px; font-size: 0.82rem;">
         <li><strong>Standard Map:</strong> OpenStreetMap contributors (Open Database License)</li>
         <li><strong>Satellite View:</strong> Esri World Imagery (Source: Esri, Maxar, GeoEye, USDA, USGS)</li>
         <li><strong>Topographic View:</strong> OpenTopoMap (utilizing SRTM elevation data)</li>
+        <li><strong>MWS Framework</strong> ICAR-IIWM REWARD Project GIS Watershed Boundaries </li>
       </ul>
-      <p style="background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px dashed #cbd5e1; margin-bottom: 0;"><strong>MWS Framework:</strong> ICAR-IIWM REWARD Project GIS Watershed Boundaries</p>
-    </div>
     <div class="modal-footer"><button class="btn-modal-save" onclick="closeSummarySourceModal()">Close</button></div>
   </div>
 </div>
@@ -848,7 +869,7 @@ const surfaceWaterBackend = {
   "Kalyanpur": { "ponds": { count: 17, area_m2: 77660.53, max_volume_m3: 236290.59, monthly: { "Jan": 207633.85, "Feb": 194400.5, "Mar": 179023.71, "Apr": 163111.07, "May": 144519.14, "Jun": 144519.14, "Jul": 236290.59, "Aug": 236290.59, "Sep": 236290.59, "Oct": 236290.59, "Nov": 226534.89, "Dec": 217512.23 } }, "reservoir": { count: 1, area_m2: 1580.12, max_volume_m3: 395.03, monthly: { "Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 395.03, "Aug": 395.03, "Sep": 395.03, "Oct": 395.03, "Nov": 0.0, "Dec": 13.0 } }, "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } } },
   "Kumbhiapalli": { "ponds": { count: 24, area_m2: 88490.9, max_volume_m3: 266277.62, monthly: { "Jan": 233624.48, "Feb": 218545.63, "Mar": 201024.44, "Apr": 182892.65, "May": 161707.93, "Jun": 161707.93, "Jul": 266277.62, "Aug": 266277.62, "Sep": 266277.62, "Oct": 266277.62, "Nov": 254941.94, "Dec": 244880.53 } }, "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }, "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } } },
   "Nandighora": { "ponds": { count: 32, area_m2: 251023.95, max_volume_m3: 869397.48, monthly: { "Jan": 776769.64, "Feb": 733995.16, "Mar": 684292.42, "Apr": 632857.61, "May": 572762.48, "Jun": 572762.48, "Jul": 869397.48, "Aug": 869397.48, "Sep": 869397.48, "Oct": 869397.48, "Nov": 837241.31, "Dec": 808699.89 } }, "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }, "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } } },
-  "Odagaon": { "ponds": { count: 8, area_m2: 58101.86, max_volume_m3: 205389.17, monthly: { "Jan": 183949.59, "Feb": 174069.96, "Mar": 162232.06, "Apr": 150034.33, "May": 136003.87, "Jun": 136003.87, "Jul": 205389.17, "Aug": 205389.17, "Sep": 205389.17, "Oct": 205389.17, "Nov": 198177.12, "Dec": 191340.37 } }, "reservoir": { count: 5, area_m2: 2026.58, max_volume_m3: 1335.28, monthly: { "Jan": 691.5, "Feb": 474.21, "Mar": 579.78, "Apr": 760.82, "May": 760.82, "Jun": 760.82, "Jul": 1335.28, "Aug": 1335.28, "Sep": 1335.28, "Oct": 1335.28, "Nov": 844.88, "Dec": 845.03 } }, "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } } },
+  "Odagaon": { "ponds": { count: 9, area_m2: 58101.86, max_volume_m3: 205389.17, monthly: { "Jan": 183949.59, "Feb": 174069.96, "Mar": 162232.06, "Apr": 150034.33, "May": 136003.87, "Jun": 136003.87, "Jul": 205389.17, "Aug": 205389.17, "Sep": 205389.17, "Oct": 205389.17, "Nov": 198177.12, "Dec": 191340.37 } }, "reservoir": { count: 5, area_m2: 2026.58, max_volume_m3: 1335.28, monthly: { "Jan": 691.5, "Feb": 474.21, "Mar": 579.78, "Apr": 760.82, "May": 760.82, "Jun": 760.82, "Jul": 1335.28, "Aug": 1335.28, "Sep": 1335.28, "Oct": 1335.28, "Nov": 844.88, "Dec": 845.03 } }, "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } } },
   "Rabara": { "ponds": { count: 31, area_m2: 126365.09, max_volume_m3: 420105.54, monthly: { "Jan": 373476.82, "Feb": 351722.23, "Mar": 326443.98, "Apr": 300535.38, "May": 270283.58, "Jun": 270283.58, "Jul": 420105.54, "Aug": 420105.54, "Sep": 420105.54, "Oct": 420105.54, "Nov": 404231.99, "Dec": 389550.04 } }, "reservoir": { count: 2, area_m2: 1302.7, max_volume_m3: 977.02, monthly: { "Jan": 496.33, "Feb": 496.33, "Mar": 496.35, "Apr": 496.33, "May": 496.33, "Jun": 496.33, "Jul": 977.02, "Aug": 977.02, "Sep": 977.02, "Oct": 977.02, "Nov": 496.33, "Dec": 662.45 } }, "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } } },
   "Saradapur": { "ponds": { count: 36, area_m2: 168441.99, max_volume_m3: 531222.97, monthly: { "Jan": 469067.88, "Feb": 440311.35, "Mar": 406897.08, "Apr": 372379.32, "May": 332054.31, "Jun": 332054.31, "Jul": 531222.97, "Aug": 531222.97, "Sep": 531222.97, "Oct": 531222.97, "Nov": 509721.91, "Dec": 490494.02 } }, "reservoir": { count: 1, area_m2: 316.96, max_volume_m3: 237.72, monthly: { "Jan": 120.76, "Feb": 120.76, "Mar": 120.76, "Apr": 120.76, "May": 120.76, "Jun": 120.76, "Jul": 237.72, "Aug": 237.72, "Sep": 237.72, "Oct": 237.72, "Nov": 120.76, "Dec": 160.76 } }, "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } } },
   "Sikharpur": { "ponds": { count: 29, area_m2: 102890.27, max_volume_m3: 305085.96, monthly: { "Jan": 267119.45, "Feb": 249586.95, "Mar": 229214.68, "Apr": 208132.46, "May": 183500.53, "Jun": 183500.53, "Jul": 305085.96, "Aug": 305085.96, "Sep": 305085.96, "Oct": 305085.96, "Nov": 291905.72, "Dec": 280207.1 } }, "reservoir": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } }, "river": { count: 0, area_m2: 0.0, max_volume_m3: 0.0, monthly: { "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0 } } }
@@ -934,6 +955,9 @@ let industrialMonthlyData = {
   light: Array(12).fill(0)
 };
 
+// Track whether user customized exact month-by-month values via the modal
+let isMonthWiseIndustrial = false;
+
 const calendarMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function openIndustrialModal() {
@@ -957,7 +981,7 @@ function renderIndustrialMonthsInputs() {
       <tr>
         <td style="font-weight: 500; padding: 6px 4px;">${m}</td>
         <td style="text-align: right; padding: 6px 4px;">
-          <input type="number" min="0" class="ind-month-input" data-index="${idx}" value="${displayVal}" placeholder="0" oninput="handleIndustrialInput(${idx}, this.value)" style="width: 120px; text-align: right; padding: 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem;">
+          <input type="number" min="0" class="ind-month-input" data-index="${idx}" value="${displayVal}" placeholder="0" oninput="handleIndustrialModalInput(${idx}, this.value)" style="width: 120px; text-align: right; padding: 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem;">
         </td>
       </tr>
     `;
@@ -965,14 +989,12 @@ function renderIndustrialMonthsInputs() {
   updateIndustrialModalTotal();
 }
 
-// Live update stored array values as user types so switching types retains data
-function handleIndustrialInput(idx, val) {
+function handleIndustrialModalInput(idx, val) {
   const type = document.getElementById('modal-ind-type').value;
   industrialMonthlyData[type][idx] = val === '' ? 0 : +val;
   updateIndustrialModalTotal();
 }
 
-// Bind dropdown change event to reload inputs for the selected industry type
 document.getElementById('modal-ind-type').onchange = renderIndustrialMonthsInputs;
 
 function updateIndustrialModalTotal() {
@@ -984,36 +1006,36 @@ function updateIndustrialModalTotal() {
   document.getElementById('ind-calc-annual-volume').innerText = sum.toLocaleString() + ' m³';
 }
 
-function clearIndustrialModalInputs() {
-  // Completely wipe monthly data for BOTH heavy and light industries
-  industrialMonthlyData = { heavy: Array(12).fill(0), light: Array(12).fill(0) };
-  renderIndustrialMonthsInputs();
-  
-  // Reset annual totals and hidden backend fields to 0
-  document.getElementById('ind-1').value = 0;
-  document.getElementById('ind-2').value = 0;
-  document.getElementById('lbl-ind-heavy-annual').innerText = "0";
-  document.getElementById('lbl-ind-light-annual').innerText = "0";
-  
-  // Reset table header label back to monthly default
+// Triggered when typing directly into the Heavy or Light table boxes (Uniform Monthly Entry)
+function handleDirectIndustrialInput() {
+  isMonthWiseIndustrial = false; // Switch to uniform direct entry mode
+  let hVal = +document.getElementById('ind-1').value || 0;
+  let lVal = +document.getElementById('ind-2').value || 0;
+
+  // Apply value uniformly across all 12 months for backend tracking
+  industrialMonthlyData.heavy = Array(12).fill(hVal);
+  industrialMonthlyData.light = Array(12).fill(lVal);
+
   document.getElementById('ind-header-label').innerText = "Demand / month (m³)";
-  
-  calculate(); // Refresh dashboard calculations
+  calculate();
+}
+
+function clearIndustrialModalInputs() {
+  const type = document.getElementById('modal-ind-type').value;
+  industrialMonthlyData[type] = Array(12).fill(0);
+  renderIndustrialMonthsInputs();
 }
 
 function saveIndustrialData() {
   const type = document.getElementById('modal-ind-type').value;
-  let annualSum = 0;
   let hasNegative = false;
 
-  // Validate inputs for negative numbers
   document.querySelectorAll('.ind-month-input').forEach((input, idx) => {
     let val = input.value === '' ? 0 : +input.value;
     if (val < 0) {
       hasNegative = true;
     }
     industrialMonthlyData[type][idx] = val;
-    annualSum += val;
   });
 
   if (hasNegative) {
@@ -1021,34 +1043,25 @@ function saveIndustrialData() {
     return;
   }
 
-  // Update hidden inputs used by global calculate() function
-  if (type === 'heavy') {
-    document.getElementById('ind-1').value = Math.round(annualSum / 12);
-    document.getElementById('lbl-ind-heavy-annual').innerText = annualSum.toLocaleString();
-  } else {
-    document.getElementById('ind-2').value = Math.round(annualSum / 12);
-    document.getElementById('lbl-ind-light-annual').innerText = annualSum.toLocaleString();
-  }
+  isMonthWiseIndustrial = true; // Switch to custom month-wise entry mode
 
-  // Check if either heavy or light has entries, then update header label dynamically
-  let totalHeavy = industrialMonthlyData.heavy.reduce((a, b) => a + b, 0);
-  let totalLight = industrialMonthlyData.light.reduce((a, b) => a + b, 0);
+  let heavySum = industrialMonthlyData.heavy.reduce((a, b) => a + b, 0);
+  let lightSum = industrialMonthlyData.light.reduce((a, b) => a + b, 0);
 
-  if (totalHeavy > 0 || totalLight > 0) {
-    document.getElementById('ind-header-label').innerText = "Demand / year (m³)";
-  } else {
-    document.getElementById('ind-header-label').innerText = "Demand / month (m³)";
-  }
+  // Update direct input boxes to reflect monthly averages for reference
+  document.getElementById('ind-1').value = Math.round(heavySum / 12);
+  document.getElementById('ind-2').value = Math.round(lightSum / 12);
+
+  document.getElementById('ind-header-label').innerText = "Demand / year (m³)";
 
   closeIndustrialModal();
-  calculate(); // Recalculate dashboard totals and trends
+  calculate(); 
 }
 
 window.addEventListener('click', function(e) {
   const indModal = document.getElementById('industrialModal');
   if (e.target === indModal) closeIndustrialModal();
 });
-
 let lastMonthlySupply = Array(12).fill(0);
 let lastMonthlyDemand = Array(12).fill(0);
 
@@ -1474,12 +1487,10 @@ document.getElementById('clear-all-btn').onclick = function() {
   document.getElementById('map-name').innerText = "Project Map View";
   document.querySelectorAll('.calc-input').forEach(input => { input.value = 0; });
   
-  // Completely reset industrial data for both types, labels, hidden inputs, and table header
+  isMonthWiseIndustrial = false;
   industrialMonthlyData = { heavy: Array(12).fill(0), light: Array(12).fill(0) };
   document.getElementById('ind-1').value = 0;
   document.getElementById('ind-2').value = 0;
-  document.getElementById('lbl-ind-heavy-annual').innerText = "0";
-  document.getElementById('lbl-ind-light-annual').innerText = "0";
   document.getElementById('ind-header-label').innerText = "Demand / month (m³)";
 
   updateSurfaceWaterUI("");
@@ -1579,8 +1590,6 @@ function calculate() {
 
   let ind1Val = +document.getElementById('ind-1').value || 0;
   let ind2Val = +document.getElementById('ind-2').value || 0;
-  let monthlyIndDem = ind1Val + ind2Val;
-  let annualIndDem = monthlyIndDem * 12;
 
   let cropAreas = {
     "Kharif_Paddy": +document.getElementById('a-paddy').value || 0,
@@ -1603,7 +1612,7 @@ function calculate() {
   let tableHtml = "";
   let seasonalDemands = { kharif: 0, rabi: 0, summer: 0 };
 
-  calendarMonths.forEach(m => {
+  calendarMonths.forEach((m, idx) => {
     let days = DAYS_IN_MONTH[m];
     let mDomestic = dailyDomesticM3 * days;
     let mLivestock = dailyLivestockM3 * days;
@@ -1617,7 +1626,15 @@ function calculate() {
       cropAnnualTotals[cropKey] += reqM3;
     }
 
-    let monthTotal = Math.round(mDomestic + mLivestock + mCropWater + monthlyIndDem);
+    // Industrial monthly contribution based on mode (Direct vs Month-wise Modal)
+    let mIndustry = 0;
+    if (isMonthWiseIndustrial) {
+      mIndustry = (industrialMonthlyData.heavy[idx] || 0) + (industrialMonthlyData.light[idx] || 0);
+    } else {
+      mIndustry = ind1Val + ind2Val;
+    }
+
+    let monthTotal = Math.round(mDomestic + mLivestock + mCropWater + mIndustry);
     totalIrrigationAnnual += mCropWater;
     monthlyDemandArr.push(monthTotal);
     monthlyIrrigationArr.push(Math.round(mCropWater));
@@ -1651,14 +1668,24 @@ function calculate() {
   let ground = (+document.getElementById('g-dug').value || 0) + (+document.getElementById('g-tube').value || 0) + (+document.getElementById('g-oth').value || 0);
   let trans = (+document.getElementById('t-s1').value || 0) + (+document.getElementById('t-s2').value || 0);
 
-  let totalD = annualDomesticM3 + annualLivestockM3 + totalIrrigationAnnual + annualIndDem;
+  // Accurate annual industrial demand sum depending on mode
+  let annualIndSum = 0;
+  if (isMonthWiseIndustrial) {
+    let hSum = industrialMonthlyData.heavy.reduce((a, b) => a + b, 0);
+    let lSum = industrialMonthlyData.light.reduce((a, b) => a + b, 0);
+    annualIndSum = hSum + lSum;
+  } else {
+    annualIndSum = (ind1Val + ind2Val) * 12;
+  }
+
+  let totalD = annualDomesticM3 + annualLivestockM3 + totalIrrigationAnnual + annualIndSum;
   let totalS = surf + ground + trans;
   let net = totalS - totalD;
 
   document.getElementById('txt-human').innerText = Math.round(annualDomesticM3).toLocaleString();
   document.getElementById('txt-livestock').innerText = Math.round(annualLivestockM3).toLocaleString();
   document.getElementById('txt-irrigation').innerText = Math.round(totalIrrigationAnnual).toLocaleString();
-  document.getElementById('txt-industry').innerText = Math.round(annualIndDem).toLocaleString();
+  document.getElementById('txt-industry').innerText = Math.round(annualIndSum).toLocaleString();
   document.getElementById('txt-surface').innerText = Math.round(surf).toLocaleString();
   document.getElementById('txt-ground').innerText = Math.round(ground).toLocaleString();
   document.getElementById('txt-transfer').innerText = Math.round(trans).toLocaleString();
