@@ -197,6 +197,22 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   .title-container h1 { font-size: 1.8rem; }
   .title-container h2 { font-size: 0.95rem; margin-bottom: 5px; }
 }
+
+/* Custom Map Label Styling - Removes white box */
+.leaflet-tooltip.custom-mws-label {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #0f172a !important; 
+  font-weight: 700 !important;
+  font-size: 0.85rem;
+  text-shadow: 
+    -1.5px -1.5px 0 #fff, 
+     1.5px -1.5px 0 #fff, 
+    -1.5px  1.5px 0 #fff, 
+     1.5px  1.5px 0 #fff, 
+     0px 2px 4px rgba(0,0,0,0.3) !important;
+}
 </style>
 </head>
 <body>
@@ -1448,6 +1464,38 @@ let geoLayer = null, districtLayer = null;
 const overlayMaps = {};
 const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
 
+let waterbodiesLayer = null;
+
+// Fetch and load the waterbodies GeoJSON in the background
+fetch('Waterbodies_updated.json')
+  .then(response => response.json())
+  .then(data => {
+    
+    // IMPORTANT: Convert coordinates to map format using your existing function
+    data.features.forEach(f => processCoords(f));
+
+    // Create the layer and style it to look like water
+    waterbodiesLayer = L.geoJSON(data, {
+      style: function(feature) {
+        return {
+          color: '#0369a1',       // Dark blue outline
+          weight: 1.5,
+          fillColor: '#38bdf8',   // Light blue water fill
+          fillOpacity: 0.7
+        };
+      },
+      onEachFeature: function(feature, layer) {
+        // Optional popup if someone clicks the waterbody
+        let id = feature.properties.id_fid || feature.properties.FID || "N/A";
+        layer.bindPopup("<b>Waterbody ID:</b> " + id);
+      }
+    });
+    
+    // ONLY add it to the layer control box (do not add it to the map yet)
+    layerControl.addOverlay(waterbodiesLayer, "Waterbodies");
+  })
+  .catch(err => console.error("Could not load Waterbodies_updated.json", err));
+
 const dS = document.getElementById('district-select'),
       cS = document.getElementById('cluster-select'),
       mS = document.getElementById('msw-select');
@@ -1460,6 +1508,12 @@ dS.onchange = function() {
   cS.disabled = !this.value; mS.disabled = true;
   if (districtLayer) map.removeLayer(districtLayer);
   if (geoLayer) map.removeLayer(geoLayer);
+  
+  // Hide waterbodies if district changes
+  if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) {
+    map.removeLayer(waterbodiesLayer);
+  }
+
   if (!this.value) return;
   let distInfo = geoData[this.value];
   for (let c in distInfo.clusters) cS.add(new Option(c, c));
@@ -1474,7 +1528,20 @@ dS.onchange = function() {
 cS.onchange = function() {
   mS.innerHTML = '<option value="">All Micro-watersheds</option>';
   mS.disabled = !this.value;
-  if (!this.value) return;
+  
+  // If they unselect a cluster, hide the waterbodies
+  if (!this.value) {
+    if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) {
+      map.removeLayer(waterbodiesLayer);
+    }
+    return; 
+  }
+  
+  // Show waterbodies when a cluster is selected
+  if (waterbodiesLayer && !map.hasLayer(waterbodiesLayer)) {
+    waterbodiesLayer.addTo(map);
+  }
+
   let clusterName = this.value;
   let cluster = geoData[dS.value].clusters[clusterName];
   for (let m in cluster.msws) mS.add(new Option(m, m));
@@ -1601,6 +1668,12 @@ document.getElementById('clear-all-btn').onclick = function() {
     map.removeLayer(geoLayer);
   }
   if (districtLayer) map.removeLayer(districtLayer);
+  
+  // Hide waterbodies on Clear All
+  if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) {
+    map.removeLayer(waterbodiesLayer);
+  }
+  
   map.setView([20.1226, 85.1051], 9);
   document.getElementById('map-name').innerText = "Project Map View";
   document.querySelectorAll('.calc-input').forEach(input => { input.value = 0; });
@@ -2282,4 +2355,3 @@ updateRWHSection("");
 </script>
 </body>
 </html>
-
