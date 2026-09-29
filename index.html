@@ -1465,36 +1465,96 @@ const overlayMaps = {};
 const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
 
 let waterbodiesLayer = null;
+let mcdLayer = null;
+
+// robust GeometryCollection processor
+function processGeometry(geom) {
+  if (!geom) return;
+  if (geom.type === "GeometryCollection" && geom.geometries) {
+    geom.geometries.forEach(g => processGeometry(g));
+  } else if (geom.coordinates) {
+    let c = geom.coordinates;
+    if (geom.type === "Point") {
+      convert(c);
+    } else if (geom.type === "LineString" || geom.type === "MultiPoint") {
+      c.forEach(pt => convert(pt));
+    } else if (geom.type === "Polygon" || geom.type === "MultiLineString") {
+      c.forEach(r => { if(Array.isArray(r)) r.forEach(pt => convert(pt)); });
+    } else if (geom.type === "MultiPolygon") {
+      c.forEach(p => { if(Array.isArray(p)) p.forEach(r => { if(Array.isArray(r)) r.forEach(pt => convert(pt)); }); });
+    }
+  }
+}
+
+function processCoords(f) {
+  if (f && f.geometry) {
+    processGeometry(f.geometry);
+  } else if (f && f.type === "GeometryCollection") {
+    processGeometry(f);
+  }
+}
+
+function convert(pt) {
+  if (pt && pt.length >= 2 && pt[0] > 180) {
+    let out = proj4("EPSG:32645", "EPSG:4326", [pt[0], pt[1]]);
+    pt[0] = out[0];
+    pt[1] = out[1];
+  }
+}
 
 // Fetch and load the waterbodies GeoJSON in the background
 fetch('Waterbodies_updated.json')
   .then(response => response.json())
   .then(data => {
-    
-    // IMPORTANT: Convert coordinates to map format using your existing function
-    data.features.forEach(f => processCoords(f));
-
-    // Create the layer and style it to look like water
+    if (data.features) data.features.forEach(f => processCoords(f));
     waterbodiesLayer = L.geoJSON(data, {
+      style: { color: '#1e3a8a', weight: 1.8, fillColor: '#1d4ed8', fillOpacity: 0.85 },
+      onEachFeature: function(feature, layer) {
+        let id = feature.properties ? (feature.properties.id_fid || feature.properties.FID || "N/A") : "N/A";
+        layer.bindPopup("<b>Pond / Lake ID:</b> " + id);
+      }
+    });
+    layerControl.addOverlay(waterbodiesLayer, "Ponds / Lakes");
+  })
+  .catch(err => console.error("Could not load Waterbodies_updated.json", err));
+
+// Fetch and load the Check Dams / Reservoirs / MCD GeoJSON in the background
+fetch('Odogaon_MCD.json')
+  .then(response => {
+    if (!response.ok) throw new Error("Odogaon_MCD.json not found or network error");
+    return response.json();
+  })
+  .then(data => {
+    // Handle GeometryCollection at root level or standard FeatureCollection
+    if (data.type === "GeometryCollection") {
+      processCoords(data);
+      // Wrap it so Leaflet handles it as a standard feature
+      data = { type: "FeatureCollection", features: [{ type: "Feature", properties: { Name: "MCD Structure" }, geometry: data }] };
+    } else if (data.features) {
+      data.features.forEach(f => processCoords(f));
+    }
+
+    mcdLayer = L.geoJSON(data, {
       style: function(feature) {
-        return {
-          color: '#0369a1',       // Dark blue outline
-          weight: 1.5,
-          fillColor: '#38bdf8',   // Light blue water fill
-          fillOpacity: 0.7
-        };
+        return { color: '#b45309', weight: 1.5, fillColor: '#f59e0b', fillOpacity: 0.8 };
       },
       onEachFeature: function(feature, layer) {
-        // Optional popup if someone clicks the waterbody
-        let id = feature.properties.id_fid || feature.properties.FID || "N/A";
-        layer.bindPopup("<b>Waterbody ID:</b> " + id);
+        let id = feature.properties ? (feature.properties.id_fid || feature.properties.FID || feature.properties.Name || "N/A") : "N/A";
+        layer.bindPopup("<b>Reservoir / Check Dam ID:</b> " + id);
       }
     });
     
-    // ONLY add it to the layer control box (do not add it to the map yet)
-    layerControl.addOverlay(waterbodiesLayer, "Waterbodies");
+    // Add to layer control right under Waterbodies
+    layerControl.addOverlay(mcdLayer, "Reservoir / Check Dam / MCD");
+    
+    // If a cluster is already selected when this finishes loading, add it to the map immediately
+    let clusterSelect = document.getElementById('cluster-select');
+    if (clusterSelect && clusterSelect.value) {
+        mcdLayer.addTo(map);
+    }
   })
-  .catch(err => console.error("Could not load Waterbodies_updated.json", err));
+  .catch(err => console.error("Could not load Odogaon_MCD.json. Please check if the file name is exact.", err));
+
 
 const dS = document.getElementById('district-select'),
       cS = document.getElementById('cluster-select'),
@@ -1506,13 +1566,11 @@ dS.onchange = function() {
   cS.innerHTML = '<option value="">Select Cluster</option>';
   mS.innerHTML = '';
   cS.disabled = !this.value; mS.disabled = true;
+  
   if (districtLayer) map.removeLayer(districtLayer);
   if (geoLayer) map.removeLayer(geoLayer);
-  
-  // Hide waterbodies if district changes
-  if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) {
-    map.removeLayer(waterbodiesLayer);
-  }
+  if (mcdLayer && map.hasLayer(mcdLayer)) map.removeLayer(mcdLayer);
+  if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) map.removeLayer(waterbodiesLayer);
 
   if (!this.value) return;
   let distInfo = geoData[this.value];
@@ -1529,18 +1587,17 @@ cS.onchange = function() {
   mS.innerHTML = '<option value="">All Micro-watersheds</option>';
   mS.disabled = !this.value;
   
-  // If they unselect a cluster, hide the waterbodies
+  // If they unselect a cluster, hide the layers
   if (!this.value) {
-    if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) {
-      map.removeLayer(waterbodiesLayer);
-    }
+    if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) map.removeLayer(waterbodiesLayer);
+    if (mcdLayer && map.hasLayer(mcdLayer)) map.removeLayer(mcdLayer);
+    if (geoLayer) map.removeLayer(geoLayer);
     return; 
   }
   
-  // Show waterbodies when a cluster is selected
-  if (waterbodiesLayer && !map.hasLayer(waterbodiesLayer)) {
-    waterbodiesLayer.addTo(map);
-  }
+  // Show layers when a cluster is selected
+  if (waterbodiesLayer && !map.hasLayer(waterbodiesLayer)) waterbodiesLayer.addTo(map);
+  if (mcdLayer && !map.hasLayer(mcdLayer)) mcdLayer.addTo(map);
 
   let clusterName = this.value;
   let cluster = geoData[dS.value].clusters[clusterName];
@@ -1550,6 +1607,7 @@ cS.onchange = function() {
     plotMap(data);
     if (geoLayer) map.flyToBounds(geoLayer.getBounds(), { duration: 1.2 });
   });
+  
   let totals = getClusterTotals(dS.value, clusterName);
   document.getElementById('map-name').innerText = "Cluster Overview: " + clusterName;
   document.getElementById('pop-urban').value = 0;
@@ -1660,19 +1718,20 @@ document.getElementById('clear-all-btn').onclick = function() {
   document.getElementById('cluster-select').disabled = true;
   document.getElementById('msw-select').innerHTML = "";
   document.getElementById('msw-select').disabled = true;
+  
   if (geoLayer) {
     geoLayer.eachLayer(l => {
       if (l._path) l._path.classList.remove('selected-mws-outline');
       l.setStyle({ color: '#0077b6', fillColor: '#0077b6', fillOpacity: 0.1, weight: 1.5 });
     });
     map.removeLayer(geoLayer);
+    layerControl.removeLayer(geoLayer);
+    geoLayer = null;
   }
-  if (districtLayer) map.removeLayer(districtLayer);
   
-  // Hide waterbodies on Clear All
-  if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) {
-    map.removeLayer(waterbodiesLayer);
-  }
+  if (districtLayer) map.removeLayer(districtLayer);
+  if (mcdLayer && map.hasLayer(mcdLayer)) map.removeLayer(mcdLayer);
+  if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) map.removeLayer(waterbodiesLayer);
   
   map.setView([20.1226, 85.1051], 9);
   document.getElementById('map-name').innerText = "Project Map View";
@@ -1701,22 +1760,14 @@ document.getElementById('clear-all-btn').onclick = function() {
   updateRWHSection("");
 };
 
-function processCoords(f) {
-  let c = f.geometry.coordinates;
-  if (f.geometry.type === "Polygon") c.forEach(r => r.forEach(pt => convert(pt)));
-  else c.forEach(p => p.forEach(r => r.forEach(pt => convert(pt))));
-}
-
-function convert(pt) {
-  if (pt[0] > 180) {
-    let out = proj4("EPSG:32645", "EPSG:4326", [pt[0], pt[1]]);
-    pt[0] = out[0];
-    pt[1] = out[1];
-  }
-}
+let mwsOverlayName = "Micro-Watersheds";
 
 function plotMap(data) {
-  if (geoLayer) map.removeLayer(geoLayer);
+  if (geoLayer) {
+    map.removeLayer(geoLayer);
+    layerControl.removeLayer(geoLayer);
+  }
+  
   geoLayer = L.geoJSON(data, {
     style: { color: '#0077b6', weight: 1.5, fillOpacity: 0.1 },
     onEachFeature: function(feature, layer) {
@@ -1752,7 +1803,8 @@ function plotMap(data) {
       layer.bindTooltip(mwsName.toString(), { permanent: true, direction: 'center', className: 'custom-mws-label'});
     }
   }).addTo(map);
-  layerControl.addOverlay(geoLayer, "Micro-Watersheds");
+
+  layerControl.addOverlay(geoLayer, mwsOverlayName);
 }
 
 function calculate() {
