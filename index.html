@@ -256,7 +256,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 
   <div class="right-col">
     <div class="kpi-scenario-wrapper">
-      <h3 class="scenario-section-title">Annual Water Budget Scenario</h3>
+      <h3 class="scenario-section-title">Annual Water Budget Scenario(Values in m³)</h3>
       <div class="kpi-row">
         <div class="kpi-box supply-bg">
           <p class="kpi-title">Annual Utilizable Water Resources</p>
@@ -319,7 +319,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   </div>
 
   <div class="card">
-    <h5 style="margin-bottom: 8px; color: var(--primary);">Demand Crop Water Requirement (Season&Crop)</h5>
+    <h5 style="margin-bottom: 8px; color: var(--primary);">Demand for Crop Water Requirement (Season&Crop)</h5>
     <div style="overflow-x: auto; max-height: 140px; overflow-y: auto;">
       <table class="input-table">
         <thead>
@@ -2037,6 +2037,11 @@ function calculate() {
     charts.overviewTrend.data.datasets[0].data = monthlySupplyArr;
     charts.overviewTrend.data.datasets[1].data = monthlyDemandArr;
     charts.overviewTrend.update();
+  }
+  if (charts && charts.rwhTrend) {
+    charts.rwhTrend.data.datasets[1].data = monthlySupplyArr; 
+    charts.rwhTrend.data.datasets[2].data = monthlyDemandArr; 
+    charts.rwhTrend.update();
   }
 
   updateCharts(monthlyDemandArr, monthlyIrrigationArr, monthlySupplyArr);
