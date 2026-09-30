@@ -1996,15 +1996,14 @@ function calculate() {
     else if (["Nov", "Dec", "Jan", "Feb"].includes(m)) seasonalSupply.rabi += mSupplyTotal;
     else if (["Mar", "Apr", "May"].includes(m)) seasonalSupply.summer += mSupplyTotal;
 
-    supplyTableHtml += `<tr><th>${m}</th><td>${mSupplyTotal.toLocaleString()}</td></tr>`;
+    supplyTableHtml += `<tr><th>${m}</th><td>${mSupplyTotal.toLocaleString('en-IN')}</td></tr>`;
   });
 
-  document.getElementById('monthly-supply-body').innerHTML = supplyTableHtml;
-  document.getElementById('supply-season-kharif').innerText = seasonalSupply.kharif.toLocaleString();
-  document.getElementById('supply-season-rabi').innerText = seasonalSupply.rabi.toLocaleString();
-  document.getElementById('supply-season-summer').innerText = seasonalSupply.summer.toLocaleString();
+  document.getElementById('supply-season-kharif').innerText = seasonalSupply.kharif.toLocaleString('en-IN');
+  document.getElementById('supply-season-rabi').innerText = seasonalSupply.rabi.toLocaleString('en-IN');
+  document.getElementById('supply-season-summer').innerText = seasonalSupply.summer.toLocaleString('en-IN');
   let totalSupplySeasonalSum = seasonalSupply.kharif + seasonalSupply.rabi + seasonalSupply.summer;
-  document.getElementById('supply-season-total-combined').innerText = totalSupplySeasonalSum.toLocaleString();
+  document.getElementById('supply-season-total-combined').innerText = totalSupplySeasonalSum.toLocaleString('en-IN');
 
   lastMonthlySupply = monthlySupplyArr;
   lastMonthlyDemand = monthlyDemandArr;
