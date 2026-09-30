@@ -109,7 +109,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 .tab-info-content { text-align: center; max-width: 800px; margin: 0 auto; }
 .tab-info-content h4 { font-size: 1.2rem; color: #fefffd; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 .tab-info-content p { font-size: 0.88rem; line-height: 1.6; margin-bottom: 10px; color: #f1f5f9; }
-.tab-info-content strong { color: #ffffff; }
+.tab-info-content strong { color: #ffffff; }  
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 .info-btn { background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.95rem; padding: 2px 6px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
@@ -412,13 +412,13 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
 </div>
 
 <!-- SUPPLY INPUTS SECTION -->
-<div class="section-header">Supply Inputs (m³)</div>  
+<div class="section-header">Supply Inputs (m³)</div>
 <div class="bottom-grid-supply" style="grid-column: 1 / -1; width: 100%;">
   <div class="card">
     <div class="card-header-flex">
       <h5 style="color: var(--primary); margin-bottom: 0;">Surface Water</h5>
       <div style="display: flex; gap: 8px;">
-        <button class="btn-add-surface" style="background-color: #e35050;" onclick="resetSurfaceWater()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+        <button class="btn-add-surface" style="background-color: #ef4444;" onclick="resetSurfaceWater()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
         <button class="btn-add-surface" onclick="openSurfaceModal()"><i class="fa-solid fa-plus"></i> Add</button>
       </div>
     </div>
@@ -694,7 +694,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
         <h4>Research Team</h4>
         <p>DR. SUSANTA SKUMAR JENA (P.I REWARD)</p>
         <p>DR. SAMEER MANDAL (RA)</p>
-        <p>Others</p>
+        <p>ER. SUBRAT DASH (YP-1)</p>
       </div>
     </div>
 
@@ -742,7 +742,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     </div>
   </div>
 </div>
-
 
 <!-- Industrial Water Monthly Data Modal Popup -->
 <div id="industrialModal" class="modal-overlay">
@@ -1053,7 +1052,7 @@ function updateIndustrialModalTotal() {
     let val = +input.value || 0;
     sum += val;
   });
-  document.getElementById('ind-calc-annual-volume').innerText = sum.toLocaleString() + ' m³';
+  document.getElementById('ind-calc-annual-volume').innerText = sum.toLocaleString('en-IN') + ' m³';
 }
 
 function handleDirectIndustrialInput() {
@@ -1149,7 +1148,7 @@ function updateTransferModalTotal() {
     let val = +input.value || 0;
     sum += val;
   });
-  document.getElementById('trans-calc-annual-volume').innerText = sum.toLocaleString() + ' m³';
+  document.getElementById('trans-calc-annual-volume').innerText = sum.toLocaleString('en-IN') + ' m³';
 }
 
 function handleDirectTransferInput() {
@@ -1241,7 +1240,7 @@ function updateRWHSection(selectedMws) {
     let mm = rain_mm[idx] || 0;
     let m3 = rain_m3[idx] || 0;
     let ro = runoff_m3[idx] || 0;
-    tableHtml += `<tr><th style="text-align:left;">${m}</th><td style="text-align:right;">${mm.toLocaleString()}</td><td style="text-align:right;">${Math.round(m3).toLocaleString()}</td><td style="text-align:right; font-weight:600; color:#10b981;">${Math.round(ro).toLocaleString()}</td></tr>`;
+    tableHtml += `<tr><th style="text-align:left;">${m}</th><td style="text-align:right;">${mm.toLocaleString('en-IN')}</td><td style="text-align:right;">${Math.round(m3).toLocaleString('en-IN')}</td><td style="text-align:right; font-weight:600; color:#10b981;">${Math.round(ro).toLocaleString('en-IN')}</td></tr>`;
     if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
       seasonal.kharif.mm += mm;
       seasonal.kharif.m3 += m3;
@@ -1261,8 +1260,8 @@ function updateRWHSection(selectedMws) {
 
   const setRwhSeason = (key, prefix) => {
     document.getElementById(`rwh-rain-mm-${prefix}`).innerText = seasonal[key].mm.toFixed(1);
-    document.getElementById(`rwh-rain-m3-${prefix}`).innerText = Math.round(seasonal[key].m3).toLocaleString();
-    document.getElementById(`rwh-runoff-${prefix}`).innerText = Math.round(seasonal[key].runoff).toLocaleString();
+    document.getElementById(`rwh-rain-m3-${prefix}`).innerText = Math.round(seasonal[key].m3).toLocaleString('en-IN');
+    document.getElementById(`rwh-runoff-${prefix}`).innerText = Math.round(seasonal[key].runoff).toLocaleString('en-IN');
   };
 
   setRwhSeason('kharif', 'kharif');
@@ -1274,8 +1273,8 @@ function updateRWHSection(selectedMws) {
   let totalRunoff = seasonal.kharif.runoff + seasonal.rabi.runoff + seasonal.summer.runoff;
 
   document.getElementById('rwh-rain-mm-total').innerText = totalMm.toFixed(1);
-  document.getElementById('rwh-rain-m3-total').innerText = Math.round(totalM3).toLocaleString();
-  document.getElementById('rwh-runoff-total').innerText = Math.round(totalRunoff).toLocaleString();
+  document.getElementById('rwh-rain-m3-total').innerText = Math.round(totalM3).toLocaleString('en-IN');
+  document.getElementById('rwh-runoff-total').innerText = Math.round(totalRunoff).toLocaleString('en-IN');
 
   if (charts && charts.rwhTrend) {
     charts.rwhTrend.data.datasets[0].data = rain_m3;
@@ -1835,8 +1834,8 @@ function calculate() {
   let dailyDomesticM3 = totalPop * 135 * 0.001;
   let annualDomesticM3 = dailyDomesticM3 * 365;
 
-  document.getElementById('lbl-demand-urban').innerText = Math.round(popUrbanVal * 135 * 365 * 0.001).toLocaleString();
-  document.getElementById('lbl-demand-rural').innerText = Math.round((totalPop - popUrbanVal) * 135 * 365 * 0.001).toLocaleString();
+  document.getElementById('lbl-demand-urban').innerText = Math.round(popUrbanVal * 135 * 365 * 0.001).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-rural').innerText = Math.round((totalPop - popUrbanVal) * 135 * 365 * 0.001).toLocaleString('en-IN');
 
   let c = +document.getElementById('l-cattle').value || 0;
   let s = +document.getElementById('l-sheep').value || 0;
@@ -1851,10 +1850,10 @@ function calculate() {
   let dailyLivestockM3 = ((c * 67) + (s * 7) + (p * 0.32) + (pig * 22)) * 0.001;
   let annualLivestockM3 = dailyLivestockM3 * 365;
 
-  document.getElementById('lbl-demand-cattle').innerText = Math.round(cattleDemandAnnual).toLocaleString();
-  document.getElementById('lbl-demand-sheep').innerText = Math.round(sheepDemandAnnual).toLocaleString();
-  document.getElementById('lbl-demand-poultry').innerText = Math.round(poultryDemandAnnual).toLocaleString();
-  document.getElementById('lbl-demand-pigs').innerText = Math.round(pigDemandAnnual).toLocaleString();
+  document.getElementById('lbl-demand-cattle').innerText = Math.round(cattleDemandAnnual).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-sheep').innerText = Math.round(sheepDemandAnnual).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-poultry').innerText = Math.round(poultryDemandAnnual).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-pigs').innerText = Math.round(pigDemandAnnual).toLocaleString('en-IN');
 
   let ind1Val = +document.getElementById('ind-1').value || 0;
   let ind2Val = +document.getElementById('ind-2').value || 0;
@@ -1912,26 +1911,26 @@ function calculate() {
     else if (["Nov", "Dec", "Jan", "Feb"].includes(m)) seasonalDemands.rabi += monthTotal;
     else if (["Mar", "Apr", "May"].includes(m)) seasonalDemands.summer += monthTotal;
 
-    tableHtml += `<tr><th>${m}</th><td>${monthTotal.toLocaleString()}</td></tr>`;
+    tableHtml += `<tr><th>${m}</th><td>${monthTotal.toLocaleString('en-IN')}</td></tr>`;
   });
 
-  document.getElementById('lbl-demand-paddy').innerText = Math.round(cropAnnualTotals["Kharif_Paddy"]).toLocaleString();
-  document.getElementById('lbl-demand-k-blackgram').innerText = Math.round(cropAnnualTotals["Kharif_Blackgram"]).toLocaleString();
-  document.getElementById('lbl-demand-k-maize').innerText = Math.round(cropAnnualTotals["Kharif_Maize"]).toLocaleString();
-  document.getElementById('lbl-demand-r-blackgram').innerText = Math.round(cropAnnualTotals["Rabi_Blackgram"]).toLocaleString();
-  document.getElementById('lbl-demand-r-greengram').innerText = Math.round(cropAnnualTotals["Rabi_Greengram"]).toLocaleString();
-  document.getElementById('lbl-demand-r-mustard').innerText = Math.round(cropAnnualTotals["Rabi_Mustard"]).toLocaleString();
-  document.getElementById('lbl-demand-r-maize').innerText = Math.round(cropAnnualTotals["Rabi_Maize"]).toLocaleString();
-  document.getElementById('lbl-demand-r-sugarcane').innerText = Math.round(cropAnnualTotals["Rabi_Sugarcane"]).toLocaleString();
-  document.getElementById('lbl-demand-r-veg').innerText = Math.round(cropAnnualTotals["Rabi_Vegetables"]).toLocaleString();
-  document.getElementById('lbl-demand-s-veg').innerText = Math.round(cropAnnualTotals["Summer_Vegetables"]).toLocaleString();
+  document.getElementById('lbl-demand-paddy').innerText = Math.round(cropAnnualTotals["Kharif_Paddy"]).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-k-blackgram').innerText = Math.round(cropAnnualTotals["Kharif_Blackgram"]).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-k-maize').innerText = Math.round(cropAnnualTotals["Kharif_Maize"]).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-r-blackgram').innerText = Math.round(cropAnnualTotals["Rabi_Blackgram"]).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-r-greengram').innerText = Math.round(cropAnnualTotals["Rabi_Greengram"]).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-r-mustard').innerText = Math.round(cropAnnualTotals["Rabi_Mustard"]).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-r-maize').innerText = Math.round(cropAnnualTotals["Rabi_Maize"]).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-r-sugarcane').innerText = Math.round(cropAnnualTotals["Rabi_Sugarcane"]).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-r-veg').innerText = Math.round(cropAnnualTotals["Rabi_Vegetables"]).toLocaleString('en-IN');
+  document.getElementById('lbl-demand-s-veg').innerText = Math.round(cropAnnualTotals["Summer_Vegetables"]).toLocaleString('en-IN');
 
   document.getElementById('monthly-body').innerHTML = tableHtml;
-  document.getElementById('season-kharif').innerText = seasonalDemands.kharif.toLocaleString();
-  document.getElementById('season-rabi').innerText = seasonalDemands.rabi.toLocaleString();
-  document.getElementById('season-summer').innerText = seasonalDemands.summer.toLocaleString();
+  document.getElementById('season-kharif').innerText = seasonalDemands.kharif.toLocaleString('en-IN');
+  document.getElementById('season-rabi').innerText = seasonalDemands.rabi.toLocaleString('en-IN');
+  document.getElementById('season-summer').innerText = seasonalDemands.summer.toLocaleString('en-IN');
   let totalSeasonalSum = seasonalDemands.kharif + seasonalDemands.rabi + seasonalDemands.summer;
-  document.getElementById('season-total-combined').innerText = totalSeasonalSum.toLocaleString();
+  document.getElementById('season-total-combined').innerText = totalSeasonalSum.toLocaleString('en-IN');
 
   let surf = (+document.getElementById('s-pond').value || 0) + (+document.getElementById('s-res').value || 0) + (+document.getElementById('s-riv').value || 0);
   let ground = (+document.getElementById('g-dug').value || 0) + (+document.getElementById('g-tube').value || 0) + (+document.getElementById('g-oth').value || 0);
@@ -1958,18 +1957,18 @@ function calculate() {
   let totalS = surf + ground + annualTransSum;
   let net = totalS - totalD;
 
-  document.getElementById('txt-human').innerText = Math.round(annualDomesticM3).toLocaleString();
-  document.getElementById('txt-livestock').innerText = Math.round(annualLivestockM3).toLocaleString();
-  document.getElementById('txt-irrigation').innerText = Math.round(totalIrrigationAnnual).toLocaleString();
-  document.getElementById('txt-industry').innerText = Math.round(annualIndSum).toLocaleString();
-  document.getElementById('txt-surface').innerText = Math.round(surf).toLocaleString();
-  document.getElementById('txt-ground').innerText = Math.round(ground).toLocaleString();
-  document.getElementById('txt-transfer').innerText = Math.round(annualTransSum).toLocaleString();
-  document.getElementById('txt-net').innerText = Math.round(net).toLocaleString();
+  document.getElementById('txt-human').innerText = Math.round(annualDomesticM3).toLocaleString('en-IN');
+  document.getElementById('txt-livestock').innerText = Math.round(annualLivestockM3).toLocaleString('en-IN');
+  document.getElementById('txt-irrigation').innerText = Math.round(totalIrrigationAnnual).toLocaleString('en-IN');
+  document.getElementById('txt-industry').innerText = Math.round(annualIndSum).toLocaleString('en-IN');
+  document.getElementById('txt-surface').innerText = Math.round(surf).toLocaleString('en-IN');
+  document.getElementById('txt-ground').innerText = Math.round(ground).toLocaleString('en-IN');
+  document.getElementById('txt-transfer').innerText = Math.round(annualTransSum).toLocaleString('en-IN');
+  document.getElementById('txt-net').innerText = Math.round(net).toLocaleString('en-IN');
 
-  document.getElementById('kpi-supply').innerText = Math.round(totalS).toLocaleString();
-  document.getElementById('kpi-demand').innerText = Math.round(totalD).toLocaleString();
-  document.getElementById('kpi-status').innerText = Math.round(net).toLocaleString();
+  document.getElementById('kpi-supply').innerText = Math.round(totalS).toLocaleString('en-IN');
+  document.getElementById('kpi-demand').innerText = Math.round(totalD).toLocaleString('en-IN');
+  document.getElementById('kpi-status').innerText = Math.round(net).toLocaleString('en-IN');
   document.getElementById('kpi-status-box').style.background = net >= 0 ? '#10b981' : '#ef4444';
 
   let monthlySupplyArr = [];
@@ -1999,6 +1998,7 @@ function calculate() {
     supplyTableHtml += `<tr><th>${m}</th><td>${mSupplyTotal.toLocaleString('en-IN')}</td></tr>`;
   });
 
+  document.getElementById('monthly-supply-body').innerHTML = supplyTableHtml;
   document.getElementById('supply-season-kharif').innerText = seasonalSupply.kharif.toLocaleString('en-IN');
   document.getElementById('supply-season-rabi').innerText = seasonalSupply.rabi.toLocaleString('en-IN');
   document.getElementById('supply-season-summer').innerText = seasonalSupply.summer.toLocaleString('en-IN');
@@ -2014,16 +2014,16 @@ function calculate() {
     let dVal = monthlyDemandArr[idx] || 0;
     let netVal = sVal - dVal;
     let netColor = netVal >= 0 ? '#10b981' : '#ef4444';
-    overviewTableHtml += `<tr><th style="text-align:left;">${m}</th><td style="text-align:right;">${sVal.toLocaleString()}</td><td style="text-align:right;">${dVal.toLocaleString()}</td><td style="text-align:right; font-weight:600; color:${netColor}">${netVal.toLocaleString()}</td></tr>`;
+    overviewTableHtml += `<tr><th style="text-align:left;">${m}</th><td style="text-align:right;">${sVal.toLocaleString('en-IN')}</td><td style="text-align:right;">${dVal.toLocaleString('en-IN')}</td><td style="text-align:right; font-weight:600; color:${netColor}">${netVal.toLocaleString('en-IN')}</td></tr>`;
   });
   document.getElementById('overview-monthly-body').innerHTML = overviewTableHtml;
 
   const setSeasonOv = (idSup, idDem, idNet, supVal, demVal) => {
     let netVal = supVal - demVal;
-    document.getElementById(idSup).innerText = supVal.toLocaleString();
-    document.getElementById(idDem).innerText = demVal.toLocaleString();
+    document.getElementById(idSup).innerText = supVal.toLocaleString('en-IN');
+    document.getElementById(idDem).innerText = demVal.toLocaleString('en-IN');
     let netEl = document.getElementById(idNet);
-    netEl.innerText = netVal.toLocaleString();
+    netEl.innerText = netVal.toLocaleString('en-IN');
     netEl.style.color = netVal >= 0 ? '#10b981' : '#ef4444';
   };
 
@@ -2080,7 +2080,7 @@ function initCharts() {
       maintainAspectRatio: false,
       devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
       scales: {
-        y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString() } },
+        y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString('en-IN') } },
         x: { ticks: { font: { size: 9 } }, grid: { display: false } }
       },
       plugins: { legend: { display: false }, datalabels: { display: false } }
@@ -2098,7 +2098,7 @@ function initCharts() {
       maintainAspectRatio: false,
       devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
       scales: {
-        y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString() } },
+        y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString('en-IN') } },
         x: { ticks: { font: { size: 9 } }, grid: { display: false } }
       },
       plugins: { legend: { display: false }, datalabels: { display: false } }
@@ -2116,7 +2116,7 @@ function initCharts() {
       maintainAspectRatio: false,
       devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
       scales: {
-        y: { beginAtZero: true, ticks: { font: { size: 9 } }, title: { display: true, text: 'Supply (m³)', font: { family: 'Poppins', size: 11, weight: '600' } } },
+        y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString('en-IN') }, title: { display: true, text: 'Supply (m³)', font: { family: 'Poppins', size: 11, weight: '600' } } },
         x: { ticks: { font: { size: 9 } } }
       },
       plugins: { legend: { display: false } }
@@ -2137,7 +2137,7 @@ function initCharts() {
       maintainAspectRatio: false,
       devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
       scales: {
-        y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString() } },
+        y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString('en-IN') } },
         x: { ticks: { font: { size: 9 } } }
       },
       plugins: {
@@ -2165,7 +2165,7 @@ function initCharts() {
       scales: {
         y: {
           beginAtZero: true,
-          ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString() },
+          ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString('en-IN') },
           title: { display: true, text: 'Volume (m³)', font: { family: 'Poppins', size: 10, weight: '600' } }
         },
         x: { ticks: { font: { size: 9 } } }
@@ -2192,7 +2192,7 @@ function initCharts() {
       maintainAspectRatio: false,
       devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
       scales: {
-        y: { beginAtZero: true, ticks: { font: { size: 9 } }, title: { display: true, text: 'Demand (m³)', font: { family: 'Poppins', size: 10, weight: '600' } } },
+        y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString('en-IN') }, title: { display: true, text: 'Demand (m³)', font: { family: 'Poppins', size: 10, weight: '600' } } },
         x: { ticks: { font: { size: 9 } } }
       },
       plugins: { legend: { display: false } }
@@ -2211,26 +2211,12 @@ function initCharts() {
       maintainAspectRatio: false,
       devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
       scales: {
-        y: { beginAtZero: true, ticks: { font: { size: 9 } }, title: { display: true, text: 'Demand (m³)', font: { family: 'Poppins', size: 11, weight: '600' } } },
+        y: { beginAtZero: true, ticks: { font: { size: 9 }, callback: value => value >= 1e6 ? (value / 1e6).toFixed(1) + 'M' : value.toLocaleString('en-IN') }, title: { display: true, text: 'Demand (m³)', font: { family: 'Poppins', size: 11, weight: '600' } } },
         x: { ticks: { font: { size: 9 } } }
       },
       plugins: { legend: { display: false } }
     }
   });
-}
-
-function openSurfaceModal() { document.getElementById('surfaceModal').style.display = 'flex'; }
-function closeSurfaceModal() { 
-  document.getElementById('surfaceModal').style.display = 'none'; 
-  
-  // Clear the inputs for the next time the modal opens
-  document.getElementById('dim-length').value = 0;
-  document.getElementById('dim-width').value = 0;
-  document.getElementById('dim-depth').value = 0;
-  document.getElementById('dim-calc-volume').innerText = '0 m³';
-  
-  // Reset the dropdown back to default (Ponds / Lakes)
-  document.getElementById('modal-struct-type').value = 'pond';
 }
 
 function resetSurfaceWater() {
@@ -2263,6 +2249,20 @@ function resetSurfaceWater() {
   
   // Re-run the main calculation to update the Monthly/Seasonal tables
   calculate(); 
+}
+
+function openSurfaceModal() { document.getElementById('surfaceModal').style.display = 'flex'; }
+function closeSurfaceModal() { 
+  document.getElementById('surfaceModal').style.display = 'none'; 
+  
+  // Clear the inputs for the next time the modal opens
+  document.getElementById('dim-length').value = 0;
+  document.getElementById('dim-width').value = 0;
+  document.getElementById('dim-depth').value = 0;
+  document.getElementById('dim-calc-volume').innerText = '0 m³';
+  
+  // Reset the dropdown back to default (Ponds / Lakes)
+  document.getElementById('modal-struct-type').value = 'pond';
 }
 
 function saveSurfaceStructure() {
@@ -2331,7 +2331,7 @@ function updateModalVolume() {
   let effectiveDepth = Math.max(0, d - FACTOR_CONSTANT); 
   let vol = Math.round(l * w * effectiveDepth);
   
-  document.getElementById('dim-calc-volume').innerText = vol.toLocaleString() + ' m³';
+  document.getElementById('dim-calc-volume').innerText = vol.toLocaleString('en-IN') + ' m³';
 }
 ['dim-length', 'dim-width', 'dim-depth'].forEach(id => {
   let el = document.getElementById(id);
