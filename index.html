@@ -726,9 +726,9 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
       <div class="dimension-box">
         <label style="font-weight:600; font-size:0.85rem; color:#0077b6;">Specify Dimensions</label>
         <div class="dimension-grid">
-          <div class="modal-group"><label>Length (m)</label><input type="number" id="dim-length" placeholder="0" value="0"></div>
-          <div class="modal-group"><label>Width (m)</label><input type="number" id="dim-width" placeholder="0" value="0"></div>
-          <div class="modal-group"><label>Depth (m)</label><input type="number" id="dim-depth" placeholder="0" value="0"></div>
+          <div class="modal-group"><label>Length (m)</label><input type="number" id="dim-length" placeholder="0"></div>
+          <div class="modal-group"><label>Width (m)</label><input type="number" id="dim-width" placeholder="0"></div>
+          <div class="modal-group"><label>Depth (m)</label><input type="number" id="dim-depth" placeholder="0"></div>
         </div>
       </div>
       <div class="result-box">
@@ -1585,8 +1585,9 @@ dS.onchange = function() {
   mS.innerHTML = '';
   cS.disabled = !this.value; mS.disabled = true;
   
-  if (districtLayer) map.removeLayer(districtLayer);
-  if (geoLayer) map.removeLayer(geoLayer);
+  // FIXED: Also remove from layerControl to prevent duplicates in the map menu
+  if (districtLayer) { map.removeLayer(districtLayer); layerControl.removeLayer(districtLayer); }
+  if (geoLayer) { map.removeLayer(geoLayer); layerControl.removeLayer(geoLayer); }
   if (mcdLayer && map.hasLayer(mcdLayer)) map.removeLayer(mcdLayer);
   if (waterbodiesLayer && map.hasLayer(waterbodiesLayer)) map.removeLayer(waterbodiesLayer);
 
@@ -2141,13 +2142,29 @@ function initCharts() {
         x: { ticks: { font: { size: 9 } } }
       },
       plugins: {
-        legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 9, family: 'Poppins' } } },
+        legend: { 
+          display: true, 
+          position: 'top', 
+          labels: { 
+            boxWidth: 12, 
+            font: { size: 9, family: 'Poppins' },
+            generateLabels: (chart) => {
+              return chart.data.datasets.map((dataset, i) => ({
+                text: dataset.label,
+                fillStyle: dataset.borderColor, // Forces solid fill inside the legend box
+                strokeStyle: dataset.borderColor,
+                hidden: !chart.isDatasetVisible(i),
+                datasetIndex: i
+              }));
+            }
+          } 
+        },
         datalabels: { display: false }
       }
     }
   });
 
-  charts.rwhTrend = new Chart(document.getElementById('c-rwh-trend'), {
+ charts.rwhTrend = new Chart(document.getElementById('c-rwh-trend'), {
     type: 'line',
     data: {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -2171,7 +2188,30 @@ function initCharts() {
         x: { ticks: { font: { size: 9 } } }
       },
       plugins: {
-        legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 9, family: 'Poppins' } } },
+        legend: { 
+          display: true, 
+          position: 'top', 
+          labels: { 
+            boxWidth: 16, // Made slightly wider so the dashed line is clearly visible
+            usePointStyle: true, // Enables custom shapes in the legend
+            font: { size: 9, family: 'Poppins' },
+            generateLabels: (chart) => {
+              return chart.data.datasets.map((dataset, i) => {
+                const isNetSupply = dataset.label === 'Net Supply';
+                return {
+                  text: dataset.label,
+                  fillStyle: dataset.borderColor,
+                  strokeStyle: dataset.borderColor,
+                  lineWidth: isNetSupply ? 2 : 1,
+                  lineDash: isNetSupply ? [4, 3] : [], // Applies the dashed effect
+                  pointStyle: isNetSupply ? 'line' : 'rect', // 'line' for Net Supply, solid 'rect' box for others
+                  hidden: !chart.isDatasetVisible(i),
+                  datasetIndex: i
+                };
+              });
+            }
+          } 
+        },
         datalabels: { display: false }
       }
     }
@@ -2256,9 +2296,9 @@ function closeSurfaceModal() {
   document.getElementById('surfaceModal').style.display = 'none'; 
   
   // Clear the inputs for the next time the modal opens
-  document.getElementById('dim-length').value = 0;
-  document.getElementById('dim-width').value = 0;
-  document.getElementById('dim-depth').value = 0;
+  document.getElementById('dim-length').value = '';
+  document.getElementById('dim-width').value = '';
+  document.getElementById('dim-depth').value = '';
   document.getElementById('dim-calc-volume').innerText = '0 m³';
   
   // Reset the dropdown back to default (Ponds / Lakes)
@@ -2266,10 +2306,20 @@ function closeSurfaceModal() {
 }
 
 function saveSurfaceStructure() {
+  const lRaw = document.getElementById('dim-length').value;
+  const wRaw = document.getElementById('dim-width').value;
+  const dRaw = document.getElementById('dim-depth').value;
+
+  // Validation: Check if fields are empty or zero
+  if (lRaw === "" || wRaw === "" || dRaw === "" || +lRaw <= 0 || +wRaw <= 0 || +dRaw <= 0) {
+    alert("Please provide valid, non-zero values for Length, Width, and Depth.");
+    return; // Stop function execution
+  }
+
   const type = document.getElementById('modal-struct-type').value;
-  const l = +document.getElementById('dim-length').value || 0;
-  const w = +document.getElementById('dim-width').value || 0;
-  const d = +document.getElementById('dim-depth').value || 0;
+  const l = +lRaw;
+  const w = +wRaw;
+  const d = +dRaw;
   
   // 1. Calculate Max Volume to add to the visual input box total
   let maxEffectiveDepth = Math.max(0, d - FACTOR_CONSTANT);
