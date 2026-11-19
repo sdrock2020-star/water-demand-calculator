@@ -723,7 +723,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
             <th style="text-align: right;">Available Water Resources (m³)</th>
             <th style="text-align: center;">Water Balance</th>
             <th style="text-align: right;">Net Area to be Cropped (ha)</th>
-            <th style="text-align: left;">Advisory Section</th>
+            <th style="text-align: left;">Recommendations</th>
           </tr>
         </thead>
         <tbody id="crop-planning-body"></tbody>
@@ -1764,14 +1764,9 @@ function renderCropPlanningTable() {
   const agriAreaHa = MWS_AGRI_AREA_HA[selectedMws];
 
   if (!agriAreaHa) {
-    const msg = selectedMws
-      ? `Crop planning agricultural area data for <strong>${selectedMws}</strong> MWS is not yet available (currently configured for <strong>Rabara</strong> MWS).`
-      : `Select Above the MWS to See The Crop Planning Based on Water Availability Data`;
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="9" style="text-align: center; color: #64748b; padding: 20px;">${msg}</td>
-      </tr>
-    `;
+    tbody.innerHTML = selectedMws
+      ? ""
+      : `<tr><td colspan="9" style="text-align: center; color: #64748b; padding: 20px;">Select above the MWS to see the Crop Planning Based on Water Availability data</td></tr>`;
     return;
   }
 
@@ -2200,7 +2195,7 @@ function calculate() {
   }
 
   updateCharts(monthlyDemandArr, monthlyIrrigationArr, monthlySupplyArr);
-  lastSeasonalDemands = {...seasonalDemands};
+  lastSeasonalDemands = { ...seasonalSupply };
   renderCropPlanningTable();
 }
 
