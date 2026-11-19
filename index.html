@@ -1789,9 +1789,9 @@ function renderCropPlanningTable() {
     const netAreaPct = agriAreaHa > 0 ? ((netAreaHa / agriAreaHa) * 100).toFixed(2) : "0.00"; 
     let advisory = "";
     if (isDeficit) {
-      advisory = "Either select low duty crop or reduce the croping area or create storage";
-    } else {
       advisory = "Select low duty crop/ reduce the cropping area/ create storage";
+    } else {
+      advisory = "Sufficient water available for cultivation";
     }
 
     return `
