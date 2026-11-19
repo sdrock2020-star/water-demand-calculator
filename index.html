@@ -1786,12 +1786,12 @@ function renderCropPlanningTable() {
     const balanceText = isDeficit ? "Deficit" : "Surplus";
     const balanceColor = isDeficit ? "#ef4444" : "#10b981";
     const netAreaHa = isDeficit ? (availWater / (row.cwrMm * 10)) : agriAreaHa;
-    const netAreaPct = agriAreaHa > 0 ? ((netAreaHa / agriAreaHa) * 100).toFixed(2) : "0.00";
+    const netAreaPct = agriAreaHa > 0 ? ((netAreaHa / agriAreaHa) * 100).toFixed(2) : "0.00"; 
     let advisory = "";
     if (isDeficit) {
-      advisory = "Either select low duty crop or reduce the cropping area";
+      advisory = "Either select low duty crop or reduce the croping area or create storage";
     } else {
-      advisory = "Sufficient water available cultivate in full agricultural area";
+      advisory = "Select low duty crop/ reduce the cropping area/ create storage";
     }
 
     return `
