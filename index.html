@@ -198,6 +198,36 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
   .title-container h2 { font-size: 0.95rem; margin-bottom: 5px; }
 }
 
+/* Crop Planning Table Styling */
+#crop-planning-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  min-width: 780px;
+}
+#crop-planning-table th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  white-space: nowrap;
+}
+#crop-planning-table td {
+  border: 1px solid #e2e8f0;
+  padding: 7px 10px;
+  color: #0f172a;
+  vertical-align: middle;
+}
+#crop-planning-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+
 /* Custom Map Label Styling - Removes white box */
 .leaflet-tooltip.custom-mws-label {
   background-color: transparent !important;
@@ -658,6 +688,46 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; }
     <h4 class="table-card-title">Rainfall, Supply, Demand & Net Supply Trend</h4>
     <div style="flex: 1; min-height: 0; margin-top: 8px; position: relative;">
       <canvas id="c-rwh-trend"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- CROP PLANNING BASED ON WATER AVAILABILITY SECTION -->
+<div class="section-header">Crop Planning Based on Water Availability</div>
+<div class="full-width-row" id="crop-planning-section">
+  <div class="card">
+    <div class="card-header-flex" style="border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 8px;">
+      <h4 class="table-card-title" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
+        Crop Planning Based on Water Availability information Below 🍀
+      </h4>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <label for="crop-season-filter" style="font-size: 0.8rem; font-weight: 600; color: #334155;">Filter by Season:</label>
+        <select id="crop-season-filter" onchange="renderCropPlanningTable()" style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border); font-size: 0.8rem; color: #0f172a; background: #ffffff; cursor: pointer;">
+          <option value="All">All Seasons</option>
+          <option value="Kharif">Kharif</option>
+          <option value="Rabi">Rabi</option>
+          <option value="Summer">Summer</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-scroll-wrapper">
+      <table id="crop-planning-table">
+        <thead>
+          <tr>
+            <th style="text-align: left;">Season</th>
+            <th style="text-align: left;">Crop</th>
+            <th style="text-align: right;">Crop Water Requirement (mm)</th>
+            <th style="text-align: right;">Agricultural Area of MWS (ha)</th>
+            <th style="text-align: right;">Crop Water Requirement (m³)</th>
+            <th style="text-align: right;">Available Water Resources (m³)</th>
+            <th style="text-align: center;">Water Balance</th>
+            <th style="text-align: right;">Net Area to be Cropped (ha)</th>
+            <th style="text-align: left;">Advisory Section</th>
+          </tr>
+        </thead>
+        <tbody id="crop-planning-body"></tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -1656,6 +1726,91 @@ cS.onchange = function() {
   updateRWHSection("");
 };
 
+// --- CROP PLANNING BASED ON WATER AVAILABILITY ---
+let lastSeasonalDemands = { kharif: 0, rabi: 0, summer: 0 };
+
+// Add other MWS agricultural areas (in ha) here whenever ready
+const MWS_AGRI_AREA_HA = {
+  "Rabara": 414.17
+};
+
+const CROP_PLANNING_DATA = [
+  // Kharif
+  { season: "Kharif", seasonKey: "kharif", crop: "Paddy",         cwrMm: 881 },
+  { season: "Kharif", seasonKey: "kharif", crop: "Blackgram",     cwrMm: 579.8 },
+  { season: "Kharif", seasonKey: "kharif", crop: "Maize",         cwrMm: 687.4 },
+  { season: "Kharif", seasonKey: "kharif", crop: "Redgram",       cwrMm: 466.7 },
+  { season: "Kharif", seasonKey: "kharif", crop: "Finger Millet", cwrMm: 342 },
+  // Rabi
+  { season: "Rabi",   seasonKey: "rabi",   crop: "Maize",         cwrMm: 400 },
+  { season: "Rabi",   seasonKey: "rabi",   crop: "Groundnut",     cwrMm: 373.4 },
+  { season: "Rabi",   seasonKey: "rabi",   crop: "Mustard",       cwrMm: 412.6 },
+  { season: "Rabi",   seasonKey: "rabi",   crop: "Greengram",     cwrMm: 490 },
+  { season: "Rabi",   seasonKey: "rabi",   crop: "Millets",       cwrMm: 157.2 },
+  // Summer
+  { season: "Summer", seasonKey: "summer", crop: "Redgram",       cwrMm: 466.7 },
+  { season: "Summer", seasonKey: "summer", crop: "Groundnut",     cwrMm: 517.3 },
+  { season: "Summer", seasonKey: "summer", crop: "Millets",       cwrMm: 325.5 },
+  { season: "Summer", seasonKey: "summer", crop: "Greengram",     cwrMm: 490 },
+  { season: "Summer", seasonKey: "summer", crop: "Cowpea",        cwrMm: 442 }
+];
+
+function renderCropPlanningTable() {
+  const filterVal = document.getElementById('crop-season-filter')?.value || "All";
+  const selectedMws = document.getElementById('msw-select')?.value || "";
+  const tbody = document.getElementById('crop-planning-body');
+  if (!tbody) return;
+
+  const agriAreaHa = MWS_AGRI_AREA_HA[selectedMws];
+
+  if (!agriAreaHa) {
+    const msg = selectedMws
+      ? `Crop planning agricultural area data for <strong>${selectedMws}</strong> MWS is not yet available (currently configured for <strong>Rabara</strong> MWS).`
+      : `Select Above the MWS to See The Crop Planning Based on Water Availability Data`;
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="9" style="text-align: center; color: #64748b; padding: 20px;">${msg}</td>
+      </tr>
+    `;
+    return;
+  }
+
+  const filteredRows = filterVal === "All"
+    ? CROP_PLANNING_DATA
+    : CROP_PLANNING_DATA.filter(row => row.season === filterVal);
+
+  tbody.innerHTML = filteredRows.map(row => {
+    const cwrM3 = row.cwrMm * agriAreaHa * 10;
+    const availWater = Math.round(lastSeasonalDemands[row.seasonKey] || 0);
+    const isDeficit = cwrM3 > availWater;
+    const balanceText = isDeficit ? "Deficit" : "Surplus";
+    const balanceColor = isDeficit ? "#ef4444" : "#10b981";
+    const netAreaHa = isDeficit ? (availWater / (row.cwrMm * 10)) : agriAreaHa;
+    const netAreaPct = agriAreaHa > 0 ? ((netAreaHa / agriAreaHa) * 100).toFixed(2) : "0.00";
+    let advisory = "";
+    if (isDeficit) {
+      advisory = "Either select low duty crop or reduce the cropping area";
+    } else {
+      advisory = "Sufficient water available cultivate in full agricultural area";
+    }
+
+    return `
+      <tr>
+        <td style="font-weight: 600;">${row.season}</td>
+        <td>${row.crop}</td>
+        <td style="text-align: right;">${row.cwrMm}</td>
+        <td style="text-align: right;">${agriAreaHa.toFixed(2)}</td>
+        <td style="text-align: right;">${cwrM3.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</td>
+        <td style="text-align: right; font-weight: 600; color: #0077b6;">${availWater.toLocaleString('en-IN')}</td>
+        <td style="text-align: center; font-weight: 700; color: ${balanceColor};">${balanceText}</td>
+        <td style="text-align: right; font-weight: 600; white-space: nowrap;">${netAreaHa.toFixed(2)} <span style="color: #64748b; font-weight: 500;">(${netAreaPct}%)</span></td>
+        <td>${advisory}</td>
+      </tr>
+    `;
+  }).join('');
+}
+renderCropPlanningTable();
+
 function setCropInputs(cropsObj = {}) {
   document.getElementById('a-paddy').value = cropsObj["Kharif_Paddy"] || 0;
   document.getElementById('a-k-blackgram').value = cropsObj["Kharif_Blackgram"] || 0;
@@ -2045,6 +2200,8 @@ function calculate() {
   }
 
   updateCharts(monthlyDemandArr, monthlyIrrigationArr, monthlySupplyArr);
+  lastSeasonalDemands = {...seasonalDemands};
+  renderCropPlanningTable();
 }
 
 let charts = {};
