@@ -1728,6 +1728,7 @@ cS.onchange = function() {
 
 // --- CROP PLANNING BASED ON WATER AVAILABILITY ---
 let lastSeasonalDemands = { kharif: 0, rabi: 0, summer: 0 };
+let customCropAreas = {}; // Stores user-edited areas per MWS & row
 
 // Add other MWS agricultural areas (in ha) here whenever ready
 const MWS_AGRI_AREA_HA = {
@@ -1755,46 +1756,66 @@ const CROP_PLANNING_DATA = [
   { season: "Summer", seasonKey: "summer", crop: "Cowpea",        cwrMm: 442 }
 ];
 
+function handleCropAreaEdit(rowIndex, inputEl) {
+  const selectedMws = document.getElementById('msw-select')?.value || "";
+  const defaultArea = MWS_AGRI_AREA_HA[selectedMws];
+  if (!defaultArea) return;
+
+  let val = parseFloat(inputEl.value);
+  if (isNaN(val) || val < 0) {
+    val = defaultArea;
+  }
+
+  if (!customCropAreas[selectedMws]) customCropAreas[selectedMws] = {};
+  customCropAreas[selectedMws][rowIndex] = val;
+
+  renderCropPlanningTable();
+}
+
 function renderCropPlanningTable() {
   const filterVal = document.getElementById('crop-season-filter')?.value || "All";
   const selectedMws = document.getElementById('msw-select')?.value || "";
   const tbody = document.getElementById('crop-planning-body');
   if (!tbody) return;
 
-  const agriAreaHa = MWS_AGRI_AREA_HA[selectedMws];
+  const defaultAreaHa = MWS_AGRI_AREA_HA[selectedMws];
 
-  if (!agriAreaHa) {
+  if (!defaultAreaHa) {
     tbody.innerHTML = selectedMws
       ? ""
       : `<tr><td colspan="9" style="text-align: center; color: #64748b; padding: 20px;">Select above the MWS to see the Crop Planning Based on Water Availability data</td></tr>`;
     return;
   }
 
-  const filteredRows = filterVal === "All"
-    ? CROP_PLANNING_DATA
-    : CROP_PLANNING_DATA.filter(row => row.season === filterVal);
+  const mwsEdits = customCropAreas[selectedMws] || {};
 
-  tbody.innerHTML = filteredRows.map(row => {
+  tbody.innerHTML = CROP_PLANNING_DATA.map((row, idx) => {
+    if (filterVal !== "All" && row.season !== filterVal) return "";
+
+    const agriAreaHa = (mwsEdits[idx] !== undefined) ? mwsEdits[idx] : defaultAreaHa;
     const cwrM3 = row.cwrMm * agriAreaHa * 10;
     const availWater = Math.round(lastSeasonalDemands[row.seasonKey] || 0);
     const isDeficit = cwrM3 > availWater;
     const balanceText = isDeficit ? "Deficit" : "Surplus";
     const balanceColor = isDeficit ? "#ef4444" : "#10b981";
     const netAreaHa = isDeficit ? (availWater / (row.cwrMm * 10)) : agriAreaHa;
-    const netAreaPct = agriAreaHa > 0 ? ((netAreaHa / agriAreaHa) * 100).toFixed(2) : "0.00"; 
+    const netAreaPct = defaultAreaHa > 0 ? ((netAreaHa / defaultAreaHa) * 100).toFixed(2) : "0.00";
     let advisory = "";
-    if (isDeficit) {
-      advisory = "Select low duty crop/ reduce the cropping area/ create storage";
-    } else {
-      advisory = "Sufficient water available for cultivation";
+    if (agriAreaHa > 0) {
+      advisory = isDeficit
+        ? "Select low duty crop/ reduce the cropping area/ create storage"
+        : "Sufficient water available for cultivation";
     }
-
     return `
       <tr>
         <td style="font-weight: 600;">${row.season}</td>
         <td>${row.crop}</td>
         <td style="text-align: right;">${row.cwrMm}</td>
-        <td style="text-align: right;">${agriAreaHa.toFixed(2)}</td>
+        <td style="text-align: right;">
+          <input type="number" step="0.01" min="0" value="${agriAreaHa.toFixed(2)}"
+            onchange="handleCropAreaEdit(${idx}, this)"
+            style="width: 78px; padding: 3px 5px; text-align: right; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.78rem; font-weight: 600; color: #0f172a;">
+        </td>
         <td style="text-align: right;">${cwrM3.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</td>
         <td style="text-align: right; font-weight: 600; color: #0077b6;">${availWater.toLocaleString('en-IN')}</td>
         <td style="text-align: center; font-weight: 700; color: ${balanceColor};">${balanceText}</td>
@@ -1887,7 +1908,10 @@ document.getElementById('clear-all-btn').onclick = function() {
   document.getElementById('cluster-select').disabled = true;
   document.getElementById('msw-select').innerHTML = "";
   document.getElementById('msw-select').disabled = true;
-  
+  customCropAreas = {};
+  const cropFilter = document.getElementById('crop-season-filter');
+  if (cropFilter) cropFilter.value = "All";
+
   if (geoLayer) {
     geoLayer.eachLayer(l => {
       if (l._path) l._path.classList.remove('selected-mws-outline');
@@ -2031,6 +2055,7 @@ function calculate() {
   let monthlyIrrigationArr = [];
   let tableHtml = "";
   let seasonalDemands = { kharif: 0, rabi: 0, summer: 0 };
+  let seasonalDomLive = { kharif: 0, rabi: 0, summer: 0 };
 
   calendarMonths.forEach((m, idx) => {
     let days = DAYS_IN_MONTH[m];
@@ -2058,9 +2083,17 @@ function calculate() {
     monthlyDemandArr.push(monthTotal);
     monthlyIrrigationArr.push(Math.round(mCropWater));
 
-    if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) seasonalDemands.kharif += monthTotal;
-    else if (["Nov", "Dec", "Jan", "Feb"].includes(m)) seasonalDemands.rabi += monthTotal;
-    else if (["Mar", "Apr", "May"].includes(m)) seasonalDemands.summer += monthTotal;
+    let mDomLive = mDomestic + mLivestock;
+    if (["Jun", "Jul", "Aug", "Sep", "Oct"].includes(m)) {
+      seasonalDemands.kharif += monthTotal;
+      seasonalDomLive.kharif += mDomLive;
+    } else if (["Nov", "Dec", "Jan", "Feb"].includes(m)) {
+      seasonalDemands.rabi += monthTotal;
+      seasonalDomLive.rabi += mDomLive;
+    } else if (["Mar", "Apr", "May"].includes(m)) {
+      seasonalDemands.summer += monthTotal;
+      seasonalDomLive.summer += mDomLive;
+    }
 
     tableHtml += `<tr><th>${m}</th><td>${monthTotal.toLocaleString('en-IN')}</td></tr>`;
   });
@@ -2195,7 +2228,12 @@ function calculate() {
   }
 
   updateCharts(monthlyDemandArr, monthlyIrrigationArr, monthlySupplyArr);
-  lastSeasonalDemands = { ...seasonalSupply };
+  lastSeasonalDemands = {
+    kharif: Math.max(0, Math.round(seasonalSupply.kharif - seasonalDomLive.kharif)),
+    rabi:   Math.max(0, Math.round(seasonalSupply.rabi   - seasonalDomLive.rabi)),
+    summer: Math.max(0, Math.round(seasonalSupply.summer - seasonalDomLive.summer))
+  };
+  renderCropPlanningTable();
   renderCropPlanningTable();
 }
 
