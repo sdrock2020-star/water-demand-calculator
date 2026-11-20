@@ -2193,6 +2193,8 @@ function calculate() {
     supplyTableHtml += `<tr><th>${m}</th><td>${mSupplyTotal.toLocaleString('en-IN')}</td></tr>`;
   });
 
+  seasonalSupply.rabi = Math.round(seasonalSupply.rabi / 4);
+  seasonalSupply.summer = Math.round(seasonalSupply.summer / 3);
   document.getElementById('monthly-supply-body').innerHTML = supplyTableHtml;
   document.getElementById('supply-season-kharif').innerText = seasonalSupply.kharif.toLocaleString('en-IN');
   document.getElementById('supply-season-rabi').innerText = seasonalSupply.rabi.toLocaleString('en-IN');
