@@ -15,14 +15,15 @@ export async function handler(event, context) {
   }
 
   try {
-    if (!process.env.GROQ_API_KEY) {
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ reply: "🚨 **Configuration Error:** Missing GROQ_API_KEY." })
-      };
-    }
-
+    if (process.env.ENABLE_HYDRO_AI !== "true") {
+  return {
+    statusCode: 200,
+    headers,
+    body: JSON.stringify({
+      reply: "⏸️ **HydroAI Assistant is currently in working phase.**"
+    })
+  };
+}
     const { message, dashboardState = {} } = JSON.parse(event.body || "{}");
 
     const systemPrompt = `You are HydroAI, an expert water budget, hydrology, and agricultural assistant for the ICAR-IIWM REWARD Project.
